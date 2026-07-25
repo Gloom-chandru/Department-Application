@@ -7,7 +7,8 @@
     "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
     "install-all": "npm install && npm install --prefix server && npm install --prefix client",
     "db:migrate": "npm run migrate --prefix server",
-    "db:seed": "npm run seed --prefix server"
+    "db:seed": "npm run seed --prefix server",
+    "test": "npm run test --prefix server && npm run test --prefix client"
   },
   "dependencies": {
     "concurrently": "^8.2.2"
