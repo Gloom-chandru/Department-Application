@@ -1,0 +1,34 @@
+# Dependency directories
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Local configuration files
+.env
+server/.env
+client/.env
+
+# Build outputs
+dist/
+client/dist/
+build/
+server/dist/
+
+# Cache directories
+.vite/
+client/.vite/
+.npm
+.eslintcache
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# System Files
+.DS_Store
+Thumbs.db
+desktop.ini
