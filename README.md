@@ -7,7 +7,7 @@ A full-stack student information system for tracking, managing, and analyzing st
 ```text
 ├── client/                 # React frontend application (Vite)
 │   ├── src/
-│   │   ├── components/     # UI components (Navbar, etc.)
+│   │   ├── components/     # UI components (Navbar, Skeletons, etc.)
 │   │   ├── context/        # React context (AuthContext, etc.)
 │   │   ├── pages/          # Screens (Login, Student, Faculty, Admin, Profile)
 │   │   ├── utils/          # API services (Axios client with JWT interceptor)
@@ -24,11 +24,11 @@ A full-stack student information system for tracking, managing, and analyzing st
 │   │   ├── middleware/     # JWT authentication & role authorization
 │   │   ├── routes/         # Express router mapping
 │   │   ├── utils/          # Database clients
-│   │   └── index.js        # Main server entry
+│   │   └── index.js        # Main server entry with Helmet & Rate limiting
 │   └── package.json
 │
 ├── package.json            # Root configuration for concurrent execution
-└── .env                    # System environment variables
+└── .env.example            # System environment variables template
 ```
 
 ---
@@ -44,7 +44,7 @@ Ensure you have the following installed on your machine:
 
 ## Configuration & Environment Variables
 
-Create a `.env` file in the **workspace root** and also in the **`server/` directory** (a template `.env.example` has been provided at the root).
+Create a `.env` file in the **workspace root** and also in the **`server/` directory** using the placeholders below:
 
 ```env
 # Server Config
@@ -52,12 +52,12 @@ PORT=5000
 NODE_ENV=development
 
 # Database Connection URL (PostgreSQL)
-DATABASE_URL="postgresql://postgres:0324@localhost:5432/vit_portal?schema=public"
+DATABASE_URL="postgresql://[db_user]:[db_password]@[db_host]:[db_port]/[db_name]?schema=public"
 
 # Auth Secrets
-JWT_SECRET="vit_student_portal_jwt_secret_key_2026_super_secure"
+JWT_SECRET="your_32_character_or_longer_secure_random_jwt_secret_key"
 JWT_EXPIRE="8h"
-JWT_REFRESH_SECRET="vit_student_portal_jwt_refresh_secret_key_2026_super_secure"
+JWT_REFRESH_SECRET="your_32_character_or_longer_secure_random_jwt_refresh_secret_key"
 JWT_REFRESH_EXPIRE="7d"
 
 # Frontend Config
@@ -68,9 +68,10 @@ VITE_API_URL="http://localhost:5000/api"
 
 ## Installation & Setup
 
-1. **Clone or navigate** to the project directory:
+1. **Clone the repository** and navigate to the project directory:
    ```bash
-   cd "c:\Users\ASUS\Desktop\MY PROJECT\Department Application"
+   git clone https://github.com/[username]/department-application.git
+   cd department-application
    ```
 
 2. **Install all dependencies** (installs workspace root, client, and server packages):
@@ -100,8 +101,8 @@ To run both the **frontend** and **backend** servers concurrently in development
 npm run dev
 ```
 
-- **Frontend Application** is served at: `http://localhost:5173`
-- **Backend API** is served at: `http://localhost:5000`
+- **Frontend Application**: `http://localhost:5173`
+- **Backend API**: `http://localhost:5000`
 
 ---
 
@@ -128,3 +129,23 @@ Faculty can select sections to mark daily attendance registries (with auto-load 
 Admins can view batch analytics charts, change low-attendance thresholds, CRUD departments/subjects/faculty/students, and export all records to an Excel-compatible CSV file.
 - **Administrator:** Admin Principal
   - **Email:** `admin@velammal.edu.in`
+
+---
+
+## Application Previews
+
+### 1. Login Page
+*Visual entry point with role-based routing controls.*
+<!-- [Login Mockup Placeholder] -->
+
+### 2. Student Dashboard
+*Circular overall attendance dial, subject-wise chart, and marks summary.*
+<!-- [Student Dashboard Mockup Placeholder] -->
+
+### 3. Faculty Dashboard
+*Rosters for marking daily attendance and publishing exam marks.*
+<!-- [Faculty Dashboard Mockup Placeholder] -->
+
+### 4. Admin Dashboard
+*Batch trends analytics, threshold settings, and CRUD tables.*
+<!-- [Admin Dashboard Mockup Placeholder] -->
