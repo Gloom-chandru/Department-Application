@@ -8,7 +8,8 @@
     "install-all": "npm install && npm install --prefix server && npm install --prefix client",
     "db:migrate": "npm run migrate --prefix server",
     "db:seed": "npm run seed --prefix server",
-    "test": "npm run test --prefix server && npm run test --prefix client"
+    "test": "npm run test --prefix server && npm run test --prefix client",
+    "build": "npm run build --prefix client && npm run prisma:generate --prefix server"
   },
   "dependencies": {
     "concurrently": "^8.2.2"
