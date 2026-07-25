@@ -86,6 +86,8 @@ const Navbar = () => {
           <div className="flex md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
+              aria-label="Toggle main navigation menu"
+              aria-expanded={isOpen}
               className="inline-flex items-center justify-center rounded-md p-2 text-slate-400 hover:bg-slate-850 hover:text-slate-200 focus:outline-none"
             >
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}

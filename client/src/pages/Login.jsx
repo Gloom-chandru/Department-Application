@@ -2,11 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { GraduationCap, Lock, Mail, AlertCircle, Loader2 } from 'lucide-react';
+import Toast from '../components/Toast';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  
+  // Inline error fields
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  
+  // Toast notifications
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastType, setToastType] = useState('error');
+  
   const [isLoading, setIsLoading] = useState(false);
   
   const { login, user } = useAuth();
@@ -19,16 +28,45 @@ const Login = () => {
     }
   }, [user, navigate]);
 
+  const validate = () => {
+    let isValid = true;
+    setEmailError('');
+    setPasswordError('');
+
+    // Email check
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      setEmailError('Email address is required.');
+      isValid = false;
+    } else if (!emailRegex.test(email)) {
+      setEmailError('Please enter a valid email address.');
+      isValid = false;
+    }
+
+    // Password check
+    if (!password) {
+      setPasswordError('Password is required.');
+      isValid = false;
+    } else if (password.length < 6) {
+      setPasswordError('Password must be at least 6 characters long.');
+      isValid = false;
+    }
+
+    return isValid;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    
+    if (!validate()) return;
+    
     setIsLoading(true);
 
     try {
       await login(email, password);
-      // AuthContext triggers state update, useEffect will handle redirection
     } catch (err) {
-      setError(err || 'Failed to connect to the server');
+      setToastType('error');
+      setToastMessage(err || 'Failed to connect to the server. Please check your network.');
     } finally {
       setIsLoading(false);
     }
@@ -57,14 +95,8 @@ const Login = () => {
 
         {/* Glassmorphic Login Form */}
         <div className="backdrop-blur-md bg-slate-900/40 border border-slate-800 p-8 rounded-2xl shadow-xl">
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            {error && (
-              <div className="flex items-center gap-2 rounded-lg border border-red-500/20 bg-red-950/20 p-3 text-sm text-red-400">
-                <AlertCircle className="h-4 w-4 shrink-0" />
-                <span>{error}</span>
-              </div>
-            )}
-
+          <form className="space-y-6" onSubmit={handleSubmit} noValidate>
+            
             {/* Email Field */}
             <div className="space-y-2">
               <label htmlFor="email" className="text-xs font-semibold tracking-wide text-slate-400 uppercase">
@@ -79,12 +111,25 @@ const Login = () => {
                   name="email"
                   type="email"
                   required
+                  aria-invalid={!!emailError}
+                  aria-describedby={emailError ? "email-error" : undefined}
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full rounded-xl border border-slate-800 bg-slate-950/60 py-3 pl-10 pr-4 text-sm text-white placeholder-slate-500 focus:border-blue-500 focus:bg-slate-950 focus:outline-none transition-colors"
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (emailError) setEmailError('');
+                  }}
+                  className={`block w-full rounded-xl border bg-slate-950/60 py-3 pl-10 pr-4 text-sm text-white placeholder-slate-500 focus:border-blue-500 focus:bg-slate-950 focus:outline-none transition-colors ${
+                    emailError ? 'border-red-500/55' : 'border-slate-800'
+                  }`}
                   placeholder="e.g. name@velammal.edu.in"
                 />
               </div>
+              {emailError && (
+                <p id="email-error" className="text-xs text-red-400 flex items-center gap-1 mt-1 font-medium">
+                  <AlertCircle className="h-3 w-3 shrink-0" />
+                  <span>{emailError}</span>
+                </p>
+              )}
             </div>
 
             {/* Password Field */}
@@ -103,12 +148,25 @@ const Login = () => {
                   name="password"
                   type="password"
                   required
+                  aria-invalid={!!passwordError}
+                  aria-describedby={passwordError ? "password-error" : undefined}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full rounded-xl border border-slate-800 bg-slate-950/60 py-3 pl-10 pr-4 text-sm text-white placeholder-slate-500 focus:border-blue-500 focus:bg-slate-950 focus:outline-none transition-colors"
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (passwordError) setPasswordError('');
+                  }}
+                  className={`block w-full rounded-xl border bg-slate-950/60 py-3 pl-10 pr-4 text-sm text-white placeholder-slate-500 focus:border-blue-500 focus:bg-slate-950 focus:outline-none transition-colors ${
+                    passwordError ? 'border-red-500/55' : 'border-slate-800'
+                  }`}
                   placeholder="••••••••"
                 />
               </div>
+              {passwordError && (
+                <p id="password-error" className="text-xs text-red-400 flex items-center gap-1 mt-1 font-medium">
+                  <AlertCircle className="h-3 w-3 shrink-0" />
+                  <span>{passwordError}</span>
+                </p>
+              )}
             </div>
 
             {/* Submit Button */}
@@ -149,6 +207,13 @@ const Login = () => {
         </div>
 
       </div>
+
+      {/* Visual Toast Notification */}
+      <Toast 
+        message={toastMessage} 
+        type={toastType} 
+        onClose={() => setToastMessage('')} 
+      />
     </div>
   );
 };

@@ -5,8 +5,10 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine 
 } from 'recharts';
 import { 
-  AlertTriangle, BookOpen, Calendar, Award, Bell, Check, Printer, FileText, Loader2, ArrowRight
+  AlertTriangle, BookOpen, Calendar, Award, Bell, Check, Printer, FileText, Loader2
 } from 'lucide-react';
+import { DashboardSkeleton } from '../components/SkeletonLoader';
+import Toast from '../components/Toast';
 
 const StudentDashboard = () => {
   const { user } = useAuth();
@@ -15,13 +17,14 @@ const StudentDashboard = () => {
   const [marks, setMarks] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  
+  // Toast notifications
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastType, setToastType] = useState('error');
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      setError('');
-
       const [profileRes, attendanceRes, marksRes, notifRes] = await Promise.all([
         api.get('/student/profile'),
         api.get('/student/attendance'),
@@ -35,7 +38,8 @@ const StudentDashboard = () => {
       setNotifications(notifRes.data);
     } catch (err) {
       console.error(err);
-      setError('Failed to fetch dashboard data. Please try again.');
+      setToastType('error');
+      setToastMessage('Failed to sync student data from portal servers.');
     } finally {
       setLoading(false);
     }
@@ -48,12 +52,15 @@ const StudentDashboard = () => {
   const handleMarkAsRead = async (id) => {
     try {
       await api.put(`/student/notifications/${id}/read`);
-      // Update local state
       setNotifications(prev => 
         prev.map(n => n.id === id ? { ...n, readStatus: true } : n)
       );
+      setToastType('success');
+      setToastMessage('Notification acknowledged.');
     } catch (err) {
       console.error('Error marking notification read:', err);
+      setToastType('error');
+      setToastMessage('Failed to acknowledge notification.');
     }
   };
 
@@ -62,29 +69,16 @@ const StudentDashboard = () => {
   };
 
   if (loading) {
+    // Show premium skeleton loading state instead of a spinner
     return (
-      <div className="flex min-h-[50vh] items-center justify-center">
-        <Loader2 className="h-10 w-10 text-blue-500 animate-spin" />
-        <span className="ml-3 text-slate-400">Loading your profile and academic records...</span>
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
+        <div className="h-8 w-64 bg-slate-800 rounded animate-pulse mb-6"></div>
+        <DashboardSkeleton />
       </div>
     );
   }
 
-  if (error) {
-    return (
-      <div className="mx-auto max-w-lg mt-12 p-6 rounded-xl border border-red-500/20 bg-red-950/10 text-center">
-        <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-white mb-2">Error Loading Dashboard</h3>
-        <p className="text-slate-400 text-sm mb-4">{error}</p>
-        <button onClick={fetchData} className="px-4 py-2 bg-red-650 text-white rounded-lg hover:bg-red-600 transition-colors">
-          Retry Connection
-        </button>
-      </div>
-    );
-  }
-
-  const { overall, subjectWise } = attendance || { overall: { percentage: 100, threshold: 75, isLow: false }, subjectWise: [] };
-  const strokeDashoffset = 251.2 - (251.2 * overall.percentage) / 100;
+  const { overall, subjectWise } = attendance || { overall: { percentage: 100, total: 0, present: 0, threshold: 75, isLow: false }, subjectWise: [] };
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8 print:p-0">
@@ -101,6 +95,8 @@ const StudentDashboard = () => {
         </div>
         <button
           onClick={triggerPrint}
+          type="button"
+          aria-label="Print academic transcript and attendance report card"
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-200 hover:text-white hover:bg-slate-700 hover:border-slate-600 transition-all font-medium text-sm"
         >
           <Printer className="h-4 w-4" />
@@ -109,7 +105,7 @@ const StudentDashboard = () => {
       </div>
 
       {/* PRINT-ONLY HEADER */}
-      <div className="hidden print:block border-b-2 border-slate-300 pb-4 mb-6">
+      <div className="hidden print:block border-b-2 border-slate-350 pb-4 mb-6">
         <div className="text-center">
           <h1 className="text-2xl font-bold uppercase text-black">Velammal Institute of Technology</h1>
           <p className="text-sm text-slate-700 uppercase tracking-widest font-semibold">Department of Artificial Intelligence & Data Science</p>
@@ -129,7 +125,10 @@ const StudentDashboard = () => {
 
       {/* LOW ATTENDANCE ALERT BANNER */}
       {overall.isLow && (
-        <div className="flex items-start gap-4 rounded-xl border border-red-500/30 bg-red-950/20 p-4 text-red-300 animate-pulse print:hidden">
+        <div 
+          role="alert" 
+          className="flex items-start gap-4 rounded-xl border border-red-500/30 bg-red-950/20 p-4 text-red-300 animate-pulse print:hidden"
+        >
           <AlertTriangle className="h-6 w-6 text-red-500 shrink-0 mt-0.5" />
           <div>
             <h3 className="font-bold text-red-400">Attendance Warning!</h3>
@@ -151,7 +150,7 @@ const StudentDashboard = () => {
           
           <div className="relative flex items-center justify-center">
             {/* SVG Ring */}
-            <svg className="w-36 h-36 transform -rotate-90">
+            <svg className="w-36 h-36 transform -rotate-90" aria-label={`Circular progress bar representing overall attendance: ${overall.percentage}%`}>
               <circle
                 cx="72"
                 cy="72"
@@ -337,7 +336,9 @@ const StudentDashboard = () => {
 
               {!notif.readStatus && (
                 <button 
+                  type="button"
                   onClick={() => handleMarkAsRead(notif.id)}
+                  aria-label={`Acknowledge notification: ${notif.message.slice(0, 30)}...`}
                   className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white transition-colors"
                 >
                   <Check className="h-3.5 w-3.5" />
@@ -354,6 +355,8 @@ const StudentDashboard = () => {
         </div>
       </div>
 
+      {/* Toast Alert Popups */}
+      <Toast message={toastMessage} type={toastType} onClose={() => setToastMessage('')} />
     </div>
   );
 };
