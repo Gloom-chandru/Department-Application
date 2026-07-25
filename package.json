@@ -1,0 +1,15 @@
+{
+  "name": "vit-student-portal",
+  "version": "1.0.0",
+  "description": "Velammal Institute of Technology Student Portal",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "install-all": "npm install && npm install --prefix server && npm install --prefix client",
+    "db:migrate": "npm run migrate --prefix server",
+    "db:seed": "npm run seed --prefix server"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
