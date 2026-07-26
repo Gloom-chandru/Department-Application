@@ -72,6 +72,13 @@ describe('Phase 6: Leave & OD Management System Integration Tests', () => {
     otherStudentToken = otherStudentLogin.body.accessToken;
     otherStudentId = otherStudentLogin.body.user.studentId;
 
+    // Clean up mock mechanical department if it exists
+    await prisma.approvalHistory.deleteMany({ where: { actorUser: { email: 'mech.reviewer@velammal.edu.in' } } });
+    await prisma.leaveODRequest.deleteMany({ where: { reviewerFaculty: { user: { email: 'mech.reviewer@velammal.edu.in' } } } });
+    await prisma.faculty.deleteMany({ where: { user: { email: 'mech.reviewer@velammal.edu.in' } } });
+    await prisma.user.deleteMany({ where: { email: 'mech.reviewer@velammal.edu.in' } });
+    await prisma.department.deleteMany({ where: { code: 'MECH_MOCK' } });
+
     // Create a mock faculty in a different department
     diffDeptId = (await prisma.department.create({
       data: { name: 'Mock Mechanical', code: 'MECH_MOCK' }

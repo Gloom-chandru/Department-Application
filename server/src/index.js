@@ -13,6 +13,8 @@ import notificationRoutes from './routes/notificationRoutes.js';
 import analyticsRoutes from './routes/analyticsRoutes.js';
 import assignmentRoutes from './routes/assignmentRoutes.js';
 import leaveRoutes from './routes/leaveRoutes.js';
+import timetableRoutes from './routes/timetableRoutes.js';
+import importExportRoutes from './routes/importExportRoutes.js';
 import prisma from './utils/db.js';
 
 const app = express();
@@ -88,6 +90,8 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/assignments', assignmentRoutes);
 app.use('/api/requests', leaveRoutes);
+app.use('/api/timetable', timetableRoutes);
+app.use('/api/bulk', importExportRoutes);
 
 // 6. Global centralized JSON error-handling middleware
 app.use((err, req, res, next) => {

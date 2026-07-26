@@ -67,17 +67,28 @@ export const validateFileSignature = (buffer, extension) => {
 
   // 4. ZIP/Office Container Validation (Begins with PK -> 50 4B 03 04, 50 4B 05 06, 50 4B 07 08)
   if (hex.startsWith('504b0304') || hex.startsWith('504b0506') || hex.startsWith('504b0708')) {
-    if (ext === '.docx') {
+    if (ext === '.docx' || ext === '.xlsx') {
       try {
         const fileNames = getZipFileNames(buffer);
-        // Verify Office Open XML structures are present
-        return fileNames.includes('[Content_Types].xml') && fileNames.includes('word/document.xml');
+        if (ext === '.docx') {
+          return fileNames.includes('[Content_Types].xml') && fileNames.includes('word/document.xml');
+        }
+        if (ext === '.xlsx') {
+          return fileNames.includes('[Content_Types].xml') && (fileNames.includes('xl/workbook.xml') || fileNames.includes('xl/sharedStrings.xml'));
+        }
       } catch (err) {
         return false;
       }
     }
     // Generic ZIP is not an approved upload type
     return false;
+  }
+
+  // 5. CSV validation (plain text, must not match zip/PDF/image magic bytes)
+  if (ext === '.csv') {
+    // Simply check it doesn't match common binary file signatures
+    const isBinary = hex.startsWith('504b0304') || hex.startsWith('25504446') || hex.startsWith('89504e47') || hex.startsWith('ffd8ff');
+    return !isBinary;
   }
 
   return false;
@@ -103,15 +114,17 @@ export const validateUpload = (file, allowedExtensions, maxSizeBytes) => {
 
   // Basic MIME verification
   const mimeMapping = {
-    '.pdf': 'application/pdf',
-    '.png': 'image/png',
-    '.jpg': 'image/jpeg',
-    '.jpeg': 'image/jpeg',
-    '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    '.pdf': ['application/pdf'],
+    '.png': ['image/png'],
+    '.jpg': ['image/jpeg'],
+    '.jpeg': ['image/jpeg'],
+    '.docx': ['application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
+    '.xlsx': ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+    '.csv': ['text/csv', 'application/vnd.ms-excel', 'text/plain']
   };
 
-  const expectedMime = mimeMapping[ext];
-  if (!expectedMime || file.mimetype !== expectedMime) {
+  const expectedMimes = mimeMapping[ext];
+  if (!expectedMimes || !expectedMimes.includes(file.mimetype)) {
     return { valid: false, reason: `MIME type mismatch for extension ${ext}` };
   }
 
