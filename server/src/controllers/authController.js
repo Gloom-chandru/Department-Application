@@ -2,6 +2,7 @@ import prisma from '../utils/db.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { z } from 'zod';
+import { logAudit, AUDIT_ACTIONS } from '../utils/audit.js';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -179,6 +180,45 @@ export const register = async (req, res) => {
             designation: data.designation,
           },
         });
+      }
+
+      // Audit Log creation
+      if (data.role === 'STUDENT' && studentProfile) {
+        await logAudit({
+          actorUserId: req.user.id,
+          actorRole: req.user.role,
+          action: AUDIT_ACTIONS.STUDENT_CREATED,
+          entityType: 'STUDENT',
+          entityId: studentProfile.id,
+          previousValue: null,
+          newValue: {
+            id: studentProfile.id,
+            rollNo: studentProfile.rollNo,
+            batchYear: studentProfile.batchYear,
+            section: studentProfile.section,
+            name: user.name,
+            email: user.email,
+            departmentId: user.departmentId,
+          },
+          req
+        }, tx);
+      } else if (data.role === 'FACULTY' && facultyProfile) {
+        await logAudit({
+          actorUserId: req.user.id,
+          actorRole: req.user.role,
+          action: AUDIT_ACTIONS.FACULTY_CREATED,
+          entityType: 'FACULTY',
+          entityId: facultyProfile.id,
+          previousValue: null,
+          newValue: {
+            id: facultyProfile.id,
+            designation: facultyProfile.designation,
+            name: user.name,
+            email: user.email,
+            departmentId: user.departmentId,
+          },
+          req
+        }, tx);
       }
 
       return { user, studentProfile, facultyProfile };

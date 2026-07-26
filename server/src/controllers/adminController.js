@@ -1,5 +1,6 @@
 import prisma from '../utils/db.js';
 import bcrypt from 'bcryptjs';
+import { logAudit, AUDIT_ACTIONS, computeDiff } from '../utils/audit.js';
 
 // --- Analytics Endpoint ---
 export const getAnalytics = async (req, res) => {
@@ -378,8 +379,36 @@ export const updateStudent = async (req, res) => {
     const { id } = req.params;
     const { name, email, rollNo, batchYear, section, mobileNo, guardianContact, departmentId } = req.body;
 
-    const profile = await prisma.student.findUnique({ where: { id } });
+    const profile = await prisma.student.findUnique({
+      where: { id },
+      include: { user: true }
+    });
     if (!profile) return res.status(404).json({ message: 'Student not found' });
+
+    // Compare fields to detect diffs
+    const prevData = {
+      name: profile.user.name,
+      email: profile.user.email,
+      departmentId: profile.departmentId,
+      rollNo: profile.rollNo,
+      batchYear: profile.batchYear,
+      section: profile.section,
+      mobileNo: profile.mobileNo,
+      guardianContact: profile.guardianContact
+    };
+
+    const nextData = {
+      name,
+      email,
+      departmentId,
+      rollNo,
+      batchYear,
+      section,
+      mobileNo,
+      guardianContact
+    };
+
+    const { diffPrev, diffNew, hasChanges } = computeDiff(prevData, nextData);
 
     const result = await prisma.$transaction(async (tx) => {
       const user = await tx.user.update({
@@ -391,6 +420,19 @@ export const updateStudent = async (req, res) => {
         where: { id },
         data: { rollNo, batchYear, section, mobileNo, guardianContact, departmentId },
       });
+
+      if (hasChanges) {
+        await logAudit({
+          actorUserId: req.user.id,
+          actorRole: req.user.role,
+          action: AUDIT_ACTIONS.STUDENT_UPDATED,
+          entityType: 'STUDENT',
+          entityId: id,
+          previousValue: diffPrev,
+          newValue: diffNew,
+          req
+        }, tx);
+      }
 
       return { user, updatedProfile };
     });
