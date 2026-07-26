@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Menu, X, LogOut, User, GraduationCap, Shield, BookOpen, Bell } from 'lucide-react';
+import NotificationCenter from './NotificationCenter';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -64,6 +65,7 @@ const Navbar = () => {
 
           {/* User Details & Logout Button (Desktop) */}
           <div className="hidden md:flex items-center gap-4">
+            <NotificationCenter />
             <div className="flex flex-col text-right">
               <span className="text-sm font-semibold text-slate-200">{user.name}</span>
               <span className="text-xs text-slate-500 flex items-center justify-end gap-1">

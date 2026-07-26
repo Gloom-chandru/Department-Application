@@ -1,6 +1,7 @@
 import prisma from '../utils/db.js';
 import { z } from 'zod';
 import { logAudit, AUDIT_ACTIONS } from '../utils/audit.js';
+import { createNotification, NOTIFICATION_TYPES, NOTIFICATION_PRIORITIES } from '../utils/notificationService.js';
 
 const attendanceSchema = z.object({
   subjectId: z.string().uuid(),
@@ -22,7 +23,7 @@ const marksSchema = z.object({
 });
 
 // Helper function to check and notify student if their attendance falls below threshold
-async function checkLowAttendance(tx, studentId) {
+async function checkLowAttendance(tx, studentId, subjectId = null) {
   // Get threshold
   const thresholdSetting = await tx.setting.findUnique({
     where: { key: 'low_attendance_threshold' },
@@ -44,25 +45,36 @@ async function checkLowAttendance(tx, studentId) {
     const roundedPercent = percentage.toFixed(1);
     const message = `Alert: Your overall attendance has dropped to ${roundedPercent}%, which is below the minimum required ${threshold}%. Please meet your class advisor.`;
 
-    // Check if we already notified about this percent range in the last 24h to avoid spamming
-    const existing = await tx.notification.findFirst({
-      where: {
-        studentId,
-        type: 'LOW_ATTENDANCE',
-        message: {
-          contains: `dropped to ${roundedPercent}%`,
-        },
-      },
+    const student = await tx.student.findUnique({
+      where: { id: studentId },
+      select: { userId: true }
     });
 
-    if (!existing) {
-      await tx.notification.create({
-        data: {
-          studentId,
-          message,
-          type: 'LOW_ATTENDANCE',
-        },
+    if (student && student.userId) {
+      // Cooldown strategy: Check if there is an unread attendance warning for this student in the last 24h
+      const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+      const existing = await tx.notification.findFirst({
+        where: {
+          userId: student.userId,
+          type: 'ATTENDANCE_WARNING',
+          relatedEntityType: 'SUBJECT',
+          relatedEntityId: subjectId,
+          createdAt: { gte: yesterday },
+          readStatus: false
+        }
       });
+
+      if (!existing) {
+        await createNotification({
+          userId: student.userId,
+          title: 'Attendance Alert',
+          message,
+          type: NOTIFICATION_TYPES.ATTENDANCE_WARNING,
+          priority: NOTIFICATION_PRIORITIES.HIGH,
+          relatedEntityType: 'SUBJECT',
+          relatedEntityId: subjectId
+        }, tx);
+      }
     }
   }
 }
@@ -223,7 +235,7 @@ export const markAttendance = async (req, res) => {
 
       // Check attendance levels for each student and send alert if needed
       for (const rec of records) {
-        await checkLowAttendance(tx, rec.studentId);
+        await checkLowAttendance(tx, rec.studentId, subjectId);
       }
     });
 
@@ -272,7 +284,7 @@ export const updateAttendanceRecord = async (req, res) => {
         req
       }, tx);
 
-      await checkLowAttendance(tx, attendance.studentId);
+      await checkLowAttendance(tx, attendance.studentId, attendance.subjectId);
       return attendance;
     });
 
@@ -322,6 +334,25 @@ export const enterMarks = async (req, res) => {
 
     const hasChanges = changedMarks.length > 0;
 
+    // Fetch subject and user details to prepare notification payload
+    const subject = await prisma.subject.findUnique({
+      where: { id: subjectId },
+      select: { name: true }
+    });
+    const subjectName = subject?.name || 'Subject';
+
+    const studentsToNotify = isUpdate 
+      ? changedMarks.map(c => c.studentId)
+      : records.map(r => r.studentId);
+
+    const studentProfiles = await prisma.student.findMany({
+      where: { id: { in: studentsToNotify } },
+      select: { id: true, userId: true }
+    });
+
+    const studentUserMap = {};
+    studentProfiles.forEach(s => { studentUserMap[s.id] = s.userId; });
+
     // Run in transaction
     await prisma.$transaction(async (tx) => {
       // Upsert marks: Delete existing ones first
@@ -350,6 +381,22 @@ export const enterMarks = async (req, res) => {
           };
         }),
       });
+
+      // Send notifications to students if there are actual updates or new entries
+      for (const studentId of studentsToNotify) {
+        const userId = studentUserMap[studentId];
+        if (userId) {
+          await createNotification({
+            userId,
+            title: 'Marks Published',
+            message: `Your ${examType} marks for ${subjectName} are now available.`,
+            type: NOTIFICATION_TYPES.MARKS_PUBLISHED,
+            priority: NOTIFICATION_PRIORITIES.NORMAL,
+            relatedEntityType: 'MARK',
+            relatedEntityId: subjectId
+          }, tx);
+        }
+      }
 
       // Audit logs
       if (isUpdate) {
