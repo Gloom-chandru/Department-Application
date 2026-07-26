@@ -105,6 +105,7 @@ const Navbar = () => {
             <>
               <Link to="/" onClick={() => setIsOpen(false)} className={linkClass('/')}>Dashboard</Link>
               <Link to="/profile" onClick={() => setIsOpen(false)} className={linkClass('/profile')}>Profile</Link>
+              <Link to="/notifications" onClick={() => setIsOpen(false)} className={linkClass('/notifications')}>Notifications</Link>
             </>
           )}
 
@@ -112,6 +113,7 @@ const Navbar = () => {
             <>
               <Link to="/" onClick={() => setIsOpen(false)} className={linkClass('/')}>Faculty Panel</Link>
               <Link to="/profile" onClick={() => setIsOpen(false)} className={linkClass('/profile')}>Profile</Link>
+              <Link to="/notifications" onClick={() => setIsOpen(false)} className={linkClass('/notifications')}>Notifications</Link>
             </>
           )}
 
@@ -119,6 +121,7 @@ const Navbar = () => {
             <>
               <Link to="/" onClick={() => setIsOpen(false)} className={linkClass('/')}>Admin Panel</Link>
               <Link to="/profile" onClick={() => setIsOpen(false)} className={linkClass('/profile')}>Profile</Link>
+              <Link to="/notifications" onClick={() => setIsOpen(false)} className={linkClass('/notifications')}>Notifications</Link>
             </>
           )}
           

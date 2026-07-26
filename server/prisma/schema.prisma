@@ -63,7 +63,6 @@ model Student {
   department      Department     @relation(fields: [departmentId], references: [id], onDelete: Restrict)
   attendance      Attendance[]
   marks           Mark[]
-  notifications   Notification[]
 
   @@index([departmentId])
   @@index([batchYear, section])
@@ -134,16 +133,10 @@ model Mark {
 model Notification {
   id                String    @id @default(uuid())
   
-  // Legacy / Transitional fields
-  studentId         String?
-  student           Student?  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  userId            String
+  user              User      @relation("UserNotifications", fields: [userId], references: [id], onDelete: Cascade)
   
-  // Modern targets
-  userId            String?
-  user              User?     @relation("UserNotifications", fields: [userId], references: [id], onDelete: Cascade)
-  
-  // Payload
-  title             String?
+  title             String
   message           String
   type              String    // E.g., "ATTENDANCE_WARNING", "MARKS_PUBLISHED"
   priority          String    @default("NORMAL") // "LOW", "NORMAL", "HIGH", "URGENT"
@@ -154,10 +147,8 @@ model Notification {
   relatedEntityId   String?   
   archivedAt        DateTime?
 
-  @@index([studentId])
-  @@index([userId])
-  @@index([createdAt])
-  @@index([readStatus])
+  @@index([userId, createdAt])
+  @@index([userId, readStatus])
 }
 
 model Setting {

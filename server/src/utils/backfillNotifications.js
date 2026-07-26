@@ -5,6 +5,30 @@ export const runBackfill = async () => {
   
   // 1. Pre-backfill metrics
   const totalBefore = await prisma.notification.count();
+  
+  // Check if studentId is queryable in the current schema
+  let hasStudentId = false;
+  try {
+    await prisma.notification.count({
+      where: { studentId: { not: null } }
+    });
+    hasStudentId = true;
+  } catch (e) {
+    hasStudentId = false;
+  }
+
+  if (!hasStudentId) {
+    console.log('Schema contraction completed. Backfill skipped.');
+    return {
+      totalBefore,
+      studentIdCountBefore: 0,
+      userIdCountBefore: totalBefore,
+      totalAfter: totalBefore,
+      userIdCountAfter: totalBefore,
+      orphanedCount: 0
+    };
+  }
+
   const studentIdCountBefore = await prisma.notification.count({
     where: { studentId: { not: null } }
   });
