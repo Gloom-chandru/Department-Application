@@ -1,31 +1,28 @@
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import { config } from './config/env.js';
 import authRoutes from './routes/authRoutes.js';
 import studentRoutes from './routes/studentRoutes.js';
 import facultyRoutes from './routes/facultyRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import fileRoutes from './routes/fileRoutes.js';
 import prisma from './utils/db.js';
 
-dotenv.config();
-
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = config.port;
 
 // 1. Secure HTTP headers using Helmet
 app.use(helmet());
 
 // 2. Configure Dynamic CORS Whitelist
-const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
-  : ['http://localhost:5173']; // Local Vite dev server default
+const allowedOrigins = config.allowedOrigins;
 
 const corsOptions = {
   origin: (origin, callback) => {
     // In production, reject non-whitelisted origins. In development, allow localhost/null origins.
-    if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
+    if (!origin || allowedOrigins.includes(origin) || config.nodeEnv !== 'production') {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -80,6 +77,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/student', studentRoutes);
 app.use('/api/faculty', facultyRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/files', fileRoutes);
 
 // 6. Global centralized JSON error-handling middleware
 app.use((err, req, res, next) => {
@@ -90,14 +88,14 @@ app.use((err, req, res, next) => {
   res.status(status).json({
     status: 'error',
     statusCode: status,
-    message: process.env.NODE_ENV === 'production' && status === 500
+    message: config.nodeEnv === 'production' && status === 500
       ? 'A server-side error occurred. Please contact the administrator.'
       : message,
   });
 });
 
 // Start Server
-if (process.env.NODE_ENV !== 'test') {
+if (config.nodeEnv !== 'test') {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });

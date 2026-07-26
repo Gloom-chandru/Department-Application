@@ -24,8 +24,10 @@ const registerSchema = z.object({
   designation: z.string().optional(),
 });
 
-const JWT_SECRET = process.env.JWT_SECRET || 'vit_student_portal_jwt_secret_key_2026_super_secure';
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'vit_student_portal_jwt_refresh_secret_key_2026_super_secure';
+import { config } from '../config/env.js';
+
+const JWT_SECRET = config.jwtSecret;
+const JWT_REFRESH_SECRET = config.jwtRefreshSecret;
 
 const generateTokens = (user, studentProfile, facultyProfile) => {
   const payload = {
@@ -39,11 +41,11 @@ const generateTokens = (user, studentProfile, facultyProfile) => {
   };
 
   const accessToken = jwt.sign(payload, JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE || '8h',
+    expiresIn: config.jwtExpire,
   });
 
   const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, {
-    expiresIn: process.env.JWT_REFRESH_EXPIRE || '7d',
+    expiresIn: config.jwtRefreshExpire,
   });
 
   return { accessToken, refreshToken };
