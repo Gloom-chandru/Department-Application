@@ -46,6 +46,7 @@ model User {
   studentProfile    Student?
   facultyProfile    Faculty?
   markedAttendance  Attendance[] @relation("MarkedByRelation")
+  auditLogs         AuditLog[]   @relation("UserAuditLogs")
 }
 
 model Student {
@@ -145,4 +146,25 @@ model Setting {
   id    String @id @default(uuid())
   key   String @unique // e.g., "low_attendance_threshold"
   value String
+}
+
+model AuditLog {
+  id            String   @id @default(uuid())
+  actorUserId   String?
+  actorUser     User?    @relation("UserAuditLogs", fields: [actorUserId], references: [id], onDelete: SetNull)
+  actorRole     String
+  action        String
+  entityType    String
+  entityId      String?
+  previousValue Json?
+  newValue      Json?
+  timestamp     DateTime @default(now())
+  ipAddress     String?
+  apiRoute      String?
+  httpMethod    String?
+
+  @@index([timestamp])
+  @@index([actorUserId])
+  @@index([action])
+  @@index([entityType, entityId])
 }
