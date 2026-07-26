@@ -145,7 +145,7 @@ describe('Phase 4: Advanced Academic Analytics Tests', () => {
         .set('Authorization', `Bearer ${studentToken}`);
 
       expect(res.statusCode).toEqual(200);
-      expect(res.body.student.rollNo).toEqual('2024AI001');
+      expect(res.body.student.rollNo).toEqual('2024AIDS002');
       expect(res.body.attendance.overall).toHaveProperty('percentage');
       expect(res.body.academics).toHaveProperty('subjectWisePerformance');
     });
