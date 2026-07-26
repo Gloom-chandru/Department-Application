@@ -30,6 +30,7 @@ export const getStudentSummary = async (req, res) => {
     const student = await prisma.student.findUnique({
       where: { id: studentId },
       include: {
+        user: { select: { name: true } },
         department: { select: { name: true, code: true } }
       }
     });
