@@ -9,6 +9,9 @@ import FacultyDashboard from './pages/FacultyDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import Profile from './pages/Profile';
 import NotificationsPage from './pages/NotificationsPage';
+import StudentRequests from './pages/StudentRequests';
+import FacultyReview from './pages/FacultyReview';
+import AdminRequestsOverview from './pages/AdminRequestsOverview';
 import NotFound from './pages/NotFound';
 
 // Route Guard for authenticated paths
@@ -78,6 +81,30 @@ function App() {
                   element={
                     <PrivateRoute>
                       <NotificationsPage />
+                    </PrivateRoute>
+                  } 
+                />
+                <Route 
+                  path="/requests" 
+                  element={
+                    <PrivateRoute>
+                      <StudentRequests />
+                    </PrivateRoute>
+                  } 
+                />
+                <Route 
+                  path="/review" 
+                  element={
+                    <PrivateRoute>
+                      <FacultyReview />
+                    </PrivateRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin/requests" 
+                  element={
+                    <PrivateRoute>
+                      <AdminRequestsOverview />
                     </PrivateRoute>
                   } 
                 />

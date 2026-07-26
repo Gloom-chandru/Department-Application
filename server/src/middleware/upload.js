@@ -32,7 +32,7 @@ const CATEGORY_POLICIES = {
  * Express middleware factory to handle single file upload and run security validations.
  * Category must be one of: 'assignments', 'submissions', 'leave', 'od'
  */
-export const configureUploadMiddleware = (category, fieldName) => {
+export const configureUploadMiddleware = (category, fieldName, isOptional = false) => {
   const policy = CATEGORY_POLICIES[category];
   if (!policy) {
     throw new Error(`Invalid category for upload middleware: ${category}`);
@@ -42,6 +42,13 @@ export const configureUploadMiddleware = (category, fieldName) => {
 
   return (req, res, next) => {
     multerMiddleware(req, res, (err) => {
+      console.log('configureUploadMiddleware file details:', { 
+        category, 
+        fieldName, 
+        isOptional, 
+        hasFile: !!req.file, 
+        body: req.body 
+      });
       if (err) {
         if (err.code === 'LIMIT_FILE_SIZE') {
           return res.status(400).json({
@@ -53,6 +60,9 @@ export const configureUploadMiddleware = (category, fieldName) => {
 
       const file = req.file;
       if (!file) {
+        if (isOptional) {
+          return next();
+        }
         return res.status(400).json({ message: 'No file uploaded' });
       }
 

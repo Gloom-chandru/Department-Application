@@ -32,6 +32,8 @@ model Department {
   students  Student[]
   faculty   Faculty[]
   subjects  Subject[]
+  rooms              Room[]
+  timetableSchedules TimetableSchedule[]
 }
 
 model User {
@@ -48,21 +50,27 @@ model User {
   markedAttendance  Attendance[] @relation("MarkedByRelation")
   auditLogs         AuditLog[]   @relation("UserAuditLogs")
   notifications     Notification[] @relation("UserNotifications")
+  createdAssignments Assignment[] @relation("CreatedAssignments")
+  gradedSubmissions  AssignmentSubmission[] @relation("GradedSubmissions")
+  approvalHistories  ApprovalHistory[]
+  createdTimetableSchedules TimetableSchedule[] @relation("TimetableScheduleCreator")
 }
 
 model Student {
-  id              String         @id @default(uuid())
-  userId          String         @unique
-  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  rollNo          String         @unique
-  batchYear       String // e.g. "2024-2028"
-  section         String // e.g. "A"
-  mobileNo        String
-  guardianContact String
-  departmentId    String
-  department      Department     @relation(fields: [departmentId], references: [id], onDelete: Restrict)
-  attendance      Attendance[]
-  marks           Mark[]
+  id                    String                 @id @default(uuid())
+  userId                String                 @unique
+  user                  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rollNo                String                 @unique
+  batchYear             String // e.g. "2024-2028"
+  section               String // e.g. "A"
+  mobileNo              String
+  guardianContact       String
+  departmentId          String
+  department            Department             @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  attendance            Attendance[]
+  marks                 Mark[]
+  assignmentSubmissions AssignmentSubmission[]
+  leaveODRequests       LeaveODRequest[]
 
   @@index([departmentId])
   @@index([batchYear, section])
@@ -74,8 +82,9 @@ model Faculty {
   user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   departmentId String
   department   Department @relation(fields: [departmentId], references: [id], onDelete: Restrict)
-  designation  String
-  subjects     Subject[]
+  designation             String
+  subjects                Subject[]
+  reviewedLeaveODRequests LeaveODRequest[]
 
   @@index([departmentId])
 }
@@ -91,6 +100,8 @@ model Subject {
   faculty      Faculty      @relation(fields: [facultyId], references: [id], onDelete: Restrict)
   attendance   Attendance[]
   marks        Mark[]
+  assignments  Assignment[]
+  timetableSlots TimetableSlot[]
 
   @@index([departmentId])
   @@index([facultyId])
@@ -176,4 +187,216 @@ model AuditLog {
   @@index([actorUserId])
   @@index([action])
   @@index([entityType, entityId])
+}
+
+enum AssignmentStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+}
+
+enum SubmissionStatus {
+  SUBMITTED
+  GRADED
+}
+
+model Assignment {
+  id                     String                 @id @default(uuid())
+  subjectId              String
+  subject                Subject                @relation(fields: [subjectId], references: [id], onDelete: Restrict)
+  title                  String
+  description            String                 @db.Text
+  attachmentPath         String?
+  originalAttachmentName String?
+  dueAt                  DateTime
+  maxMarks               Float
+  status                 AssignmentStatus       @default(DRAFT)
+  batchYear              String?
+  section                String?
+  createdByUserId        String?
+  createdBy              User?                  @relation("CreatedAssignments", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  createdAt              DateTime               @default(now())
+  updatedAt              DateTime               @updatedAt
+  submissions            AssignmentSubmission[]
+
+  @@index([subjectId])
+  @@index([status])
+}
+
+model AssignmentSubmission {
+  id               String                        @id @default(uuid())
+  assignmentId     String
+  assignment       Assignment                    @relation(fields: [assignmentId], references: [id], onDelete: Restrict)
+  studentId        String
+  student          Student                       @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  submittedAt      DateTime                      @default(now())
+  updatedAt        DateTime                      @updatedAt
+  status           SubmissionStatus              @default(SUBMITTED)
+  marksAwarded     Float?
+  feedback         String?                       @db.Text
+  gradedAt         DateTime?
+  gradedById       String?
+  gradedBy         User?                         @relation("GradedSubmissions", fields: [gradedById], references: [id], onDelete: SetNull)
+  versions         AssignmentSubmissionVersion[]
+
+  @@unique([assignmentId, studentId])
+  @@index([assignmentId])
+  @@index([studentId])
+  @@index([status])
+}
+
+model AssignmentSubmissionVersion {
+  id               String               @id @default(uuid())
+  submissionId     String
+  submission       AssignmentSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  fileReference    String
+  originalFileName String
+  submittedAt      DateTime             @default(now())
+  versionNumber    Int
+
+  @@unique([submissionId, versionNumber])
+  @@index([submissionId])
+}
+
+enum LeaveODType {
+  LEAVE
+  OD
+}
+
+enum LeaveODStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum ApprovalAction {
+  SUBMITTED
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+model LeaveODRequest {
+  id                     String            @id @default(uuid())
+  studentId              String
+  student                Student           @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  requestType            LeaveODType
+  reason                 String            @db.Text
+  startDate              DateTime          @db.Date
+  endDate                DateTime          @db.Date
+  status                 LeaveODStatus     @default(PENDING)
+  attachmentPath         String?
+  originalDocumentName   String?
+  reviewerFacultyId      String
+  reviewerFaculty        Faculty           @relation(fields: [reviewerFacultyId], references: [id], onDelete: Restrict)
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+  cancelledAt            DateTime?
+  approvalHistory        ApprovalHistory[]
+
+  @@index([studentId])
+  @@index([reviewerFacultyId])
+  @@index([status])
+}
+
+model ApprovalHistory {
+  id             String         @id @default(uuid())
+  requestId      String
+  request        LeaveODRequest @relation(fields: [requestId], references: [id], onDelete: Restrict)
+  actorUserId    String
+  actorUser      User           @relation(fields: [actorUserId], references: [id], onDelete: Restrict)
+  action         ApprovalAction
+  remarks        String?        @db.Text
+  createdAt      DateTime       @default(now())
+
+  @@index([requestId])
+  @@index([actorUserId])
+}
+
+enum RoomType {
+  CLASSROOM
+  LAB
+  SEMINAR_HALL
+  OTHER
+}
+
+enum TimetableStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model PeriodTemplate {
+  id           String   @id @default(uuid())
+  periodNumber Int      @unique
+  name         String
+  startTime    String   // HH:mm format
+  endTime      String   // HH:mm format
+  isBreak      Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  startSlots   TimetableSlot[] @relation("StartPeriod")
+  endSlots     TimetableSlot[] @relation("EndPeriod")
+}
+
+model Room {
+  id           String      @id @default(uuid())
+  departmentId String?
+  department   Department? @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  roomNo       String      @unique
+  name         String?
+  type         RoomType    @default(CLASSROOM)
+  capacity     Int?
+  isActive     Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  timetableSlots TimetableSlot[]
+}
+
+model TimetableSchedule {
+  id              String          @id @default(uuid())
+  departmentId    String
+  department      Department      @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  batchYear       String
+  section         String
+  semester        Int
+  name            String
+  effectiveFrom   DateTime        @db.Date
+  effectiveTo     DateTime?       @db.Date
+  status          TimetableStatus @default(DRAFT)
+  createdByUserId String?
+  createdBy       User?           @relation("TimetableScheduleCreator", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  slots           TimetableSlot[]
+
+  @@index([departmentId, batchYear, section, semester])
+  @@index([status])
+}
+
+model TimetableSlot {
+  id              String            @id @default(uuid())
+  scheduleId      String
+  schedule        TimetableSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  subjectId       String
+  subject         Subject           @relation(fields: [subjectId], references: [id], onDelete: Restrict)
+  dayOfWeek       Int               // 1=Mon ... 6=Sat
+  startPeriodId   String
+  startPeriod     PeriodTemplate    @relation("StartPeriod", fields: [startPeriodId], references: [id], onDelete: Restrict)
+  endPeriodId     String
+  endPeriod       PeriodTemplate    @relation("EndPeriod", fields: [endPeriodId], references: [id], onDelete: Restrict)
+  roomId          String?
+  room            Room?             @relation(fields: [roomId], references: [id], onDelete: Restrict)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@unique([scheduleId, dayOfWeek, startPeriodId])
+  @@index([scheduleId])
+  @@index([subjectId])
+  @@index([roomId])
+  @@index([dayOfWeek])
 }

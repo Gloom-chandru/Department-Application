@@ -44,6 +44,7 @@ const Navbar = () => {
             {user.role === 'STUDENT' && (
               <>
                 <Link to="/" className={linkClass('/')}>Dashboard</Link>
+                <Link to="/requests" className={linkClass('/requests')}>Leave & OD</Link>
                 <Link to="/profile" className={linkClass('/profile')}>Profile</Link>
               </>
             )}
@@ -51,6 +52,7 @@ const Navbar = () => {
             {user.role === 'FACULTY' && (
               <>
                 <Link to="/" className={linkClass('/')}>Faculty Panel</Link>
+                <Link to="/review" className={linkClass('/review')}>Absences Inbox</Link>
                 <Link to="/profile" className={linkClass('/profile')}>Profile</Link>
               </>
             )}
@@ -58,6 +60,7 @@ const Navbar = () => {
             {user.role === 'ADMIN' && (
               <>
                 <Link to="/" className={linkClass('/')}>Admin Panel</Link>
+                <Link to="/admin/requests" className={linkClass('/admin/requests')}>Absences Oversight</Link>
                 <Link to="/profile" className={linkClass('/profile')}>Profile</Link>
               </>
             )}
@@ -104,6 +107,7 @@ const Navbar = () => {
           {user.role === 'STUDENT' && (
             <>
               <Link to="/" onClick={() => setIsOpen(false)} className={linkClass('/')}>Dashboard</Link>
+              <Link to="/requests" onClick={() => setIsOpen(false)} className={linkClass('/requests')}>Leave & OD</Link>
               <Link to="/profile" onClick={() => setIsOpen(false)} className={linkClass('/profile')}>Profile</Link>
               <Link to="/notifications" onClick={() => setIsOpen(false)} className={linkClass('/notifications')}>Notifications</Link>
             </>
@@ -112,6 +116,7 @@ const Navbar = () => {
           {user.role === 'FACULTY' && (
             <>
               <Link to="/" onClick={() => setIsOpen(false)} className={linkClass('/')}>Faculty Panel</Link>
+              <Link to="/review" onClick={() => setIsOpen(false)} className={linkClass('/review')}>Absences Inbox</Link>
               <Link to="/profile" onClick={() => setIsOpen(false)} className={linkClass('/profile')}>Profile</Link>
               <Link to="/notifications" onClick={() => setIsOpen(false)} className={linkClass('/notifications')}>Notifications</Link>
             </>
@@ -120,6 +125,7 @@ const Navbar = () => {
           {user.role === 'ADMIN' && (
             <>
               <Link to="/" onClick={() => setIsOpen(false)} className={linkClass('/')}>Admin Panel</Link>
+              <Link to="/admin/requests" onClick={() => setIsOpen(false)} className={linkClass('/admin/requests')}>Absences Oversight</Link>
               <Link to="/profile" onClick={() => setIsOpen(false)} className={linkClass('/profile')}>Profile</Link>
               <Link to="/notifications" onClick={() => setIsOpen(false)} className={linkClass('/notifications')}>Notifications</Link>
             </>
