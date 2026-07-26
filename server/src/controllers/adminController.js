@@ -311,9 +311,24 @@ export const updateFaculty = async (req, res) => {
     const { id } = req.params;
     const { name, email, designation, departmentId } = req.body;
 
-    // Faculty is nested, so update both user and profile in transaction
     const profile = await prisma.faculty.findUnique({ where: { id }, include: { user: true } });
     if (!profile) return res.status(404).json({ message: 'Faculty not found' });
+
+    const prevData = {
+      name: profile.user.name,
+      email: profile.user.email,
+      designation: profile.designation,
+      departmentId: profile.departmentId
+    };
+
+    const nextData = {
+      name,
+      email,
+      designation,
+      departmentId
+    };
+
+    const { diffPrev, diffNew, hasChanges } = computeDiff(prevData, nextData);
 
     const result = await prisma.$transaction(async (tx) => {
       const user = await tx.user.update({
@@ -325,6 +340,19 @@ export const updateFaculty = async (req, res) => {
         where: { id },
         data: { designation, departmentId },
       });
+
+      if (hasChanges) {
+        await logAudit({
+          actorUserId: req.user.id,
+          actorRole: req.user.role,
+          action: AUDIT_ACTIONS.FACULTY_UPDATED,
+          entityType: 'FACULTY',
+          entityId: id,
+          previousValue: diffPrev,
+          newValue: diffNew,
+          req
+        }, tx);
+      }
 
       return { user, updatedProfile };
     });
@@ -339,10 +367,10 @@ export const updateFaculty = async (req, res) => {
 export const deleteFaculty = async (req, res) => {
   try {
     const { id } = req.params;
-    const profile = await prisma.faculty.findUnique({ where: { id } });
+    const profile = await prisma.faculty.findUnique({ where: { id }, include: { user: true } });
     if (!profile) return res.status(404).json({ message: 'Faculty profile not found' });
 
-    // Transaction to delete user (which cascade deletes faculty profile due to relations)
+    // Transaction to delete user and log audit
     await prisma.$transaction(async (tx) => {
       // First check if they teach any subjects
       const subjects = await tx.subject.findFirst({ where: { facultyId: id } });
@@ -350,6 +378,23 @@ export const deleteFaculty = async (req, res) => {
         throw new Error('Cannot delete faculty member who is assigned to teach subjects.');
       }
       await tx.user.delete({ where: { id: profile.userId } });
+
+      await logAudit({
+        actorUserId: req.user.id,
+        actorRole: req.user.role,
+        action: AUDIT_ACTIONS.FACULTY_DELETED,
+        entityType: 'FACULTY',
+        entityId: id,
+        previousValue: {
+          id: profile.id,
+          name: profile.user.name,
+          email: profile.user.email,
+          designation: profile.designation,
+          departmentId: profile.departmentId
+        },
+        newValue: null,
+        req
+      }, tx);
     });
 
     res.json({ message: 'Faculty deleted successfully' });
@@ -447,11 +492,35 @@ export const updateStudent = async (req, res) => {
 export const deleteStudent = async (req, res) => {
   try {
     const { id } = req.params;
-    const profile = await prisma.student.findUnique({ where: { id } });
+    const profile = await prisma.student.findUnique({
+      where: { id },
+      include: { user: true }
+    });
     if (!profile) return res.status(404).json({ message: 'Student not found' });
 
-    // Deleting the user will cascade delete the student record, attendance, marks, and notifications.
-    await prisma.user.delete({ where: { id: profile.userId } });
+    // Transaction to cascade delete user and record audit log
+    await prisma.$transaction(async (tx) => {
+      await tx.user.delete({ where: { id: profile.userId } });
+
+      await logAudit({
+        actorUserId: req.user.id,
+        actorRole: req.user.role,
+        action: AUDIT_ACTIONS.STUDENT_DELETED,
+        entityType: 'STUDENT',
+        entityId: id,
+        previousValue: {
+          id: profile.id,
+          rollNo: profile.rollNo,
+          batchYear: profile.batchYear,
+          section: profile.section,
+          name: profile.user.name,
+          email: profile.user.email,
+          departmentId: profile.departmentId
+        },
+        newValue: null,
+        req
+      }, tx);
+    });
 
     res.json({ message: 'Student deleted successfully' });
   } catch (error) {

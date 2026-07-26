@@ -29,6 +29,21 @@ const AdminDashboard = () => {
   const [students, setStudents] = useState([]);
   const [loadingCrud, setLoadingCrud] = useState(false);
 
+  // Audit Logs states
+  const [auditLogs, setAuditLogs] = useState([]);
+  const [auditPagination, setAuditPagination] = useState({ total: 0, page: 1, limit: 25, totalPages: 1 });
+  const [loadingAudit, setLoadingAudit] = useState(false);
+  const [auditFilters, setAuditFilters] = useState({
+    page: 1,
+    limit: 25,
+    action: '',
+    entityType: '',
+    startDate: '',
+    endDate: '',
+    search: '',
+  });
+  const [selectedAuditLog, setSelectedAuditLog] = useState(null);
+
   // Modal control
   const [modalType, setModalType] = useState(null); // 'dept', 'subject', 'faculty', 'student'
   const [modalAction, setModalAction] = useState('create'); // 'create', 'edit'
@@ -71,6 +86,28 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchAuditLogs = async (filtersOverride = {}) => {
+    try {
+      setLoadingAudit(true);
+      const activeFilters = { ...auditFilters, ...filtersOverride };
+      const params = new URLSearchParams();
+      Object.entries(activeFilters).forEach(([key, val]) => {
+        if (val !== undefined && val !== null && val !== '') {
+          params.append(key, String(val));
+        }
+      });
+
+      const res = await api.get(`/audit?${params.toString()}`);
+      setAuditLogs(res.data.logs);
+      setAuditPagination(res.data.pagination);
+    } catch (err) {
+      console.error(err);
+      showMsg('error', 'Failed to load audit logs.');
+    } finally {
+      setLoadingAudit(false);
+    }
+  };
+
   useEffect(() => {
     fetchAnalytics();
   }, []);
@@ -105,6 +142,8 @@ const AdminDashboard = () => {
           setStudents(res.data);
           const depts = await api.get('/admin/departments');
           setDepartments(depts.data);
+        } else if (activeTab === 'audit') {
+          fetchAuditLogs();
         }
       } catch (err) {
         console.error(err);
@@ -325,6 +364,7 @@ const AdminDashboard = () => {
           { id: 'subjects', label: 'Subjects', icon: BookOpen },
           { id: 'faculty', label: 'Faculty', icon: ShieldAlert },
           { id: 'students', label: 'Students', icon: GraduationCap },
+          { id: 'audit', label: 'Audit Logs', icon: FileSpreadsheet },
           { id: 'settings', label: 'System Settings', icon: Settings },
         ].map((tab) => {
           const Icon = tab.icon;
@@ -457,7 +497,7 @@ const AdminDashboard = () => {
       )}
 
       {/* VIEW: CRUD LISTS */}
-      {activeTab !== 'analytics' && activeTab !== 'settings' && (
+      {activeTab !== 'analytics' && activeTab !== 'settings' && activeTab !== 'audit' && (
         <div className="space-y-6">
           {/* Action Row */}
           <div className="flex justify-between items-center">
@@ -928,6 +968,297 @@ const AdminDashboard = () => {
               </div>
 
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* VIEW: AUDIT LOGS */}
+      {activeTab === 'audit' && (
+        <div className="space-y-6 animate-in fade-in duration-200">
+          {/* Filters Bar */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 bg-slate-900/40 backdrop-blur-md p-4 rounded-xl border border-slate-800/80">
+            {/* Search */}
+            <div className="space-y-1">
+              <label htmlFor="audit-search" className="text-xs font-semibold text-slate-400 uppercase">Search</label>
+              <input
+                id="audit-search"
+                type="text"
+                placeholder="Name, role, route..."
+                value={auditFilters.search}
+                onChange={(e) => {
+                  const newFilters = { ...auditFilters, search: e.target.value, page: 1 };
+                  setAuditFilters(newFilters);
+                  fetchAuditLogs(newFilters);
+                }}
+                className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs text-white focus:outline-none"
+              />
+            </div>
+            {/* Action */}
+            <div className="space-y-1">
+              <label htmlFor="audit-action" className="text-xs font-semibold text-slate-400 uppercase">Action</label>
+              <select
+                id="audit-action"
+                value={auditFilters.action}
+                onChange={(e) => {
+                  const newFilters = { ...auditFilters, action: e.target.value, page: 1 };
+                  setAuditFilters(newFilters);
+                  fetchAuditLogs(newFilters);
+                }}
+                className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs text-white focus:outline-none"
+              >
+                <option value="">All Actions</option>
+                <option value="STUDENT_CREATED">Student Created</option>
+                <option value="STUDENT_UPDATED">Student Updated</option>
+                <option value="STUDENT_DELETED">Student Deleted</option>
+                <option value="FACULTY_CREATED">Faculty Created</option>
+                <option value="FACULTY_UPDATED">Faculty Updated</option>
+                <option value="FACULTY_DELETED">Faculty Deleted</option>
+                <option value="MARK_CREATED">Marks Created</option>
+                <option value="MARK_UPDATED">Marks Updated</option>
+                <option value="ATTENDANCE_CREATED">Attendance Created</option>
+                <option value="ATTENDANCE_UPDATED">Attendance Updated</option>
+              </select>
+            </div>
+            {/* Entity Type */}
+            <div className="space-y-1">
+              <label htmlFor="audit-entity" className="text-xs font-semibold text-slate-400 uppercase">Entity</label>
+              <select
+                id="audit-entity"
+                value={auditFilters.entityType}
+                onChange={(e) => {
+                  const newFilters = { ...auditFilters, entityType: e.target.value, page: 1 };
+                  setAuditFilters(newFilters);
+                  fetchAuditLogs(newFilters);
+                }}
+                className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs text-white focus:outline-none"
+              >
+                <option value="">All Entities</option>
+                <option value="STUDENT">Student</option>
+                <option value="FACULTY">Faculty</option>
+                <option value="MARK">Mark</option>
+                <option value="ATTENDANCE">Attendance</option>
+              </select>
+            </div>
+            {/* Start Date */}
+            <div className="space-y-1">
+              <label htmlFor="audit-start" className="text-xs font-semibold text-slate-400 uppercase">Start Date</label>
+              <input
+                id="audit-start"
+                type="date"
+                value={auditFilters.startDate}
+                onChange={(e) => {
+                  const newFilters = { ...auditFilters, startDate: e.target.value, page: 1 };
+                  setAuditFilters(newFilters);
+                  fetchAuditLogs(newFilters);
+                }}
+                className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs text-white focus:outline-none"
+              />
+            </div>
+            {/* End Date */}
+            <div className="space-y-1">
+              <label htmlFor="audit-end" className="text-xs font-semibold text-slate-400 uppercase">End Date</label>
+              <input
+                id="audit-end"
+                type="date"
+                value={auditFilters.endDate}
+                onChange={(e) => {
+                  const newFilters = { ...auditFilters, endDate: e.target.value, page: 1 };
+                  setAuditFilters(newFilters);
+                  fetchAuditLogs(newFilters);
+                }}
+                className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs text-white focus:outline-none"
+              />
+            </div>
+            {/* Reset */}
+            <div className="flex items-end">
+              <button
+                type="button"
+                onClick={() => {
+                  const resetFilters = { page: 1, limit: 25, action: '', entityType: '', startDate: '', endDate: '', search: '' };
+                  setAuditFilters(resetFilters);
+                  fetchAuditLogs(resetFilters);
+                }}
+                className="w-full text-center px-4 py-2 border border-slate-800 hover:border-slate-700 bg-slate-950 text-slate-400 hover:text-white rounded-lg text-xs font-semibold transition-colors"
+              >
+                Clear Filters
+              </button>
+            </div>
+          </div>
+
+          {/* Logs Table */}
+          <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950">
+            {loadingAudit ? (
+              <TableSkeleton />
+            ) : auditLogs.length === 0 ? (
+              <div className="p-8 text-center text-slate-500 text-sm">No audit logs found matching criteria.</div>
+            ) : (
+              <table className="w-full border-collapse text-left text-sm text-slate-400">
+                <thead className="bg-[#0b121e] font-semibold text-slate-200 border-b border-slate-800">
+                  <tr>
+                    <th className="px-6 py-4">Timestamp</th>
+                    <th className="px-6 py-4">Actor</th>
+                    <th className="px-6 py-4">Action</th>
+                    <th className="px-6 py-4">Target Entity</th>
+                    <th className="px-6 py-4">Summary</th>
+                    <th className="px-6 py-4 text-right">Details</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800">
+                  {auditLogs.map((log) => {
+                    const getSummary = () => {
+                      const actorName = log.actorUser?.name || 'System';
+                      if (log.action.includes('CREATED')) {
+                        return `${actorName} created a new ${log.entityType.toLowerCase()} record`;
+                      }
+                      if (log.action.includes('DELETED')) {
+                        return `${actorName} deleted a ${log.entityType.toLowerCase()} record`;
+                      }
+                      if (log.action.includes('UPDATED')) {
+                        const keys = log.newValue ? Object.keys(log.newValue) : [];
+                        return `${actorName} modified ${log.entityType.toLowerCase()} fields: ${keys.join(', ')}`;
+                      }
+                      return `Action performed by ${actorName}`;
+                    };
+
+                    return (
+                      <tr key={log.id} className="hover:bg-slate-900/30 transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-550">
+                          {new Date(log.timestamp).toLocaleString()}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-slate-200">
+                          <div>{log.actorUser?.name || 'System'}</div>
+                          <div className="text-[10px] text-slate-500">{log.actorRole}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold border ${
+                            log.action.includes('CREATED') ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
+                            log.action.includes('UPDATED') ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
+                            'bg-rose-500/10 text-rose-400 border-rose-500/20'
+                          }`}>
+                            {log.action}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xs">
+                          <span className="text-slate-350">{log.entityType}</span>
+                          {log.entityId && <span className="block text-[10px] text-slate-500">{log.entityId}</span>}
+                        </td>
+                        <td className="px-6 py-4 text-xs text-slate-300 max-w-xs truncate">
+                          {getSummary()}
+                        </td>
+                        <td className="px-6 py-4 text-right whitespace-nowrap">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedAuditLog(log)}
+                            className="text-xs font-semibold text-blue-500 hover:text-blue-400 transition-colors"
+                          >
+                            Inspect JSON
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
+          </div>
+
+          {/* Pagination Controls */}
+          {auditPagination.totalPages > 1 && (
+            <div className="flex items-center justify-between mt-4">
+              <span className="text-xs text-slate-500">
+                Page {auditPagination.page} of {auditPagination.totalPages} (Total {auditPagination.total} logs)
+              </span>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  disabled={auditPagination.page === 1 || loadingAudit}
+                  onClick={() => {
+                    const newFilters = { ...auditFilters, page: auditPagination.page - 1 };
+                    setAuditFilters(newFilters);
+                    fetchAuditLogs(newFilters);
+                  }}
+                  className="px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-950 text-xs font-semibold text-slate-400 hover:text-white disabled:opacity-40 transition-colors"
+                >
+                  Previous
+                </button>
+                <button
+                  type="button"
+                  disabled={auditPagination.page === auditPagination.totalPages || loadingAudit}
+                  onClick={() => {
+                    const newFilters = { ...auditFilters, page: auditPagination.page + 1 };
+                    setAuditFilters(newFilters);
+                    fetchAuditLogs(newFilters);
+                  }}
+                  className="px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-950 text-xs font-semibold text-slate-400 hover:text-white disabled:opacity-40 transition-colors"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* AUDIT DETAILS EXPANSION MODAL */}
+      {selectedAuditLog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+          <div className="w-full max-w-3xl rounded-2xl border border-slate-800 bg-[#0b1323] p-6 text-slate-350 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
+              <div>
+                <h3 className="text-lg font-bold text-slate-100">Audit Record Details</h3>
+                <p className="text-[10px] text-slate-500 font-medium font-mono">Log Identifier: {selectedAuditLog.id}</p>
+              </div>
+              <button 
+                onClick={() => setSelectedAuditLog(null)} 
+                type="button" 
+                aria-label="Close modal dialog"
+                className="text-slate-400 hover:text-slate-200 p-1.5 hover:bg-slate-900 rounded-lg transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
+              <div className="grid grid-cols-2 gap-4 text-xs bg-[#090e18] p-4 rounded-xl border border-slate-900">
+                <div>
+                  <span className="block text-[10px] text-slate-500 font-semibold uppercase">Actor User</span>
+                  <span className="text-slate-200 font-semibold">{selectedAuditLog.actorUser?.name || 'System'}</span>
+                </div>
+                <div>
+                  <span className="block text-[10px] text-slate-500 font-semibold uppercase">Actor Role</span>
+                  <span className="text-slate-200 font-semibold">{selectedAuditLog.actorRole}</span>
+                </div>
+                <div>
+                  <span className="block text-[10px] text-slate-500 font-semibold uppercase">Action Performed</span>
+                  <span className="text-slate-200 font-semibold">{selectedAuditLog.action}</span>
+                </div>
+                <div>
+                  <span className="block text-[10px] text-slate-500 font-semibold uppercase">Timestamp</span>
+                  <span className="text-slate-200 font-semibold">{new Date(selectedAuditLog.timestamp).toLocaleString()}</span>
+                </div>
+                <div className="col-span-2 border-t border-slate-800/60 pt-2">
+                  <span className="block text-[10px] text-slate-500 font-semibold uppercase">HTTP Context</span>
+                  <span className="text-slate-200 font-mono font-semibold">
+                    {selectedAuditLog.httpMethod} {selectedAuditLog.apiRoute || 'N/A'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <span className="block text-[10px] text-slate-500 font-semibold mb-2 uppercase font-mono">Previous State</span>
+                  <pre className="text-[10px] bg-[#070b13] p-4 rounded-xl border border-slate-900 overflow-x-auto text-amber-500 font-mono max-h-60 overflow-y-auto">
+                    {JSON.stringify(selectedAuditLog.previousValue, null, 2) || 'null'}
+                  </pre>
+                </div>
+                <div>
+                  <span className="block text-[10px] text-slate-500 font-semibold mb-2 uppercase font-mono">New State</span>
+                  <pre className="text-[10px] bg-[#070b13] p-4 rounded-xl border border-slate-900 overflow-x-auto text-emerald-500 font-mono max-h-60 overflow-y-auto">
+                    {JSON.stringify(selectedAuditLog.newValue, null, 2) || 'null'}
+                  </pre>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}

@@ -50,11 +50,12 @@ export const sanitizeForAudit = (data) => {
     for (const [key, value] of Object.entries(data)) {
       const normalizedKey = key.toLowerCase().replace(/[^a-z0-9]/g, '');
       const isSensitive = SENSITIVE_KEYS.includes(normalizedKey) || 
-                          normalizedKey.endsWith('password') || 
-                          normalizedKey.endsWith('secret') || 
-                          normalizedKey.endsWith('token') || 
-                          normalizedKey.endsWith('jwt') || 
-                          normalizedKey.endsWith('apikey');
+                          normalizedKey.includes('password') || 
+                          normalizedKey.includes('secret') || 
+                          normalizedKey.includes('token') || 
+                          normalizedKey.includes('jwt') || 
+                          normalizedKey.includes('apikey') ||
+                          normalizedKey.includes('credential');
 
       if (isSensitive) {
         sanitized[key] = '[REDACTED]';

@@ -1,5 +1,6 @@
 import prisma from '../utils/db.js';
 import { z } from 'zod';
+import { logAudit, AUDIT_ACTIONS } from '../utils/audit.js';
 
 const attendanceSchema = z.object({
   subjectId: z.string().uuid(),
@@ -139,6 +140,36 @@ export const markAttendance = async (req, res) => {
     // Use normalized Date object (Y-M-D) without time components for unique constraint match
     const formattedDate = new Date(date + 'T00:00:00.000Z');
 
+    // Query existing logs to determine if this is an update vs creation and screen no-ops
+    const existingRecords = await prisma.attendance.findMany({
+      where: {
+        subjectId,
+        date: formattedDate,
+        studentId: {
+          in: records.map(r => r.studentId),
+        },
+      },
+    });
+
+    const isUpdate = existingRecords.length > 0;
+
+    const prevMap = {};
+    existingRecords.forEach(r => { prevMap[r.studentId] = r.status; });
+
+    const changedRecords = [];
+    records.forEach(rec => {
+      const prevStatus = prevMap[rec.studentId];
+      if (prevStatus && prevStatus !== rec.status) {
+        changedRecords.push({
+          studentId: rec.studentId,
+          prevStatus,
+          newStatus: rec.status
+        });
+      }
+    });
+
+    const hasChanges = changedRecords.length > 0;
+
     // Run in a transaction
     await prisma.$transaction(async (tx) => {
       // Delete existing records for this subject and date to prevent duplicates and handle edits
@@ -163,6 +194,33 @@ export const markAttendance = async (req, res) => {
         })),
       });
 
+      // Audit logs
+      if (isUpdate) {
+        if (hasChanges) {
+          await logAudit({
+            actorUserId: req.user.id,
+            actorRole: req.user.role,
+            action: AUDIT_ACTIONS.ATTENDANCE_UPDATED,
+            entityType: 'ATTENDANCE',
+            entityId: subjectId,
+            previousValue: { date: formattedDate, changed: changedRecords.map(c => ({ studentId: c.studentId, status: c.prevStatus })) },
+            newValue: { date: formattedDate, changed: changedRecords.map(c => ({ studentId: c.studentId, status: c.newStatus })) },
+            req
+          }, tx);
+        }
+      } else {
+        await logAudit({
+          actorUserId: req.user.id,
+          actorRole: req.user.role,
+          action: AUDIT_ACTIONS.ATTENDANCE_CREATED,
+          entityType: 'ATTENDANCE',
+          entityId: subjectId,
+          previousValue: null,
+          newValue: { date: formattedDate, records: records.map(r => ({ studentId: r.studentId, status: r.status })) },
+          req
+        }, tx);
+      }
+
       // Check attendance levels for each student and send alert if needed
       for (const rec of records) {
         await checkLowAttendance(tx, rec.studentId);
@@ -185,20 +243,40 @@ export const updateAttendanceRecord = async (req, res) => {
       return res.status(400).json({ message: 'Status must be PRESENT or ABSENT' });
     }
 
-    const attendance = await prisma.attendance.update({
-      where: { id },
-      data: {
-        status,
-        markedById: req.user.id,
-      },
-    });
+    const prevRecord = await prisma.attendance.findUnique({ where: { id } });
+    if (!prevRecord) return res.status(404).json({ message: 'Attendance record not found' });
 
-    // Check attendance level for student
-    await prisma.$transaction(async (tx) => {
+    if (prevRecord.status === status) {
+      // Return immediately if it's a no-op change
+      return res.json({ message: 'Attendance record unchanged (no-op)', attendance: prevRecord });
+    }
+
+    // Wrap update, audit log and low attendance check in a single transaction
+    const result = await prisma.$transaction(async (tx) => {
+      const attendance = await tx.attendance.update({
+        where: { id },
+        data: {
+          status,
+          markedById: req.user.id,
+        },
+      });
+
+      await logAudit({
+        actorUserId: req.user.id,
+        actorRole: req.user.role,
+        action: AUDIT_ACTIONS.ATTENDANCE_UPDATED,
+        entityType: 'ATTENDANCE',
+        entityId: id,
+        previousValue: { status: prevRecord.status },
+        newValue: { status },
+        req
+      }, tx);
+
       await checkLowAttendance(tx, attendance.studentId);
+      return attendance;
     });
 
-    res.json({ message: 'Attendance record updated successfully', attendance });
+    res.json({ message: 'Attendance record updated successfully', attendance: result });
   } catch (error) {
     console.error('Error updating attendance record:', error);
     res.status(500).json({ message: 'Server error updating attendance' });
@@ -213,6 +291,36 @@ export const enterMarks = async (req, res) => {
     }
 
     const { subjectId, examType, maxMarks, records } = validation.data;
+
+    // Fetch existing records before performing database updates to calculate differences
+    const existingMarks = await prisma.mark.findMany({
+      where: {
+        subjectId,
+        examType,
+        studentId: {
+          in: records.map(r => r.studentId),
+        },
+      },
+    });
+
+    const isUpdate = existingMarks.length > 0;
+
+    const prevMap = {};
+    existingMarks.forEach(m => { prevMap[m.studentId] = m.marksObtained; });
+
+    const changedMarks = [];
+    records.forEach(rec => {
+      const prevVal = prevMap[rec.studentId];
+      if (prevVal !== undefined && prevVal !== rec.marksObtained) {
+        changedMarks.push({
+          studentId: rec.studentId,
+          prevMarks: prevVal,
+          newMarks: rec.marksObtained
+        });
+      }
+    });
+
+    const hasChanges = changedMarks.length > 0;
 
     // Run in transaction
     await prisma.$transaction(async (tx) => {
@@ -242,6 +350,33 @@ export const enterMarks = async (req, res) => {
           };
         }),
       });
+
+      // Audit logs
+      if (isUpdate) {
+        if (hasChanges) {
+          await logAudit({
+            actorUserId: req.user.id,
+            actorRole: req.user.role,
+            action: AUDIT_ACTIONS.MARK_UPDATED,
+            entityType: 'MARK',
+            entityId: subjectId,
+            previousValue: { examType, changed: changedMarks.map(c => ({ studentId: c.studentId, marks: c.prevMarks })) },
+            newValue: { examType, changed: changedMarks.map(c => ({ studentId: c.studentId, marks: c.newMarks })) },
+            req
+          }, tx);
+        }
+      } else {
+        await logAudit({
+          actorUserId: req.user.id,
+          actorRole: req.user.role,
+          action: AUDIT_ACTIONS.MARK_CREATED,
+          entityType: 'MARK',
+          entityId: subjectId,
+          previousValue: null,
+          newValue: { examType, maxMarks, records: records.map(r => ({ studentId: r.studentId, marks: r.marksObtained })) },
+          req
+        }, tx);
+      }
     });
 
     res.json({ message: 'Marks updated successfully' });
