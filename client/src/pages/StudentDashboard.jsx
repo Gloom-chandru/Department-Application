@@ -5,10 +5,11 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine 
 } from 'recharts';
 import { 
-  AlertTriangle, BookOpen, Calendar, Award, Bell, Check, Printer, FileText, Loader2
+  AlertTriangle, BookOpen, Calendar, Award, Bell, Check, Printer, FileText, Loader2, Briefcase
 } from 'lucide-react';
 import { DashboardSkeleton } from '../components/SkeletonLoader';
 import Toast from '../components/Toast';
+import AcademicHealthCard from '../components/AcademicHealthCard';
 
 const StudentDashboard = () => {
   const { user } = useAuth();
@@ -138,6 +139,20 @@ const StudentDashboard = () => {
           </div>
         </div>
       )}
+
+      {/* ACADEMIC HEALTH & RISK CARD */}
+      <AcademicHealthCard />
+
+      <a
+        href="/student/placement"
+        className="flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-900/40 px-5 py-4 print:hidden hover:border-blue-500/40 transition-colors"
+      >
+        <div>
+          <h3 className="text-sm font-semibold text-white">Placement & Career Portal</h3>
+          <p className="text-xs text-slate-400 mt-0.5">View eligible drives, applications, and offers</p>
+        </div>
+        <Briefcase className="h-5 w-5 text-blue-400" />
+      </a>
 
       {/* ATTENDANCE SECTION */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

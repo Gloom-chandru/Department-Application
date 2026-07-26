@@ -12,10 +12,19 @@ import NotificationsPage from './pages/NotificationsPage';
 import StudentRequests from './pages/StudentRequests';
 import FacultyReview from './pages/FacultyReview';
 import AdminRequestsOverview from './pages/AdminRequestsOverview';
+import StudentTimetable from './pages/StudentTimetable';
+import FacultySchedule from './pages/FacultySchedule';
+import AdminTimetableManager from './pages/AdminTimetableManager';
+import AdminBulkImportManager from './pages/AdminBulkImportManager';
+import FacultyRiskView from './pages/FacultyRiskView';
+import AdminRiskAnalytics from './pages/AdminRiskAnalytics';
+import StudentPlacement from './pages/StudentPlacement';
+import AdminPlacementManager from './pages/AdminPlacementManager';
+import FacultyPlacementView from './pages/FacultyPlacementView';
 import NotFound from './pages/NotFound';
 
-// Route Guard for authenticated paths
-const PrivateRoute = ({ children }) => {
+// Route Guard for authenticated paths & optional role check
+const PrivateRoute = ({ children, roles }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -26,7 +35,13 @@ const PrivateRoute = ({ children }) => {
     );
   }
 
-  return user ? children : <Navigate to="/login" replace />;
+  if (!user) return <Navigate to="/login" replace />;
+
+  if (roles && !roles.includes(user.role)) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
 };
 
 // Dispatcher that loads the appropriate dashboard depending on the user's role
@@ -107,6 +122,78 @@ function App() {
                       <AdminRequestsOverview />
                     </PrivateRoute>
                   } 
+                />
+                <Route 
+                  path="/timetable" 
+                  element={
+                    <PrivateRoute>
+                      <StudentTimetable />
+                    </PrivateRoute>
+                  } 
+                />
+                <Route 
+                  path="/schedule" 
+                  element={
+                    <PrivateRoute>
+                      <FacultySchedule />
+                    </PrivateRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin/timetable" 
+                  element={
+                    <PrivateRoute roles={['ADMIN']}>
+                      <AdminTimetableManager />
+                    </PrivateRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin/bulk" 
+                  element={
+                    <PrivateRoute roles={['ADMIN']}>
+                      <AdminBulkImportManager />
+                    </PrivateRoute>
+                  } 
+                />
+                <Route 
+                  path="/faculty/risk" 
+                  element={
+                    <PrivateRoute roles={['FACULTY', 'ADMIN']}>
+                      <FacultyRiskView />
+                    </PrivateRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin/risk" 
+                  element={
+                    <PrivateRoute roles={['ADMIN']}>
+                      <AdminRiskAnalytics />
+                    </PrivateRoute>
+                  } 
+                />
+                <Route
+                  path="/student/placement"
+                  element={
+                    <PrivateRoute roles={['STUDENT']}>
+                      <StudentPlacement />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/admin/placement"
+                  element={
+                    <PrivateRoute roles={['ADMIN']}>
+                      <AdminPlacementManager />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/faculty/placement"
+                  element={
+                    <PrivateRoute roles={['FACULTY']}>
+                      <FacultyPlacementView />
+                    </PrivateRoute>
+                  }
                 />
 
                 {/* 404 Catch-all fallback */}

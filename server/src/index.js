@@ -15,6 +15,8 @@ import assignmentRoutes from './routes/assignmentRoutes.js';
 import leaveRoutes from './routes/leaveRoutes.js';
 import timetableRoutes from './routes/timetableRoutes.js';
 import importExportRoutes from './routes/importExportRoutes.js';
+import riskRoutes from './routes/riskRoutes.js';
+import placementRoutes from './routes/placementRoutes.js';
 import prisma from './utils/db.js';
 
 const app = express();
@@ -35,7 +37,7 @@ const corsOptions = {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 };
@@ -92,6 +94,8 @@ app.use('/api/assignments', assignmentRoutes);
 app.use('/api/requests', leaveRoutes);
 app.use('/api/timetable', timetableRoutes);
 app.use('/api/bulk', importExportRoutes);
+app.use('/api/risk', riskRoutes);
+app.use('/api/placement', placementRoutes);
 
 // 6. Global centralized JSON error-handling middleware
 app.use((err, req, res, next) => {

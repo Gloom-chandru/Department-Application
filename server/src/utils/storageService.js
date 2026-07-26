@@ -3,7 +3,7 @@ import path from 'path';
 import crypto from 'crypto';
 
 const UPLOAD_ROOT = path.resolve(process.cwd(), 'uploads');
-const ALLOWED_CATEGORIES = ['assignments', 'submissions', 'leave', 'od'];
+const ALLOWED_CATEGORIES = ['assignments', 'submissions', 'leave', 'od', 'resumes', 'offers'];
 
 // Ensure directory layout exists at startup
 const ensureDirectoriesExist = () => {

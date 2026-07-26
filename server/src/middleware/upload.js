@@ -25,6 +25,12 @@ const CATEGORY_POLICIES = {
   },
   od: {
     allowedExtensions: ['.pdf', '.png', '.jpg', '.jpeg'],
+  },
+  resumes: {
+    allowedExtensions: ['.pdf', '.docx'],
+  },
+  offers: {
+    allowedExtensions: ['.pdf', '.docx', '.png', '.jpg', '.jpeg'],
   }
 };
 

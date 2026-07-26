@@ -35,6 +35,19 @@ import {
   exportMarksData,
   exportTimetableGrid
 } from '../services/exportService.js';
+import {
+  validatePlacementProfileData,
+  importPlacementProfilesConfirmed,
+  validateCompanyData,
+  importCompaniesConfirmed,
+  validateOfferImportData,
+  importOffersConfirmed
+} from '../services/placementImportService.js';
+import {
+  exportPlacementApplications,
+  exportPlacementOffers,
+  exportPlacementRoster
+} from '../services/placementExportService.js';
 
 // Multer memory storage limit
 const MAX_UPLOAD_SIZE = 5 * 1024 * 1024; // 5 MB
@@ -577,5 +590,263 @@ export const downloadErrorWorkbook = async (req, res) => {
   } catch (error) {
     console.error('Error exporting error workbook:', error);
     res.status(500).json({ message: 'Server error generating error workbook.' });
+  }
+};
+
+// ==================== PHASE 10 PLACEMENT IMPORT/EXPORT ====================
+
+export const getPlacementProfileTemplate = async (req, res) => {
+  try {
+    const columns = [
+      { header: 'Roll No', key: 'rollNo', width: 15 },
+      { header: 'CGPA', key: 'cgpa', width: 10 },
+      { header: 'Current Backlogs', key: 'currentBacklogs', width: 16 }
+    ];
+    const rows = [{ rollNo: '23AI001', cgpa: 8.5, currentBacklogs: 0 }];
+    const buffer = await generateWorkbook({
+      title: 'Placement Eligibility Import',
+      subtitle: 'Update student CGPA and backlog counts. Never derived from marks.',
+      columns,
+      rows
+    });
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=placement_eligibility_template.xlsx');
+    res.send(buffer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error generating template.' });
+  }
+};
+
+export const getCompanyImportTemplate = async (req, res) => {
+  try {
+    const columns = [
+      { header: 'Name', key: 'name', width: 25 },
+      { header: 'Code', key: 'code', width: 12 },
+      { header: 'Industry', key: 'industry', width: 18 },
+      { header: 'Website', key: 'website', width: 28 },
+      { header: 'HR Contact Email', key: 'hrContactEmail', width: 28 }
+    ];
+    const rows = [{
+      name: 'Acme Corp',
+      code: 'ACME',
+      industry: 'Software',
+      website: 'https://acme.example.com',
+      hrContactEmail: 'hr@acme.example.com'
+    }];
+    const buffer = await generateWorkbook({
+      title: 'Company Import Template',
+      subtitle: 'Bulk create placement companies',
+      columns,
+      rows
+    });
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=companies_import_template.xlsx');
+    res.send(buffer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error generating template.' });
+  }
+};
+
+export const getOfferImportTemplate = async (req, res) => {
+  try {
+    const columns = [
+      { header: 'Roll No', key: 'rollNo', width: 14 },
+      { header: 'Company Code', key: 'companyCode', width: 14 },
+      { header: 'Drive Title', key: 'driveTitle', width: 24 },
+      { header: 'CTC', key: 'ctc', width: 12 },
+      { header: 'Status', key: 'status', width: 12 }
+    ];
+    const rows = [{
+      rollNo: '23AI001',
+      companyCode: 'ACME',
+      driveTitle: 'Software Engineer',
+      ctc: 12,
+      status: 'OFFERED'
+    }];
+    const buffer = await generateWorkbook({
+      title: 'Offer Import Template',
+      subtitle: 'Student must already have applied to the drive. Status: OFFERED|ACCEPTED|DECLINED|EXPIRED|REVOKED',
+      columns,
+      rows
+    });
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=offers_import_template.xlsx');
+    res.send(buffer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error generating template.' });
+  }
+};
+
+export const placementProfileDryRun = async (req, res) => {
+  try {
+    const parsed = await parseUploadedFile(req.file);
+    const result = await validatePlacementProfileData(parsed.rows);
+    const hash = computeFileHash(req.file.buffer);
+    const token = registerValidation({
+      type: 'PLACEMENT_PROFILE',
+      hash,
+      data: result.data,
+      userId: req.user.id
+    });
+    res.json({
+      valid: result.valid,
+      summary: result.summary,
+      errors: result.errors,
+      token,
+      preview: result.data.slice(0, 10)
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+export const placementProfileConfirm = async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!req.file) return res.status(400).json({ message: 'No file uploaded for confirmation.' });
+    const hash = computeFileHash(req.file.buffer);
+    const verifiedData = getAndVerifyValidation(token, {
+      userId: req.user.id,
+      type: 'PLACEMENT_PROFILE',
+      hash
+    });
+    const summary = await importPlacementProfilesConfirmed(verifiedData, req.user, req);
+    res.json({ message: `${summary.updatedCount} student eligibility records updated.`, summary });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+export const companyImportDryRun = async (req, res) => {
+  try {
+    const parsed = await parseUploadedFile(req.file);
+    const result = await validateCompanyData(parsed.rows);
+    const hash = computeFileHash(req.file.buffer);
+    const token = registerValidation({
+      type: 'COMPANY',
+      hash,
+      data: result.data,
+      userId: req.user.id
+    });
+    res.json({
+      valid: result.valid,
+      summary: result.summary,
+      errors: result.errors,
+      token,
+      preview: result.data.slice(0, 10)
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+export const companyImportConfirm = async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!req.file) return res.status(400).json({ message: 'No file uploaded for confirmation.' });
+    const hash = computeFileHash(req.file.buffer);
+    const verifiedData = getAndVerifyValidation(token, {
+      userId: req.user.id,
+      type: 'COMPANY',
+      hash
+    });
+    const summary = await importCompaniesConfirmed(verifiedData, req.user, req);
+    res.json({ message: `${summary.createdCount} companies imported.`, summary });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+export const offerImportDryRun = async (req, res) => {
+  try {
+    const parsed = await parseUploadedFile(req.file);
+    const result = await validateOfferImportData(parsed.rows);
+    const hash = computeFileHash(req.file.buffer);
+    const token = registerValidation({
+      type: 'OFFER',
+      hash,
+      data: result.data,
+      userId: req.user.id
+    });
+    res.json({
+      valid: result.valid,
+      summary: result.summary,
+      errors: result.errors,
+      token,
+      preview: result.data.slice(0, 10)
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+export const offerImportConfirm = async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!req.file) return res.status(400).json({ message: 'No file uploaded for confirmation.' });
+    const hash = computeFileHash(req.file.buffer);
+    const verifiedData = getAndVerifyValidation(token, {
+      userId: req.user.id,
+      type: 'OFFER',
+      hash
+    });
+    const summary = await importOffersConfirmed(verifiedData, req.user, req);
+    res.json({ message: `${summary.createdCount} offers imported.`, summary });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+export const exportPlacementApplicationsHandler = async (req, res) => {
+  try {
+    const { departmentId, batchYear, stage, format } = req.query;
+    const result = await exportPlacementApplications(
+      { departmentId, batchYear, stage, format: format === 'csv' ? 'csv' : 'xlsx' },
+      req.user,
+      req
+    );
+    res.setHeader('Content-Type', result.contentType);
+    res.setHeader('Content-Disposition', `attachment; filename=${result.filename}`);
+    res.send(result.buffer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error exporting applications.' });
+  }
+};
+
+export const exportPlacementOffersHandler = async (req, res) => {
+  try {
+    const { departmentId, batchYear, status, format } = req.query;
+    const result = await exportPlacementOffers(
+      { departmentId, batchYear, status, format: format === 'csv' ? 'csv' : 'xlsx' },
+      req.user,
+      req
+    );
+    res.setHeader('Content-Type', result.contentType);
+    res.setHeader('Content-Disposition', `attachment; filename=${result.filename}`);
+    res.send(result.buffer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error exporting offers.' });
+  }
+};
+
+export const exportPlacementRosterHandler = async (req, res) => {
+  try {
+    const { departmentId, batchYear, format } = req.query;
+    const result = await exportPlacementRoster(
+      { departmentId, batchYear, format: format === 'csv' ? 'csv' : 'xlsx' },
+      req.user,
+      req
+    );
+    res.setHeader('Content-Type', result.contentType);
+    res.setHeader('Content-Disposition', `attachment; filename=${result.filename}`);
+    res.send(result.buffer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error exporting roster.' });
   }
 };

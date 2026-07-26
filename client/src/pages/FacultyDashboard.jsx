@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { 
-  Save, Calendar, Award, UserCheck, AlertCircle, Check, Loader2, Info
+  Save, Calendar, Award, UserCheck, AlertCircle, Check, Loader2, Info, Upload, Download, Activity
 } from 'lucide-react';
 import { TableSkeleton } from '../components/SkeletonLoader';
 import Toast from '../components/Toast';
+import FacultyBulkMarksModal from '../components/FacultyBulkMarksModal';
+import ExportDataModal from '../components/ExportDataModal';
 
 const FacultyDashboard = () => {
   const [subjects, setSubjects] = useState([]);
@@ -32,6 +34,10 @@ const FacultyDashboard = () => {
   const [marksRecords, setMarksRecords] = useState({}); // { studentId: marksObtained }
   const [marksErrors, setMarksErrors] = useState({}); // { studentId: errorMessage }
   const [savingMarks, setSavingMarks] = useState(false);
+
+  // Bulk Marks & Export Modals
+  const [isBulkMarksOpen, setIsBulkMarksOpen] = useState(false);
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
   // Toasts
   const [toastMessage, setToastMessage] = useState('');
@@ -340,9 +346,46 @@ const FacultyDashboard = () => {
       
       {/* HEADER CONTROLS */}
       <div className="backdrop-blur-md bg-slate-900/40 border border-slate-800 p-6 rounded-2xl space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold text-white mb-2">Faculty Gradebook & Registry</h1>
-          <p className="text-slate-400 text-sm">Select subject, batch, and section to view registries and grade sheets.</p>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-white mb-2">Faculty Gradebook & Registry</h1>
+            <p className="text-slate-400 text-sm">Select subject, batch, and section to view registries and grade sheets.</p>
+          </div>
+
+          <div className="flex items-center space-x-3">
+            <a
+              href="/faculty/risk"
+              className="flex items-center space-x-2 px-4 py-2.5 bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 text-xs font-semibold rounded-xl transition-all"
+            >
+              <Activity className="w-4 h-4 text-rose-400" />
+              <span>Risk Attention Portal</span>
+            </a>
+
+            <a
+              href="/faculty/placement"
+              className="flex items-center space-x-2 px-4 py-2.5 bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 text-xs font-semibold rounded-xl transition-all"
+            >
+              <span>Placement Overview</span>
+            </a>
+
+            <button
+              type="button"
+              onClick={() => setIsBulkMarksOpen(true)}
+              className="flex items-center space-x-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-xl transition-all shadow-md"
+            >
+              <Upload className="w-4 h-4" />
+              <span>Bulk Import Marks</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsExportModalOpen(true)}
+              className="flex items-center space-x-2 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold rounded-xl transition-all"
+            >
+              <Download className="w-4 h-4 text-emerald-400" />
+              <span>Export Subject Reports</span>
+            </button>
+          </div>
         </div>
 
         {/* SELECTORS ROW */}
@@ -681,6 +724,21 @@ const FacultyDashboard = () => {
           )}
         </div>
       )}
+
+      {/* Faculty Bulk Marks Modal */}
+      <FacultyBulkMarksModal
+        isOpen={isBulkMarksOpen}
+        onClose={() => setIsBulkMarksOpen(false)}
+        onToast={(msg, type) => { setToastMessage(msg); setToastType(type); }}
+      />
+
+      {/* Export Data Modal */}
+      <ExportDataModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        userRole="FACULTY"
+        onToast={(msg, type) => { setToastMessage(msg); setToastType(type); }}
+      />
 
       {/* Visual Toast Popup */}
       <Toast message={toastMessage} type={toastType} onClose={() => setToastMessage('')} />

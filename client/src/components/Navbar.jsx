@@ -44,6 +44,8 @@ const Navbar = () => {
             {user.role === 'STUDENT' && (
               <>
                 <Link to="/" className={linkClass('/')}>Dashboard</Link>
+                <Link to="/student/placement" className={linkClass('/student/placement')}>Placement</Link>
+                <Link to="/timetable" className={linkClass('/timetable')}>Timetable</Link>
                 <Link to="/requests" className={linkClass('/requests')}>Leave & OD</Link>
                 <Link to="/profile" className={linkClass('/profile')}>Profile</Link>
               </>
@@ -52,6 +54,9 @@ const Navbar = () => {
             {user.role === 'FACULTY' && (
               <>
                 <Link to="/" className={linkClass('/')}>Faculty Panel</Link>
+                <Link to="/faculty/risk" className={linkClass('/faculty/risk')}>Risk Attention</Link>
+                <Link to="/faculty/placement" className={linkClass('/faculty/placement')}>Placement</Link>
+                <Link to="/schedule" className={linkClass('/schedule')}>My Schedule</Link>
                 <Link to="/review" className={linkClass('/review')}>Absences Inbox</Link>
                 <Link to="/profile" className={linkClass('/profile')}>Profile</Link>
               </>
@@ -60,6 +65,10 @@ const Navbar = () => {
             {user.role === 'ADMIN' && (
               <>
                 <Link to="/" className={linkClass('/')}>Admin Panel</Link>
+                <Link to="/admin/risk" className={linkClass('/admin/risk')}>Risk Analytics</Link>
+                <Link to="/admin/placement" className={linkClass('/admin/placement')}>Placement</Link>
+                <Link to="/admin/bulk" className={linkClass('/admin/bulk')}>Bulk Operations</Link>
+                <Link to="/admin/timetable" className={linkClass('/admin/timetable')}>Timetable Manager</Link>
                 <Link to="/admin/requests" className={linkClass('/admin/requests')}>Absences Oversight</Link>
                 <Link to="/profile" className={linkClass('/profile')}>Profile</Link>
               </>
@@ -107,6 +116,8 @@ const Navbar = () => {
           {user.role === 'STUDENT' && (
             <>
               <Link to="/" onClick={() => setIsOpen(false)} className={linkClass('/')}>Dashboard</Link>
+              <Link to="/student/placement" onClick={() => setIsOpen(false)} className={linkClass('/student/placement')}>Placement</Link>
+              <Link to="/timetable" onClick={() => setIsOpen(false)} className={linkClass('/timetable')}>Timetable</Link>
               <Link to="/requests" onClick={() => setIsOpen(false)} className={linkClass('/requests')}>Leave & OD</Link>
               <Link to="/profile" onClick={() => setIsOpen(false)} className={linkClass('/profile')}>Profile</Link>
               <Link to="/notifications" onClick={() => setIsOpen(false)} className={linkClass('/notifications')}>Notifications</Link>
@@ -116,6 +127,9 @@ const Navbar = () => {
           {user.role === 'FACULTY' && (
             <>
               <Link to="/" onClick={() => setIsOpen(false)} className={linkClass('/')}>Faculty Panel</Link>
+              <Link to="/faculty/risk" onClick={() => setIsOpen(false)} className={linkClass('/faculty/risk')}>Risk Attention</Link>
+              <Link to="/faculty/placement" onClick={() => setIsOpen(false)} className={linkClass('/faculty/placement')}>Placement</Link>
+              <Link to="/schedule" onClick={() => setIsOpen(false)} className={linkClass('/schedule')}>My Schedule</Link>
               <Link to="/review" onClick={() => setIsOpen(false)} className={linkClass('/review')}>Absences Inbox</Link>
               <Link to="/profile" onClick={() => setIsOpen(false)} className={linkClass('/profile')}>Profile</Link>
               <Link to="/notifications" onClick={() => setIsOpen(false)} className={linkClass('/notifications')}>Notifications</Link>
@@ -125,6 +139,10 @@ const Navbar = () => {
           {user.role === 'ADMIN' && (
             <>
               <Link to="/" onClick={() => setIsOpen(false)} className={linkClass('/')}>Admin Panel</Link>
+              <Link to="/admin/risk" onClick={() => setIsOpen(false)} className={linkClass('/admin/risk')}>Risk Analytics</Link>
+              <Link to="/admin/placement" onClick={() => setIsOpen(false)} className={linkClass('/admin/placement')}>Placement</Link>
+              <Link to="/admin/bulk" onClick={() => setIsOpen(false)} className={linkClass('/admin/bulk')}>Bulk Operations</Link>
+              <Link to="/admin/timetable" onClick={() => setIsOpen(false)} className={linkClass('/admin/timetable')}>Timetable Manager</Link>
               <Link to="/admin/requests" onClick={() => setIsOpen(false)} className={linkClass('/admin/requests')}>Absences Oversight</Link>
               <Link to="/profile" onClick={() => setIsOpen(false)} className={linkClass('/profile')}>Profile</Link>
               <Link to="/notifications" onClick={() => setIsOpen(false)} className={linkClass('/notifications')}>Notifications</Link>

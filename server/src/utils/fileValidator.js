@@ -119,8 +119,8 @@ export const validateUpload = (file, allowedExtensions, maxSizeBytes) => {
     '.jpg': ['image/jpeg'],
     '.jpeg': ['image/jpeg'],
     '.docx': ['application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
-    '.xlsx': ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
-    '.csv': ['text/csv', 'application/vnd.ms-excel', 'text/plain']
+    '.xlsx': ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/octet-stream'],
+    '.csv': ['text/csv', 'application/vnd.ms-excel', 'text/plain', 'application/octet-stream']
   };
 
   const expectedMimes = mimeMapping[ext];

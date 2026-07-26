@@ -212,7 +212,22 @@ export function normalizeHeader(header) {
     endperiod: 'endPeriod',
     endperiodnumber: 'endPeriod',
     room: 'roomNo',
-    roomno: 'roomNo'
+    roomno: 'roomNo',
+    cgpa: 'cgpa',
+    gpa: 'cgpa',
+    currentbacklogs: 'currentBacklogs',
+    backlogs: 'currentBacklogs',
+    backlog: 'currentBacklogs',
+    companycode: 'companyCode',
+    drivetitle: 'driveTitle',
+    ctc: 'ctc',
+    package: 'ctc',
+    status: 'status',
+    industry: 'industry',
+    website: 'website',
+    hrcontactemail: 'hrContactEmail',
+    hremail: 'hrContactEmail',
+    code: 'code'
   };
 
   return mappings[clean] || clean;

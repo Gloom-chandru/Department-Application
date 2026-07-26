@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line
 } from 'recharts';
 import { 
   Users, BookOpen, GraduationCap, Building, AlertTriangle, FileSpreadsheet, Settings, 
-  Plus, Edit2, Trash2, Check, Loader2, X, ShieldAlert
+  Plus, Edit2, Trash2, Check, Loader2, X, ShieldAlert, Upload, Download
 } from 'lucide-react';
 import { DashboardSkeleton, TableSkeleton } from '../components/SkeletonLoader';
 import Toast from '../components/Toast';
+import ExportDataModal from '../components/ExportDataModal';
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+
   // Navigation tabs
   const [activeTab, setActiveTab] = useState('analytics');
 
@@ -344,16 +349,32 @@ const AdminDashboard = () => {
           <h1 className="text-3xl font-extrabold tracking-tight text-white mb-1">Administrative Console</h1>
           <p className="text-slate-400 text-sm">VIT Academic Portal Administration & Management</p>
         </div>
-        <button
-          onClick={handleExportCSV}
-          disabled={exporting}
-          type="button"
-          aria-label="Export all student attendance and marks reports to Excel compatible CSV"
-          className="flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm disabled:opacity-50 transition-colors shadow-lg shadow-emerald-700/10"
-        >
-          {exporting ? <Loader2 className="h-4.5 w-4.5 animate-spin" /> : <FileSpreadsheet className="h-4.5 w-4.5" />}
-          <span>Export Institution Report</span>
-        </button>
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            onClick={() => navigate('/admin/placement')}
+            type="button"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-sm transition-colors shadow-lg shadow-violet-700/10"
+          >
+            <span>Placement Manager</span>
+          </button>
+          <button
+            onClick={() => navigate('/admin/bulk')}
+            type="button"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition-colors shadow-lg shadow-blue-700/10"
+          >
+            <Upload className="h-4.5 w-4.5" />
+            <span>Bulk Data Manager</span>
+          </button>
+
+          <button
+            onClick={() => setIsExportModalOpen(true)}
+            type="button"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm transition-colors shadow-lg shadow-emerald-700/10"
+          >
+            <Download className="h-4.5 w-4.5" />
+            <span>Export Academic Ledgers</span>
+          </button>
+        </div>
       </div>
 
       {/* NAVIGATION TABS */}
@@ -1262,6 +1283,14 @@ const AdminDashboard = () => {
           </div>
         </div>
       )}
+
+      {/* Export Data Modal */}
+      <ExportDataModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        userRole="ADMIN"
+        onToast={(msg, type) => showMsg(type, msg)}
+      />
 
       {/* Visual Toast Notification popup */}
       <Toast message={toastMessage} type={toastType} onClose={() => setToastMessage('')} />

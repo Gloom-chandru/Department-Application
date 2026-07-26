@@ -17,7 +17,19 @@ import {
   exportAttendance,
   exportMarks,
   exportTimetable,
-  downloadErrorWorkbook
+  downloadErrorWorkbook,
+  getPlacementProfileTemplate,
+  getCompanyImportTemplate,
+  getOfferImportTemplate,
+  placementProfileDryRun,
+  placementProfileConfirm,
+  companyImportDryRun,
+  companyImportConfirm,
+  offerImportDryRun,
+  offerImportConfirm,
+  exportPlacementApplicationsHandler,
+  exportPlacementOffersHandler,
+  exportPlacementRosterHandler
 } from '../controllers/importExportController.js';
 
 const router = express.Router();
@@ -36,6 +48,9 @@ router.get('/templates/students', authorizeRoles('ADMIN', 'FACULTY'), getStudent
 router.get('/templates/faculty', authorizeRoles('ADMIN', 'FACULTY'), getFacultyTemplate);
 router.get('/templates/marks', authorizeRoles('ADMIN', 'FACULTY'), getMarksTemplate);
 router.get('/templates/timetable', authorizeRoles('ADMIN', 'FACULTY'), getTimetableTemplate);
+router.get('/templates/placement-eligibility', authorizeRoles('ADMIN'), getPlacementProfileTemplate);
+router.get('/templates/companies', authorizeRoles('ADMIN'), getCompanyImportTemplate);
+router.get('/templates/offers', authorizeRoles('ADMIN'), getOfferImportTemplate);
 
 // ---- Bulk Imports ----
 // Students (Admin only)
@@ -54,10 +69,21 @@ router.post('/import/marks/confirm', authorizeRoles('ADMIN', 'FACULTY'), upload.
 router.post('/import/timetable/:scheduleId/dry-run', authorizeRoles('ADMIN'), upload.single('file'), timetableDryRun);
 router.post('/import/timetable/:scheduleId/confirm', authorizeRoles('ADMIN'), upload.single('file'), timetableConfirm);
 
+// Placement (Admin only)
+router.post('/import/placement-eligibility/dry-run', authorizeRoles('ADMIN'), upload.single('file'), placementProfileDryRun);
+router.post('/import/placement-eligibility/confirm', authorizeRoles('ADMIN'), upload.single('file'), placementProfileConfirm);
+router.post('/import/companies/dry-run', authorizeRoles('ADMIN'), upload.single('file'), companyImportDryRun);
+router.post('/import/companies/confirm', authorizeRoles('ADMIN'), upload.single('file'), companyImportConfirm);
+router.post('/import/offers/dry-run', authorizeRoles('ADMIN'), upload.single('file'), offerImportDryRun);
+router.post('/import/offers/confirm', authorizeRoles('ADMIN'), upload.single('file'), offerImportConfirm);
+
 // ---- Bulk Exports ----
 router.get('/export/attendance', authorizeRoles('ADMIN', 'FACULTY'), exportAttendance);
 router.get('/export/marks', authorizeRoles('ADMIN', 'FACULTY'), exportMarks);
 router.get('/export/timetable/:scheduleId', authorizeRoles('ADMIN', 'FACULTY', 'STUDENT'), exportTimetable);
+router.get('/export/placement-applications', authorizeRoles('ADMIN'), exportPlacementApplicationsHandler);
+router.get('/export/placement-offers', authorizeRoles('ADMIN'), exportPlacementOffersHandler);
+router.get('/export/placement-roster', authorizeRoles('ADMIN'), exportPlacementRosterHandler);
 
 // ---- Error report workbook ----
 router.post('/errors/download', authorizeRoles('ADMIN', 'FACULTY'), downloadErrorWorkbook);

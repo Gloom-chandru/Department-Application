@@ -34,6 +34,7 @@ model Department {
   subjects  Subject[]
   rooms              Room[]
   timetableSchedules TimetableSchedule[]
+  driveEligibilities DriveEligibleDepartment[]
 }
 
 model User {
@@ -54,23 +55,31 @@ model User {
   gradedSubmissions  AssignmentSubmission[] @relation("GradedSubmissions")
   approvalHistories  ApprovalHistory[]
   createdTimetableSchedules TimetableSchedule[] @relation("TimetableScheduleCreator")
+  createdPlacementDrives    PlacementDrive[] @relation("PlacementDriveCreator")
+  applicationStageHistories ApplicationStageHistory[]
 }
 
 model Student {
-  id                    String                 @id @default(uuid())
-  userId                String                 @unique
-  user                  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  rollNo                String                 @unique
+  id                    String                   @id @default(uuid())
+  userId                String                   @unique
+  user                  User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rollNo                String                   @unique
   batchYear             String // e.g. "2024-2028"
   section               String // e.g. "A"
   mobileNo              String
   guardianContact       String
   departmentId          String
-  department            Department             @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  department            Department               @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  cgpa                  Decimal?                 @db.Decimal(3, 2)
+  currentBacklogs       Int                      @default(0)
   attendance            Attendance[]
   marks                 Mark[]
   assignmentSubmissions AssignmentSubmission[]
   leaveODRequests       LeaveODRequest[]
+  riskAssessments       RiskAssessment[]
+  placementProfile      StudentPlacementProfile?
+  placementApplications PlacementApplication[]
+  placementOffers       PlacementOffer[]
 
   @@index([departmentId])
   @@index([batchYear, section])
@@ -399,4 +408,226 @@ model TimetableSlot {
   @@index([subjectId])
   @@index([roomId])
   @@index([dayOfWeek])
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum ConfidenceLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model RiskAssessment {
+  id                 String          @id @default(uuid())
+  studentId          String
+  student            Student         @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  riskScore          Float
+  riskLevel          RiskLevel
+  attendanceScore    Float
+  marksScore         Float
+  assignmentScore    Float
+  progressionScore   Float
+  dataCompleteness   Float
+  confidenceLevel    ConfidenceLevel
+  factors            Json
+  recommendations    Json
+  calculatedAt       DateTime        @default(now())
+  calculationVersion String          @default("v1")
+
+  @@index([studentId, calculatedAt(sort: Desc)])
+  @@index([riskLevel])
+  @@index([calculatedAt])
+}
+
+// ─── Phase 10: Placement Management ───────────────────────────────────────────
+
+enum DriveStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+  CANCELLED
+}
+
+enum ApplicationStage {
+  APPLIED
+  SHORTLISTED
+  APTITUDE
+  TECHNICAL
+  HR
+  SELECTED
+  REJECTED
+  WITHDRAWN
+}
+
+enum OfferStatus {
+  OFFERED
+  ACCEPTED
+  DECLINED
+  EXPIRED
+  REVOKED
+}
+
+enum PlacementStatus {
+  UNPLACED
+  PLACED
+}
+
+model Company {
+  id             String           @id @default(uuid())
+  name           String
+  code           String?          @unique
+  website        String?
+  industry       String?
+  description    String?          @db.Text
+  hrContactName  String?
+  hrContactEmail String?
+  isActive       Boolean          @default(true)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  drives         PlacementDrive[]
+  offers         PlacementOffer[]
+
+  @@index([isActive])
+  @@index([name])
+}
+
+model PlacementDrive {
+  id                   String                     @id @default(uuid())
+  companyId            String
+  company              Company                    @relation(fields: [companyId], references: [id], onDelete: Restrict)
+  title                String
+  description          String                     @db.Text
+  location             String
+  jobType              String?                    // FULL_TIME | INTERNSHIP
+  packageMin           Float?
+  packageMax           Float?
+  packageCtc           Float?
+  currency             String                     @default("INR")
+  applicationDeadline  DateTime
+  driveDate            DateTime?
+  minCgpa              Decimal?                   @db.Decimal(3, 2)
+  maxBacklogs          Int?
+  allowPlacedApplications Boolean                 @default(false)
+  status               DriveStatus                @default(DRAFT)
+  createdByUserId      String?
+  createdBy            User?                      @relation("PlacementDriveCreator", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  createdAt            DateTime                   @default(now())
+  updatedAt            DateTime                   @updatedAt
+  publishedAt          DateTime?
+  closedAt             DateTime?
+  eligibleDepartments  DriveEligibleDepartment[]
+  eligibleBatches      DriveEligibleBatch[]
+  applications         PlacementApplication[]
+  offers               PlacementOffer[]
+
+  @@index([status])
+  @@index([applicationDeadline])
+  @@index([companyId])
+}
+
+model DriveEligibleDepartment {
+  id           String         @id @default(uuid())
+  driveId      String
+  drive        PlacementDrive @relation(fields: [driveId], references: [id], onDelete: Cascade)
+  departmentId String
+  department   Department     @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+
+  @@unique([driveId, departmentId])
+  @@index([departmentId])
+}
+
+model DriveEligibleBatch {
+  id        String         @id @default(uuid())
+  driveId   String
+  drive     PlacementDrive @relation(fields: [driveId], references: [id], onDelete: Cascade)
+  batchYear String
+
+  @@unique([driveId, batchYear])
+  @@index([batchYear])
+}
+
+model StudentPlacementProfile {
+  id                 String          @id @default(uuid())
+  studentId          String          @unique
+  student            Student         @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  skills             String?         @db.Text
+  linkedinUrl        String?
+  githubUrl          String?
+  portfolioUrl       String?
+  resumePath         String?
+  originalResumeName String?
+  bio                String?         @db.Text
+  isProfileComplete  Boolean         @default(false)
+  placementStatus    PlacementStatus @default(UNPLACED)
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+}
+
+model PlacementApplication {
+  id                   String                    @id @default(uuid())
+  driveId              String
+  drive                PlacementDrive            @relation(fields: [driveId], references: [id], onDelete: Restrict)
+  studentId            String
+  student              Student                   @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  stage                ApplicationStage          @default(APPLIED)
+  appliedAt            DateTime                  @default(now())
+  updatedAt            DateTime                  @updatedAt
+  withdrawnAt          DateTime?
+  eligibilitySnapshot  Json
+  stageHistory         ApplicationStageHistory[]
+  offer                PlacementOffer?
+
+  @@unique([driveId, studentId])
+  @@index([stage])
+  @@index([studentId])
+  @@index([driveId])
+}
+
+model ApplicationStageHistory {
+  id            String               @id @default(uuid())
+  applicationId String
+  application   PlacementApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  fromStage     ApplicationStage?
+  toStage       ApplicationStage
+  actorUserId   String
+  actorUser     User                 @relation(fields: [actorUserId], references: [id], onDelete: Restrict)
+  remarks       String?              @db.Text
+  createdAt     DateTime             @default(now())
+
+  @@index([applicationId])
+  @@index([actorUserId])
+}
+
+model PlacementOffer {
+  id                      String               @id @default(uuid())
+  applicationId           String               @unique
+  application             PlacementApplication @relation(fields: [applicationId], references: [id], onDelete: Restrict)
+  driveId                 String
+  drive                   PlacementDrive       @relation(fields: [driveId], references: [id], onDelete: Restrict)
+  studentId               String
+  student                 Student              @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  companyId               String
+  company                 Company              @relation(fields: [companyId], references: [id], onDelete: Restrict)
+  ctc                     Float
+  ctcBreakdown            Json?
+  location                String?
+  roleTitle               String?
+  status                  OfferStatus          @default(OFFERED)
+  offeredAt               DateTime             @default(now())
+  respondBy               DateTime?
+  respondedAt             DateTime?
+  offerLetterPath         String?
+  originalOfferLetterName String?
+  createdAt               DateTime             @default(now())
+  updatedAt               DateTime             @updatedAt
+
+  @@index([studentId])
+  @@index([status])
+  @@index([companyId])
+  @@index([driveId])
 }
