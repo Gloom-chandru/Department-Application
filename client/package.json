@@ -18,7 +18,8 @@
     "react-dom": "^19.2.7",
     "react-router-dom": "^7.18.1",
     "recharts": "^3.10.0",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "vit-student-portal": "file:.."
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^7.0.0",

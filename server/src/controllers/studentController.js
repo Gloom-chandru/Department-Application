@@ -172,7 +172,7 @@ export const getNotifications = async (req, res) => {
     }
 
     const notifications = await prisma.notification.findMany({
-      where: { studentId },
+      where: { userId: req.user.id },
       orderBy: { createdAt: 'desc' },
     });
 
@@ -195,7 +195,7 @@ export const markNotificationAsRead = async (req, res) => {
     const updated = await prisma.notification.updateMany({
       where: {
         id,
-        studentId, // Security: ensure notification belongs to student
+        userId: req.user.id, // Security: ensure notification belongs to user
       },
       data: {
         readStatus: true,

@@ -333,7 +333,7 @@ const StudentDashboard = () => {
               }`}
             >
               <div className="mt-0.5 shrink-0">
-                {notif.type === 'LOW_ATTENDANCE' ? (
+                {notif.type === 'ATTENDANCE_WARNING' ? (
                   <AlertTriangle className="h-5 w-5 text-red-500" />
                 ) : (
                   <FileText className="h-5 w-5 text-blue-500" />

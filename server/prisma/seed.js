@@ -8,6 +8,9 @@ async function main() {
 
   // 1. Clear existing data in reverse order of dependencies
   await prisma.notification.deleteMany({});
+  await prisma.assignmentSubmissionVersion.deleteMany({});
+  await prisma.assignmentSubmission.deleteMany({});
+  await prisma.assignment.deleteMany({});
   await prisma.mark.deleteMany({});
   await prisma.attendance.deleteMany({});
   await prisma.subject.deleteMany({});
@@ -378,15 +381,16 @@ async function main() {
   // 7. Create Low Attendance Notification for Abishek (who has below 75% attendance)
   const lowAttendanceStudent = createdStudents.find(s => s.rollNo === '2024AIDS002');
   if (lowAttendanceStudent) {
-    await prisma.notification.create({
-      data: {
-        studentId: lowAttendanceStudent.id,
-        message: 'Your overall attendance is 72.2%, which is below the minimum required threshold of 75.0%. Please contact your class advisor.',
-        type: 'LOW_ATTENDANCE',
-        createdAt: new Date(),
-        readStatus: false,
-      },
-    });
+     await prisma.notification.create({
+       data: {
+         userId: lowAttendanceStudent.userId,
+         title: 'Low Attendance Warning',
+         message: 'Your overall attendance is 72.2%, which is below the minimum required threshold of 75.0%. Please contact your class advisor.',
+         type: 'ATTENDANCE_WARNING',
+         createdAt: new Date(),
+         readStatus: false,
+       },
+     });
     console.log('Created Low-Attendance Notification.');
   }
 
