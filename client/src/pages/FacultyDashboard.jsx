@@ -3,8 +3,8 @@ import api from '../utils/api';
 import { 
   Save, Calendar, Award, UserCheck, AlertCircle, Check, Loader2, Info, Upload, Download, Activity
 } from 'lucide-react';
-import { TableSkeleton } from '../components/SkeletonLoader';
-import Toast from '../components/Toast';
+import { TableSkeleton } from '../components/ui/Skeleton';
+import { Toast, Button, Badge } from '../components/ui';
 import FacultyBulkMarksModal from '../components/FacultyBulkMarksModal';
 import ExportDataModal from '../components/ExportDataModal';
 

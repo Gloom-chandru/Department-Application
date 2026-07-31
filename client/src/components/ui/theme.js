@@ -84,5 +84,3 @@ export const theme = {
 };
 
 export default theme;
-</arg_value>
-</task_progress></tool_call>

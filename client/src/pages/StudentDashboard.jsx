@@ -7,8 +7,8 @@ import {
 import { 
   AlertTriangle, BookOpen, Calendar, Award, Bell, Check, Printer, FileText, Loader2, Briefcase
 } from 'lucide-react';
-import { DashboardSkeleton } from '../components/SkeletonLoader';
-import Toast from '../components/Toast';
+import { DashboardSkeleton } from '../components/ui/Skeleton';
+import { Toast, Button, Badge } from '../components/ui';
 import AcademicHealthCard from '../components/AcademicHealthCard';
 
 const StudentDashboard = () => {
