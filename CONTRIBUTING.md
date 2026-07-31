@@ -1,82 +1,121 @@
-# Contributing Guidelines & Deployment Setup
+# Contributing to VIT Student Portal
 
-Thank you for contributing to the **VIT Student Portal** project! Please follow this document to set up the codebase for development, testing, and production deployment.
+![Contribution Guide](https://via.placeholder.com/1200x200/090d16/ffffff?text=Contributing+Guide)
 
----
+Thank you for your interest in contributing! This document outlines how to set up the project and standards for contributions.
 
-## 1. Local Development Setup
+## Table of Contents
 
-Follow the instructions in the main [README.md](README.md) to set up your PostgreSQL database, seed local values, and run the development servers concurrently with:
+- [Getting Started](#getting-started)
+- [Development Workflow](#development-workflow)
+- [Coding Standards](#coding-standards)
+- [Testing](#testing)
+- [Pull Request Process](#pull-request-process)
+- [Style Guide](#style-guide)
+- [Reporting Bugs](#reporting-bugs)
+- [Feature Requests](#feature-requests)
+
+## Getting Started
+
+### Prerequisites
+- Node.js >= 18
+- npm >= 9
+- PostgreSQL >= 14
+
+### Setup
+
 ```bash
-npm run dev
+git clone https://github.com/Gloom-chandru/Department-Application.git
+cd Department-Application
+npm run install-all
 ```
 
----
-
-## 2. Coding & Quality Control
-
-### Running Code Quality Check
-Before committing, run lint checks in the respective directories:
+### Environment Configuration
 ```bash
-# Run client linter
-npm run lint --prefix client
+cp .env.example .env
+cp server/.env.example server/.env
+# Fill in your values
 ```
 
-### Running Unit & Integration Tests
-Ensure all backend and frontend tests pass before opening a Pull Request:
+### Database
 ```bash
-# Run all tests sequentially from root
-npm test
+npm run db:migrate    # Apply Prisma migrations
+npm run db:seed       # Seed with demo data
 ```
 
+### Running Locally
+```bash
+npm run dev           # Starts both client and server concurrently
+```
+
+## Development Workflow
+
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feat/feature-name`)
+3. **Make** your changes
+4. **Run** tests (`npm test`)
+5. **Commit** with conventional messages
+6. **Push** and **open a PR**
+
+### Branch Naming
+| Type | Format |
+|------|--------|
+| Feature | `feat/feature-name` |
+| Bug Fix | `fix/bug-description` |
+| Docs | `docs/update-description` |
+| Refactor | `refactor/component-name` |
+
+### Commit Messages
+Follow [Conventional Commits](https://www.conventionalcommits.org/):
+```
+feat: add dark mode toggle
+fix: resolve student profile loading issue
+docs: update API endpoint documentation
+```
+
+## Coding Standards
+
+- Use **2-space** indentation
+- Single quotes for strings, double quotes for JSX text
+- Always include `aria-*` attributes for accessibility
+- Use the standardized UI component library in `components/ui/`
+- Follow the established **Tailwind CSS** design tokens
+
+## Testing
+
+The project has **272 passing tests** across frontend and backend:
+
+```bash
+npm test                    # Run all tests
+npm run test --prefix client
+npm run test --prefix server
+```
+
+All new features must include test coverage. Existing tests must not regress.
+
+## Pull Request Process
+
+1. Ensure all tests pass
+2. Run linting: `npm run lint --prefix client`
+3. Include a clear description of changes
+4. Link any related issues
+5. Request review from a maintainer
+
+## Style Guide
+
+- **Component naming**: PascalCase (e.g., `StudentDashboard`)
+- **File naming**: kebab-case for files, PascalCase for React components
+- **Variable naming**: camelCase for JS, kebab-case for CSS classes
+- **Import ordering**: React first, then third-party, then local
+
+## Reporting Bugs
+
+Use the **[Bug Report Template](https://github.com/Gloom-chandru/Department-Application/issues/new?template=bug_report.md)** when filing issues.
+
+## Feature Requests
+
+Use the **[Feature Request Template](https://github.com/Gloom-chandru/Department-Application/issues/new?template=feature_request.md)** to propose new features.
+
 ---
 
-## 3. Environment Variables for Production
-
-When deploying to a hosting provider, configure the following environment variables:
-
-### Backend (Server) Environment Variables
-| Variable Name | Description | Example / Recommendations |
-|---|---|---|
-| `PORT` | Port number the backend server listens to. | `5000` (Defaults to 5000) |
-| `NODE_ENV` | Environment identifier. Controls stack traces. | `production` |
-| `DATABASE_URL` | PostgreSQL connection string with SSL configurations. | `postgresql://user:pass@host:5432/db?sslmode=require` |
-| `JWT_SECRET` | Secret key used to sign access JWT tokens. | Use a random, complex string (32+ chars) |
-| `JWT_REFRESH_SECRET` | Secret key used to sign refresh JWT tokens. | Use a random, complex string (32+ chars) |
-| `ALLOWED_ORIGINS` | Comma-separated CORS whitelist of frontend URLs. | `https://my-portal-client.vercel.app` |
-
-### Frontend (Client) Environment Variables
-| Variable Name | Description | Example / Recommendations |
-|---|---|---|
-| `VITE_API_URL` | Root URL of your deployed Express API server. | `https://my-portal-api.onrender.com/api` |
-
----
-
-## 4. Deployment Instructions
-
-This application is decoupled and designed to be deployed separately for optimum security, performance, and scaling.
-
-### A. Deploying the Backend (Express & Prisma)
-Deploy to hosting providers like **Render**, **Railway**, or **Heroku**:
-1. Connect your repository to your provider.
-2. Set the root directory to `server/` or configure the build commands from root.
-3. **Build Command**:
-   ```bash
-   npm install && npx prisma generate
-   ```
-4. **Start Command**:
-   ```bash
-   npm start
-   ```
-5. Set all **Backend Environment Variables** listed above (ensure `sslmode=require` is added to the PostgreSQL string for secure production connections).
-
-### B. Deploying the Frontend (React & Vite)
-Deploy to static site hosting services like **Vercel** or **Netlify**:
-1. Connect your repository.
-2. Set the build parameters:
-   - **Framework Preset**: `Vite`
-   - **Root Directory**: `client/`
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `dist`
-3. Configure the environment variable `VITE_API_URL` pointing to your deployed backend URL (e.g. `https://my-portal-api.onrender.com/api`).
-4. Trigger the deployment.
+Thank you for contributing! 🎉

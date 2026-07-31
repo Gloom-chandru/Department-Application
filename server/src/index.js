@@ -97,12 +97,12 @@ app.use('/api/bulk', importExportRoutes);
 app.use('/api/risk', riskRoutes);
 app.use('/api/placement', placementRoutes);
 
-// 6. Global centralized JSON error-handling middleware
+// 6. Central error-handling middleware (must be registered after all routes)
 app.use((err, req, res, next) => {
-  console.error(err.stack || err);
+  console.error(`[${new Date().toISOString()}] ${req.method} ${req.path}`, err.stack || err);
   const status = err.status || err.statusCode || 500;
   const message = err.message || 'Internal Server Error';
-  
+
   res.status(status).json({
     status: 'error',
     statusCode: status,
@@ -112,10 +112,23 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start Server
+// Graceful startup banner
 if (config.nodeEnv !== 'test') {
   app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    const banner = [
+      '',
+      '╔══════════════════════════════════════════════════════════╗',
+      '║           VIT Student Portal API Server                 ║',
+      '╠══════════════════════════════════════════════════════════╣',
+      `║  Environment:  ${String(config.nodeEnv).padEnd(38)} ║`,
+      `║  Port:         ${String(PORT).padEnd(38)} ║`,
+      `║  Database:     ${config.databaseUrl ? 'Configured' : 'Not set'.padEnd(33) + ' '} ║`,
+      `║  Base URL:     ${('http://localhost:' + PORT + '/api').padEnd(38)} ║`,
+      `║  Health Check: http://localhost:${PORT}/api/health            ║`,
+      '╚══════════════════════════════════════════════════════════╝',
+      '',
+    ];
+    console.log(banner.join('\n'));
   });
 }
 
