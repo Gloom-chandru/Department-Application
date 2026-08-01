@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight, ChevronFirst, ChevronLast } from 'lucide-react';
-import { Button } from './Button';
+import Button from './Button';
 
 const Pagination = ({
   currentPage = 1,
