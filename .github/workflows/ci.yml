@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: department_app_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm run install-all
+
+      - name: Run linting
+        run: npm run lint --prefix client
+
+      - name: Run client tests
+        run: npm run test --prefix client
+
+      - name: Wait for PostgreSQL
+        run: sleep 5
+
+      - name: Run server migrations
+        run: |
+          cd server
+          npx prisma generate
+          npx prisma migrate deploy
+
+      - name: Run server tests
+        run: npm run test --prefix server
+        env:
+          DATABASE_URL: postgresql://postgres:password@localhost:5432/department_app_test
+          JWT_SECRET: test_secret_key_for_ci_only_3_2_chars
+          JWT_REFRESH_SECRET: test_refresh_secret_key_3_2_chars
