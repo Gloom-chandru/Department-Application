@@ -31,8 +31,8 @@ export default function DryRunSummary({ summary, valid, expiresAt, onTokenExpire
   const invalidRows = summary?.invalidRows || 0;
 
   return (
-    <div className="bg-slate-800/60 border border-slate-700 rounded-xl p-5 space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-700 pb-3">
+    <div className="bg-bg-sidebar/60 border border-border-card rounded-xl p-5 space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border-card pb-3">
         <div className="flex items-center space-x-2">
           {valid ? (
             <span className="flex items-center space-x-1.5 px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-xs font-semibold">
@@ -48,7 +48,7 @@ export default function DryRunSummary({ summary, valid, expiresAt, onTokenExpire
         </div>
 
         {expiresAt && (
-          <div className="flex items-center space-x-1.5 text-xs text-slate-400 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-700/60">
+          <div className="flex items-center space-x-1.5 text-xs text-text-muted bg-bg-card/50 px-3 py-1.5 rounded-lg border border-border-card/60">
             <Clock className="w-3.5 h-3.5 text-amber-400" />
             <span>Validation token expires in:</span>
             <span className={`font-mono font-bold ${timeLeft < 180 ? 'text-rose-400' : 'text-amber-400'}`}>
@@ -60,8 +60,8 @@ export default function DryRunSummary({ summary, valid, expiresAt, onTokenExpire
 
       {/* Metric Cards Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3.5 bg-slate-900/40 border border-slate-700/60 rounded-xl">
-          <p className="text-xs text-slate-400 font-medium">Total Rows</p>
+        <div className="p-3.5 bg-bg-card/40 border border-border-card/60 rounded-xl">
+          <p className="text-xs text-text-muted font-medium">Total Rows</p>
           <p className="text-2xl font-bold text-slate-100 mt-1">{totalRows}</p>
         </div>
 
@@ -78,16 +78,16 @@ export default function DryRunSummary({ summary, valid, expiresAt, onTokenExpire
         {importType === 'MARKS' && summary?.actionCounts ? (
           <div className="p-3.5 bg-blue-500/5 border border-blue-500/20 rounded-xl">
             <p className="text-xs text-blue-400 font-medium">Actions Breakdown</p>
-            <div className="text-xs text-slate-300 mt-1 space-y-0.5 font-mono">
+            <div className="text-xs text-text-main mt-1 space-y-0.5 font-mono">
               <span className="text-emerald-400">{summary.actionCounts.create || 0} CREATE</span> •{' '}
               <span className="text-blue-400">{summary.actionCounts.update || 0} UPDATE</span> •{' '}
-              <span className="text-slate-400">{summary.actionCounts.noop || 0} NO-OP</span>
+              <span className="text-text-muted">{summary.actionCounts.noop || 0} NO-OP</span>
             </div>
           </div>
         ) : (
-          <div className="p-3.5 bg-slate-900/40 border border-slate-700/60 rounded-xl">
-            <p className="text-xs text-slate-400 font-medium">Status</p>
-            <p className="text-sm font-semibold text-slate-200 mt-2">
+          <div className="p-3.5 bg-bg-card/40 border border-border-card/60 rounded-xl">
+            <p className="text-xs text-text-muted font-medium">Status</p>
+            <p className="text-sm font-semibold text-text-main mt-2">
               {valid ? 'All Rows Passed' : `${invalidRows} Row(s) Rejected`}
             </p>
           </div>

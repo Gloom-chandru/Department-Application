@@ -29,7 +29,7 @@ export default function AcademicHealthCard({ studentId }) {
 
   if (loading) {
     return (
-      <div className="backdrop-blur-md bg-slate-900/40 border border-slate-800 rounded-2xl p-6 flex items-center justify-center space-x-3 text-slate-400">
+      <div className="backdrop-blur-md bg-bg-card/40 border border-border-app rounded-2xl p-6 flex items-center justify-center space-x-3 text-text-muted">
         <RefreshCw className="w-5 h-5 animate-spin text-blue-500" />
         <span className="text-sm font-medium">Analyzing academic health & attendance metrics...</span>
       </div>
@@ -68,17 +68,17 @@ export default function AcademicHealthCard({ studentId }) {
   const badge = getLevelBadge(riskLevel);
 
   return (
-    <div className="backdrop-blur-md bg-slate-900/40 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
+    <div className="backdrop-blur-md bg-bg-card/40 border border-border-app rounded-2xl p-6 shadow-xl space-y-6">
       
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border-app pb-4">
         <div className="flex items-center space-x-3">
           <div className="p-2.5 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-xl">
             <Activity className="w-5 h-5" />
           </div>
           <div>
             <h3 className="text-base font-bold text-slate-100">Academic Health & Early Warning Summary</h3>
-            <p className="text-xs text-slate-400">Real-time explainable insights on attendance, marks, and assignments.</p>
+            <p className="text-xs text-text-muted">Real-time explainable insights on attendance, marks, and assignments.</p>
           </div>
         </div>
 
@@ -88,7 +88,7 @@ export default function AcademicHealthCard({ studentId }) {
             <span>{badge.label}</span>
           </div>
 
-          <div className="flex items-center space-x-1 px-2.5 py-1 bg-slate-800/60 border border-slate-700/60 text-slate-300 rounded-lg text-[11px]">
+          <div className="flex items-center space-x-1 px-2.5 py-1 bg-bg-sidebar/60 border border-border-card/60 text-text-main rounded-lg text-[11px]">
             <Layers className="w-3.5 h-3.5 text-blue-400" />
             <span>Confidence: <strong>{confidenceLevel}</strong> ({dataCompleteness}%)</span>
           </div>
@@ -98,12 +98,12 @@ export default function AcademicHealthCard({ studentId }) {
       {/* Progress Metrics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {/* Attendance Component */}
-        <div className="p-3.5 bg-slate-950/50 border border-slate-800 rounded-xl space-y-2">
+        <div className="p-3.5 bg-bg-app/50 border border-border-app rounded-xl space-y-2">
           <div className="flex justify-between items-center text-xs">
-            <span className="text-slate-400 font-medium">Attendance Risk</span>
-            <span className="font-bold text-slate-200">{attendanceScore.toFixed(0)} / 100</span>
+            <span className="text-text-muted font-medium">Attendance Risk</span>
+            <span className="font-bold text-text-main">{attendanceScore.toFixed(0)} / 100</span>
           </div>
-          <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+          <div className="w-full bg-bg-sidebar h-2 rounded-full overflow-hidden">
             <div
               className={`h-full transition-all duration-500 ${attendanceScore >= 65 ? 'bg-rose-500' : attendanceScore >= 35 ? 'bg-amber-500' : 'bg-emerald-500'}`}
               style={{ width: `${Math.min(100, attendanceScore)}%` }}
@@ -112,12 +112,12 @@ export default function AcademicHealthCard({ studentId }) {
         </div>
 
         {/* Marks Component */}
-        <div className="p-3.5 bg-slate-950/50 border border-slate-800 rounded-xl space-y-2">
+        <div className="p-3.5 bg-bg-app/50 border border-border-app rounded-xl space-y-2">
           <div className="flex justify-between items-center text-xs">
-            <span className="text-slate-400 font-medium">Marks Risk</span>
-            <span className="font-bold text-slate-200">{marksScore.toFixed(0)} / 100</span>
+            <span className="text-text-muted font-medium">Marks Risk</span>
+            <span className="font-bold text-text-main">{marksScore.toFixed(0)} / 100</span>
           </div>
-          <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+          <div className="w-full bg-bg-sidebar h-2 rounded-full overflow-hidden">
             <div
               className={`h-full transition-all duration-500 ${marksScore >= 65 ? 'bg-rose-500' : marksScore >= 35 ? 'bg-amber-500' : 'bg-emerald-500'}`}
               style={{ width: `${Math.min(100, marksScore)}%` }}
@@ -126,12 +126,12 @@ export default function AcademicHealthCard({ studentId }) {
         </div>
 
         {/* Assignment Component */}
-        <div className="p-3.5 bg-slate-950/50 border border-slate-800 rounded-xl space-y-2">
+        <div className="p-3.5 bg-bg-app/50 border border-border-app rounded-xl space-y-2">
           <div className="flex justify-between items-center text-xs">
-            <span className="text-slate-400 font-medium">Assignment Risk</span>
-            <span className="font-bold text-slate-200">{assignmentScore.toFixed(0)} / 100</span>
+            <span className="text-text-muted font-medium">Assignment Risk</span>
+            <span className="font-bold text-text-main">{assignmentScore.toFixed(0)} / 100</span>
           </div>
-          <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+          <div className="w-full bg-bg-sidebar h-2 rounded-full overflow-hidden">
             <div
               className={`h-full transition-all duration-500 ${assignmentScore >= 65 ? 'bg-rose-500' : assignmentScore >= 35 ? 'bg-amber-500' : 'bg-emerald-500'}`}
               style={{ width: `${Math.min(100, assignmentScore)}%` }}
@@ -140,12 +140,12 @@ export default function AcademicHealthCard({ studentId }) {
         </div>
 
         {/* Progression Component */}
-        <div className="p-3.5 bg-slate-950/50 border border-slate-800 rounded-xl space-y-2">
+        <div className="p-3.5 bg-bg-app/50 border border-border-app rounded-xl space-y-2">
           <div className="flex justify-between items-center text-xs">
-            <span className="text-slate-400 font-medium">Progression Risk</span>
-            <span className="font-bold text-slate-200">{progressionScore.toFixed(0)} / 100</span>
+            <span className="text-text-muted font-medium">Progression Risk</span>
+            <span className="font-bold text-text-main">{progressionScore.toFixed(0)} / 100</span>
           </div>
-          <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+          <div className="w-full bg-bg-sidebar h-2 rounded-full overflow-hidden">
             <div
               className={`h-full transition-all duration-500 ${progressionScore >= 65 ? 'bg-rose-500' : progressionScore >= 35 ? 'bg-amber-500' : 'bg-emerald-500'}`}
               style={{ width: `${Math.min(100, progressionScore)}%` }}
@@ -161,7 +161,7 @@ export default function AcademicHealthCard({ studentId }) {
             <CheckCircle2 className="w-4 h-4 text-blue-400" />
             <span>Recommended Actions for Academic Health Improvement</span>
           </div>
-          <ul className="list-disc list-inside text-xs text-slate-300 space-y-1 pl-1">
+          <ul className="list-disc list-inside text-xs text-text-main space-y-1 pl-1">
             {recommendations.map((rec, i) => (
               <li key={i}>{rec}</li>
             ))}
@@ -171,11 +171,11 @@ export default function AcademicHealthCard({ studentId }) {
 
       {/* Factors Accordion Toggle */}
       {factors.length > 0 && (
-        <div className="border-t border-slate-800 pt-3">
+        <div className="border-t border-border-app pt-3">
           <button
             type="button"
             onClick={() => setIsExpanded(!isExpanded)}
-            className="flex items-center justify-between w-full text-xs font-semibold text-slate-400 hover:text-slate-200 transition-colors"
+            className="flex items-center justify-between w-full text-xs font-semibold text-text-muted hover:text-text-main transition-colors"
           >
             <span>Explainable Primary Risk Factors ({factors.length})</span>
             {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -184,10 +184,10 @@ export default function AcademicHealthCard({ studentId }) {
           {isExpanded && (
             <div className="mt-3 space-y-2">
               {factors.map((f, idx) => (
-                <div key={idx} className="flex items-start justify-between p-3 bg-slate-950/60 border border-slate-850 rounded-xl text-xs">
+                <div key={idx} className="flex items-start justify-between p-3 bg-bg-app/60 border border-border-card/50 rounded-xl text-xs">
                   <div className="space-y-0.5">
-                    <span className="font-semibold text-slate-200">{f.message}</span>
-                    <p className="text-[11px] text-slate-400 uppercase tracking-wider">Category: {f.category}</p>
+                    <span className="font-semibold text-text-main">{f.message}</span>
+                    <p className="text-[11px] text-text-muted uppercase tracking-wider">Category: {f.category}</p>
                   </div>
                   <span className={`px-2 py-0.5 rounded font-mono font-bold text-[10px] ${f.severity === 'HIGH' ? 'bg-rose-500/20 text-rose-300' : 'bg-amber-500/20 text-amber-300'}`}>
                     +{f.points} pts

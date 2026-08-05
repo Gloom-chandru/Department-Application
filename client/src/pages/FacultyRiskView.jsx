@@ -45,7 +45,7 @@ export default function FacultyRiskView() {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
         <Loader2 className="h-10 w-10 text-blue-500 animate-spin" />
-        <span className="ml-3 text-slate-400">Loading student risk metrics...</span>
+        <span className="ml-3 text-text-muted">Loading student risk metrics...</span>
       </div>
     );
   }
@@ -59,13 +59,13 @@ export default function FacultyRiskView() {
   });
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="backdrop-blur-md bg-slate-900/40 border border-slate-800 p-6 rounded-2xl space-y-6">
+      <div className="backdrop-blur-md bg-bg-card/40 border border-border-app p-6 rounded-2xl space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-white mb-2">Faculty Academic Attention Portal</h1>
-            <p className="text-slate-400 text-sm">Monitor student academic risk levels and explainable primary factors for assigned subjects.</p>
+            <h1 className="text-2xl font-bold text-text-main mb-2">Faculty Academic Attention Portal</h1>
+            <p className="text-text-muted text-sm">Monitor student academic risk levels and explainable primary factors for assigned subjects.</p>
           </div>
 
           <div className="flex items-center space-x-3">
@@ -77,9 +77,9 @@ export default function FacultyRiskView() {
 
         {/* Summary Counter Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-          <div className="p-4 bg-slate-950/60 border border-slate-800 rounded-xl">
-            <p className="text-xs font-medium text-slate-400">Total Enrolled</p>
-            <p className="text-2xl font-bold text-white mt-1">{summary.total}</p>
+          <div className="p-4 bg-bg-app/60 border border-border-app rounded-xl">
+            <p className="text-xs font-medium text-text-muted">Total Enrolled</p>
+            <p className="text-2xl font-bold text-text-main mt-1">{summary.total}</p>
           </div>
 
           <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl">
@@ -108,13 +108,13 @@ export default function FacultyRiskView() {
         </div>
 
         {/* Filter Controls */}
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 pt-2 border-t border-slate-800">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 pt-2 border-t border-border-app">
           <div>
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Subject</label>
+            <label className="text-xs font-semibold uppercase tracking-wider text-text-muted">Subject</label>
             <select
               value={selectedSubject}
               onChange={(e) => setSelectedSubject(e.target.value)}
-              className="mt-1 block w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white focus:outline-none"
+              className="mt-1 block w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main focus:outline-none"
             >
               <option value="">All Assigned Subjects</option>
               {subjects.map((sub) => (
@@ -126,11 +126,11 @@ export default function FacultyRiskView() {
           </div>
 
           <div>
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Batch Year</label>
+            <label className="text-xs font-semibold uppercase tracking-wider text-text-muted">Batch Year</label>
             <select
               value={selectedBatch}
               onChange={(e) => setSelectedBatch(e.target.value)}
-              className="mt-1 block w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white focus:outline-none"
+              className="mt-1 block w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main focus:outline-none"
             >
               <option value="">All Batches</option>
               <option value="2024-28">2024-28</option>
@@ -139,11 +139,11 @@ export default function FacultyRiskView() {
           </div>
 
           <div>
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Section</label>
+            <label className="text-xs font-semibold uppercase tracking-wider text-text-muted">Section</label>
             <select
               value={selectedSection}
               onChange={(e) => setSelectedSection(e.target.value)}
-              className="mt-1 block w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white focus:outline-none"
+              className="mt-1 block w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main focus:outline-none"
             >
               <option value="">All Sections</option>
               <option value="A">Section A</option>
@@ -152,11 +152,11 @@ export default function FacultyRiskView() {
           </div>
 
           <div>
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Risk Level</label>
+            <label className="text-xs font-semibold uppercase tracking-wider text-text-muted">Risk Level</label>
             <select
               value={selectedRiskLevel}
               onChange={(e) => setSelectedRiskLevel(e.target.value)}
-              className="mt-1 block w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white focus:outline-none"
+              className="mt-1 block w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main focus:outline-none"
             >
               <option value="">All Risk Levels</option>
               <option value="HIGH">High Risk</option>
@@ -168,24 +168,24 @@ export default function FacultyRiskView() {
       </div>
 
       {/* Search & Student List */}
-      <div className="backdrop-blur-md bg-slate-900/40 border border-slate-800 p-6 rounded-2xl space-y-4">
+      <div className="backdrop-blur-md bg-bg-card/40 border border-border-app p-6 rounded-2xl space-y-4">
         <div className="flex justify-between items-center">
-          <h2 className="text-lg font-bold text-white">Student Risk Roster ({filteredStudents.length})</h2>
+          <h2 className="text-lg font-bold text-text-main">Student Risk Roster ({filteredStudents.length})</h2>
           <div className="relative w-64">
-            <Search className="w-4 h-4 absolute left-3 top-3 text-slate-500" />
+            <Search className="w-4 h-4 absolute left-3 top-3 text-text-muted" />
             <input
               type="text"
               placeholder="Search by name or roll no..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-9 pr-4 py-2 text-xs bg-slate-950 border border-slate-800 rounded-xl text-white w-full focus:outline-none"
+              className="pl-9 pr-4 py-2 text-xs bg-bg-app border border-border-app rounded-xl text-text-main w-full focus:outline-none"
             />
           </div>
         </div>
 
-        <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/40">
+        <div className="overflow-x-auto rounded-xl border border-border-app bg-bg-app/40">
           <table className="min-w-full divide-y divide-slate-800 text-left text-xs">
-            <thead className="bg-slate-900/60 font-semibold uppercase tracking-wider text-slate-400">
+            <thead className="bg-bg-card/60 font-semibold uppercase tracking-wider text-text-muted">
               <tr>
                 <th className="px-6 py-4">Student Details</th>
                 <th className="px-4 py-4 text-center">Attendance Risk</th>
@@ -195,12 +195,12 @@ export default function FacultyRiskView() {
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-850 text-slate-300">
+            <tbody className="divide-y divide-slate-850 text-text-main">
               {filteredStudents.map((s) => (
-                <tr key={s.studentId} className="hover:bg-slate-900/40 transition-colors">
+                <tr key={s.studentId} className="hover:bg-bg-card/40 transition-colors">
                   <td className="px-6 py-4">
                     <div className="font-semibold text-slate-100">{s.name}</div>
-                    <div className="text-[11px] text-slate-500 font-mono">
+                    <div className="text-[11px] text-text-muted font-mono">
                       Roll: {s.rollNo} • {s.batchYear} ({s.section})
                     </div>
                   </td>
@@ -211,7 +211,7 @@ export default function FacultyRiskView() {
                     {s.marksScore.toFixed(0)} / 100
                   </td>
                   <td className="px-4 py-4 text-center">
-                    <span className="px-2 py-1 bg-slate-800 text-slate-300 rounded font-semibold text-[10px]">
+                    <span className="px-2 py-1 bg-bg-sidebar text-text-main rounded font-semibold text-[10px]">
                       {s.confidenceLevel} ({s.dataCompleteness}%)
                     </span>
                   </td>
@@ -242,7 +242,7 @@ export default function FacultyRiskView() {
               ))}
               {filteredStudents.length === 0 && (
                 <tr>
-                  <td colSpan="6" className="py-8 text-center text-slate-500">
+                  <td colSpan="6" className="py-8 text-center text-text-muted">
                     No student risk records match current filter criteria.
                   </td>
                 </tr>
@@ -254,14 +254,14 @@ export default function FacultyRiskView() {
 
       {/* Detail Modal */}
       {detailStudentId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-3xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-base font-bold text-white">Student Risk Analysis Breakdown</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-bg-sidebar/80 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-bg-card border border-border-card rounded-2xl max-w-3xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-border-app pb-3">
+              <h3 className="text-base font-bold text-text-main">Student Risk Analysis Breakdown</h3>
               <button
                 type="button"
                 onClick={() => setDetailStudentId(null)}
-                className="p-1.5 text-slate-400 hover:text-slate-200 rounded-lg"
+                className="p-1.5 text-text-muted hover:text-text-main rounded-lg"
               >
                 <X className="w-5 h-5" />
               </button>

@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import Navbar from './components/Navbar';
+import { ThemeProvider } from './context/ThemeContext';
+import Layout from './components/Layout';
 import ErrorBoundary from './components/ErrorBoundary';
 import Login from './pages/Login';
 import StudentDashboard from './pages/StudentDashboard';
@@ -65,144 +66,102 @@ const DashboardDispatcher = () => {
 function App() {
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <Router>
-          <div className="min-h-screen flex flex-col bg-[#090d16]">
-            <Navbar />
-            <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-              <Routes>
-                {/* Public route */}
-                <Route path="/login" element={<Login />} />
+      <ThemeProvider>
+        <AuthProvider>
+          <Router>
+            <Routes>
+              {/* Public route — no layout shell */}
+              <Route path="/login" element={<Login />} />
 
-                {/* Protected routes */}
-                <Route 
-                  path="/" 
-                  element={
-                    <PrivateRoute>
-                      <DashboardDispatcher />
-                    </PrivateRoute>
-                  } 
-                />
-                <Route 
-                  path="/profile" 
-                  element={
-                    <PrivateRoute>
-                      <Profile />
-                    </PrivateRoute>
-                  } 
-                />
-                <Route 
-                  path="/notifications" 
-                  element={
-                    <PrivateRoute>
-                      <NotificationsPage />
-                    </PrivateRoute>
-                  } 
-                />
-                <Route 
-                  path="/requests" 
-                  element={
-                    <PrivateRoute>
-                      <StudentRequests />
-                    </PrivateRoute>
-                  } 
-                />
-                <Route 
-                  path="/review" 
-                  element={
-                    <PrivateRoute>
-                      <FacultyReview />
-                    </PrivateRoute>
-                  } 
-                />
-                <Route 
-                  path="/admin/requests" 
-                  element={
-                    <PrivateRoute>
-                      <AdminRequestsOverview />
-                    </PrivateRoute>
-                  } 
-                />
-                <Route 
-                  path="/timetable" 
-                  element={
-                    <PrivateRoute>
-                      <StudentTimetable />
-                    </PrivateRoute>
-                  } 
-                />
-                <Route 
-                  path="/schedule" 
-                  element={
-                    <PrivateRoute>
-                      <FacultySchedule />
-                    </PrivateRoute>
-                  } 
-                />
-                <Route 
-                  path="/admin/timetable" 
-                  element={
-                    <PrivateRoute roles={['ADMIN']}>
-                      <AdminTimetableManager />
-                    </PrivateRoute>
-                  } 
-                />
-                <Route 
-                  path="/admin/bulk" 
-                  element={
-                    <PrivateRoute roles={['ADMIN']}>
-                      <AdminBulkImportManager />
-                    </PrivateRoute>
-                  } 
-                />
-                <Route 
-                  path="/faculty/risk" 
-                  element={
-                    <PrivateRoute roles={['FACULTY', 'ADMIN']}>
-                      <FacultyRiskView />
-                    </PrivateRoute>
-                  } 
-                />
-                <Route 
-                  path="/admin/risk" 
-                  element={
-                    <PrivateRoute roles={['ADMIN']}>
-                      <AdminRiskAnalytics />
-                    </PrivateRoute>
-                  } 
-                />
-                <Route
-                  path="/student/placement"
-                  element={
-                    <PrivateRoute roles={['STUDENT']}>
-                      <StudentPlacement />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path="/admin/placement"
-                  element={
-                    <PrivateRoute roles={['ADMIN']}>
-                      <AdminPlacementManager />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path="/faculty/placement"
-                  element={
-                    <PrivateRoute roles={['FACULTY']}>
-                      <FacultyPlacementView />
-                    </PrivateRoute>
-                  }
-                />
-
-                {/* 404 Catch-all fallback */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-          </div>
-        </Router>
-      </AuthProvider>
+              {/* All protected routes wrapped in the enterprise Layout */}
+              <Route
+                path="/*"
+                element={
+                  <PrivateRoute>
+                    <Layout>
+                      <Routes>
+                        <Route path="/" element={<DashboardDispatcher />} />
+                        <Route path="/profile" element={<Profile />} />
+                        <Route path="/notifications" element={<NotificationsPage />} />
+                        <Route path="/requests" element={<StudentRequests />} />
+                        <Route path="/review" element={<FacultyReview />} />
+                        <Route path="/timetable" element={<StudentTimetable />} />
+                        <Route path="/schedule" element={<FacultySchedule />} />
+                        <Route
+                          path="/admin/requests"
+                          element={
+                            <PrivateRoute>
+                              <AdminRequestsOverview />
+                            </PrivateRoute>
+                          }
+                        />
+                        <Route
+                          path="/admin/timetable"
+                          element={
+                            <PrivateRoute roles={['ADMIN']}>
+                              <AdminTimetableManager />
+                            </PrivateRoute>
+                          }
+                        />
+                        <Route
+                          path="/admin/bulk"
+                          element={
+                            <PrivateRoute roles={['ADMIN']}>
+                              <AdminBulkImportManager />
+                            </PrivateRoute>
+                          }
+                        />
+                        <Route
+                          path="/faculty/risk"
+                          element={
+                            <PrivateRoute roles={['FACULTY', 'ADMIN']}>
+                              <FacultyRiskView />
+                            </PrivateRoute>
+                          }
+                        />
+                        <Route
+                          path="/admin/risk"
+                          element={
+                            <PrivateRoute roles={['ADMIN']}>
+                              <AdminRiskAnalytics />
+                            </PrivateRoute>
+                          }
+                        />
+                        <Route
+                          path="/student/placement"
+                          element={
+                            <PrivateRoute roles={['STUDENT']}>
+                              <StudentPlacement />
+                            </PrivateRoute>
+                          }
+                        />
+                        <Route
+                          path="/admin/placement"
+                          element={
+                            <PrivateRoute roles={['ADMIN']}>
+                              <AdminPlacementManager />
+                            </PrivateRoute>
+                          }
+                        />
+                        <Route
+                          path="/faculty/placement"
+                          element={
+                            <PrivateRoute roles={['FACULTY']}>
+                              <FacultyPlacementView />
+                            </PrivateRoute>
+                          }
+                        />
+                        {/* 404 Catch-all */}
+                        <Route path="*" element={<NotFound />} />
+                      </Routes>
+                    </Layout>
+                  </PrivateRoute>
+                }
+              />
+            </Routes>
+          </Router>
+        </AuthProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 }

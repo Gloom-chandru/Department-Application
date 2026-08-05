@@ -341,26 +341,26 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
+    <div className="space-y-8">
       
       {/* HEADER ROW */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-border-app pb-6">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-white mb-1">Administrative Console</h1>
-          <p className="text-slate-400 text-sm">VIT Academic Portal Administration & Management</p>
+          <h1 className="text-3xl font-extrabold tracking-tight text-text-main mb-1">Administrative Console</h1>
+          <p className="text-text-muted text-sm">VIT Academic Portal Administration & Management</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={() => navigate('/admin/placement')}
             type="button"
-            className="flex items-center gap-2 px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-sm transition-colors shadow-lg shadow-violet-700/10"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-text-main font-semibold text-sm transition-colors shadow-lg shadow-violet-700/10"
           >
             <span>Placement Manager</span>
           </button>
           <button
             onClick={() => navigate('/admin/bulk')}
             type="button"
-            className="flex items-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition-colors shadow-lg shadow-blue-700/10"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-text-main font-semibold text-sm transition-colors shadow-lg shadow-blue-700/10"
           >
             <Upload className="h-4.5 w-4.5" />
             <span>Bulk Data Manager</span>
@@ -369,7 +369,7 @@ const AdminDashboard = () => {
           <button
             onClick={() => setIsExportModalOpen(true)}
             type="button"
-            className="flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm transition-colors shadow-lg shadow-emerald-700/10"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-text-main font-semibold text-sm transition-colors shadow-lg shadow-emerald-700/10"
           >
             <Download className="h-4.5 w-4.5" />
             <span>Export Academic Ledgers</span>
@@ -378,7 +378,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* NAVIGATION TABS */}
-      <div className="flex flex-wrap border-b border-slate-800 gap-1 sm:gap-2">
+      <div className="flex flex-wrap border-b border-border-app gap-1 sm:gap-2">
         {[
           { id: 'analytics', label: 'Overview Analytics', icon: Users },
           { id: 'departments', label: 'Departments', icon: Building },
@@ -398,7 +398,7 @@ const AdminDashboard = () => {
               className={`flex items-center gap-2 border-b-2 px-4 sm:px-6 py-3 font-semibold text-xs sm:text-sm transition-colors ${
                 activeTab === tab.id
                   ? 'border-blue-500 text-blue-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
+                  : 'border-transparent text-text-muted hover:text-text-main'
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -425,13 +425,13 @@ const AdminDashboard = () => {
                 ].map((c) => {
                   const Icon = c.icon;
                   return (
-                    <div key={c.label} className="backdrop-blur-md bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 flex items-center gap-4">
-                      <div className={`p-3 rounded-xl bg-slate-950 border border-slate-800 ${c.color}`}>
+                    <div key={c.label} className="backdrop-blur-md bg-bg-card/40 border border-border-app/80 rounded-2xl p-5 flex items-center gap-4">
+                      <div className={`p-3 rounded-xl bg-bg-app border border-border-app ${c.color}`}>
                         <Icon className="h-6 w-6" />
                       </div>
                       <div>
-                        <div className="text-2xl font-black text-white">{c.count}</div>
-                        <div className="text-xs text-slate-500 font-medium mt-0.5">{c.label}</div>
+                        <div className="text-2xl font-black text-text-main">{c.count}</div>
+                        <div className="text-xs text-text-muted font-medium mt-0.5">{c.label}</div>
                       </div>
                     </div>
                   );
@@ -441,8 +441,8 @@ const AdminDashboard = () => {
               {/* Analytics Graphs */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Batch Attendance */}
-                <div className="backdrop-blur-md bg-slate-900/20 border border-slate-800 rounded-2xl p-6">
-                  <h3 className="text-lg font-bold text-slate-200 mb-6">Class Attendance Performance (%)</h3>
+                <div className="backdrop-blur-md bg-bg-card/20 border border-border-app rounded-2xl p-6">
+                  <h3 className="text-lg font-bold text-text-main mb-6">Class Attendance Performance (%)</h3>
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={analytics?.attendanceByBatch}>
@@ -458,8 +458,8 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Batch Marks */}
-                <div className="backdrop-blur-md bg-slate-900/20 border border-slate-800 rounded-2xl p-6">
-                  <h3 className="text-lg font-bold text-slate-200 mb-6">Academic Grade Average (%)</h3>
+                <div className="backdrop-blur-md bg-bg-card/20 border border-border-app rounded-2xl p-6">
+                  <h3 className="text-lg font-bold text-text-main mb-6">Academic Grade Average (%)</h3>
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={analytics?.marksByBatch}>
@@ -481,14 +481,14 @@ const AdminDashboard = () => {
 
       {/* VIEW: SETTINGS */}
       {activeTab === 'settings' && (
-        <div className="backdrop-blur-md bg-slate-900/40 border border-slate-800 max-w-xl p-8 rounded-2xl">
-          <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+        <div className="backdrop-blur-md bg-bg-card/40 border border-border-app max-w-xl p-8 rounded-2xl">
+          <h2 className="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
             <Settings className="h-5 w-5 text-blue-500" />
             Portal Settings
           </h2>
           <form onSubmit={handleSaveSettings} className="space-y-6">
             <div className="space-y-2">
-              <label htmlFor="settings-threshold" className="text-sm font-semibold text-slate-350">Minimum Required Attendance (%)</label>
+              <label htmlFor="settings-threshold" className="text-sm font-semibold text-text-main">Minimum Required Attendance (%)</label>
               <div className="flex gap-4 items-center">
                 <input
                   id="settings-threshold"
@@ -498,9 +498,9 @@ const AdminDashboard = () => {
                   max="100"
                   value={threshold}
                   onChange={(e) => setThreshold(e.target.value)}
-                  className="w-32 rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-white focus:outline-none"
+                  className="w-32 rounded-xl border border-border-app bg-bg-app px-4 py-3 text-sm text-text-main focus:outline-none"
                 />
-                <span className="text-xs text-slate-500">
+                <span className="text-xs text-text-muted">
                   Students below this percentage will receive low-attendance warnings and banners.
                 </span>
               </div>
@@ -508,7 +508,7 @@ const AdminDashboard = () => {
             <button
               type="submit"
               disabled={savingSettings}
-              className="px-5 py-2.5 bg-blue-650 hover:bg-blue-600 rounded-lg text-white font-semibold text-sm transition-colors flex items-center gap-2"
+              className="px-5 py-2.5 bg-blue-650 hover:bg-blue-600 rounded-lg text-text-main font-semibold text-sm transition-colors flex items-center gap-2"
             >
               {savingSettings ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
               <span>Save System Settings</span>
@@ -522,12 +522,12 @@ const AdminDashboard = () => {
         <div className="space-y-6">
           {/* Action Row */}
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-bold text-slate-200 capitalize">{activeTab} Registry</h3>
+            <h3 className="text-lg font-bold text-text-main capitalize">{activeTab} Registry</h3>
             <button
               onClick={() => openModal(activeTab === 'departments' ? 'dept' : activeTab.slice(0, -1), 'create')}
               type="button"
               aria-label={`Create new ${activeTab.slice(0, -1)} entry`}
-              className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl text-white font-semibold text-sm transition-colors"
+              className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl text-text-main font-semibold text-sm transition-colors"
             >
               <Plus className="h-4 w-4" />
               <span>Add New</span>
@@ -535,26 +535,26 @@ const AdminDashboard = () => {
           </div>
 
           {loadingCrud ? (
-            <div className="bg-slate-900/10 border border-slate-800/80 rounded-2xl p-6">
+            <div className="bg-bg-card/10 border border-border-app/80 rounded-2xl p-6">
               <TableSkeleton rows={4} />
             </div>
           ) : (
-            <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/10">
+            <div className="overflow-x-auto rounded-xl border border-border-app bg-bg-card/10">
               {/* DEPARTMENTS TABLE */}
               {activeTab === 'departments' && (
                 <table className="min-w-full divide-y divide-slate-800 text-left text-sm">
-                  <thead className="bg-slate-900/50 text-xs font-semibold uppercase text-slate-400">
+                  <thead className="bg-bg-card/50 text-xs font-semibold uppercase text-text-muted">
                     <tr>
                       <th className="px-6 py-4">Department Name</th>
                       <th className="px-6 py-4 text-center">Code</th>
                       <th className="px-6 py-4 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-850 text-slate-350">
+                  <tbody className="divide-y divide-slate-850 text-text-main">
                     {departments.map((d) => (
-                      <tr key={d.id} className="hover:bg-slate-900/5 transition-colors">
-                        <td className="px-6 py-4 font-semibold text-white">{d.name}</td>
-                        <td className="px-6 py-4 text-center"><span className="bg-slate-900 px-2.5 py-1 border border-slate-800 rounded-md text-xs font-semibold">{d.code}</span></td>
+                      <tr key={d.id} className="hover:bg-bg-card/5 transition-colors">
+                        <td className="px-6 py-4 font-semibold text-text-main">{d.name}</td>
+                        <td className="px-6 py-4 text-center"><span className="bg-bg-card px-2.5 py-1 border border-border-app rounded-md text-xs font-semibold">{d.code}</span></td>
                         <td className="px-6 py-4 text-right space-x-2">
                           <button onClick={() => openModal('dept', 'edit', d)} aria-label={`Edit department ${d.code}`} className="p-1 text-slate-450 hover:text-blue-400"><Edit2 className="h-4 w-4" /></button>
                           <button onClick={() => handleDeleteItem('dept', d.id)} aria-label={`Delete department ${d.code}`} className="p-1 text-slate-450 hover:text-red-400"><Trash2 className="h-4 w-4" /></button>
@@ -568,7 +568,7 @@ const AdminDashboard = () => {
               {/* SUBJECTS TABLE */}
               {activeTab === 'subjects' && (
                 <table className="min-w-full divide-y divide-slate-800 text-left text-sm">
-                  <thead className="bg-slate-900/50 text-xs font-semibold uppercase text-slate-400">
+                  <thead className="bg-bg-card/50 text-xs font-semibold uppercase text-text-muted">
                     <tr>
                       <th className="px-6 py-4">Subject</th>
                       <th className="px-6 py-4 text-center">Code</th>
@@ -577,16 +577,16 @@ const AdminDashboard = () => {
                       <th className="px-6 py-4 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-850 text-slate-350">
+                  <tbody className="divide-y divide-slate-850 text-text-main">
                     {subjects.map((s) => (
-                      <tr key={s.id} className="hover:bg-slate-900/5 transition-colors">
-                        <td className="px-6 py-4 font-semibold text-white">
+                      <tr key={s.id} className="hover:bg-bg-card/5 transition-colors">
+                        <td className="px-6 py-4 font-semibold text-text-main">
                           <div>{s.name}</div>
-                          <div className="text-xs text-slate-500">{s.department.name}</div>
+                          <div className="text-xs text-text-muted">{s.department.name}</div>
                         </td>
-                        <td className="px-6 py-4 text-center"><span className="bg-slate-900 px-2 py-1 rounded text-xs font-semibold">{s.code}</span></td>
-                        <td className="px-6 py-4 text-center font-bold text-slate-300">{s.semester}</td>
-                        <td className="px-6 py-4 text-slate-300 font-medium">{s.faculty.user.name}</td>
+                        <td className="px-6 py-4 text-center"><span className="bg-bg-card px-2 py-1 rounded text-xs font-semibold">{s.code}</span></td>
+                        <td className="px-6 py-4 text-center font-bold text-text-main">{s.semester}</td>
+                        <td className="px-6 py-4 text-text-main font-medium">{s.faculty.user.name}</td>
                         <td className="px-6 py-4 text-right space-x-2">
                           <button onClick={() => openModal('subject', 'edit', s)} aria-label={`Edit subject ${s.code}`} className="p-1 text-slate-450 hover:text-blue-400"><Edit2 className="h-4 w-4" /></button>
                           <button onClick={() => handleDeleteItem('subject', s.id)} aria-label={`Delete subject ${s.code}`} className="p-1 text-slate-450 hover:text-red-400"><Trash2 className="h-4 w-4" /></button>
@@ -600,7 +600,7 @@ const AdminDashboard = () => {
               {/* FACULTY TABLE */}
               {activeTab === 'faculty' && (
                 <table className="min-w-full divide-y divide-slate-800 text-left text-sm">
-                  <thead className="bg-slate-900/50 text-xs font-semibold uppercase text-slate-400">
+                  <thead className="bg-bg-card/50 text-xs font-semibold uppercase text-text-muted">
                     <tr>
                       <th className="px-6 py-4">Faculty Member</th>
                       <th className="px-6 py-4">Email</th>
@@ -609,13 +609,13 @@ const AdminDashboard = () => {
                       <th className="px-6 py-4 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-850 text-slate-350">
+                  <tbody className="divide-y divide-slate-850 text-text-main">
                     {faculty.map((f) => (
-                      <tr key={f.id} className="hover:bg-slate-900/5 transition-colors">
-                        <td className="px-6 py-4 font-semibold text-white">{f.user.name}</td>
+                      <tr key={f.id} className="hover:bg-bg-card/5 transition-colors">
+                        <td className="px-6 py-4 font-semibold text-text-main">{f.user.name}</td>
                         <td className="px-6 py-4 text-slate-455">{f.user.email}</td>
-                        <td className="px-6 py-4 text-slate-300">{f.designation}</td>
-                        <td className="px-6 py-4 text-center"><span className="bg-slate-900 px-2 py-0.5 rounded text-xs font-semibold">{f.department.code}</span></td>
+                        <td className="px-6 py-4 text-text-main">{f.designation}</td>
+                        <td className="px-6 py-4 text-center"><span className="bg-bg-card px-2 py-0.5 rounded text-xs font-semibold">{f.department.code}</span></td>
                         <td className="px-6 py-4 text-right space-x-2">
                           <button onClick={() => openModal('faculty', 'edit', f)} aria-label={`Edit faculty member ${f.user.name}`} className="p-1 text-slate-450 hover:text-blue-400"><Edit2 className="h-4 w-4" /></button>
                           <button onClick={() => handleDeleteItem('faculty', f.id)} aria-label={`Delete faculty member ${f.user.name}`} className="p-1 text-slate-450 hover:text-red-400"><Trash2 className="h-4 w-4" /></button>
@@ -629,7 +629,7 @@ const AdminDashboard = () => {
               {/* STUDENTS TABLE */}
               {activeTab === 'students' && (
                 <table className="min-w-full divide-y divide-slate-800 text-left text-sm">
-                  <thead className="bg-slate-900/50 text-xs font-semibold uppercase text-slate-400">
+                  <thead className="bg-bg-card/50 text-xs font-semibold uppercase text-text-muted">
                     <tr>
                       <th className="px-6 py-4">Student Details</th>
                       <th className="px-6 py-4 text-center">Roll No</th>
@@ -639,17 +639,17 @@ const AdminDashboard = () => {
                       <th className="px-6 py-4 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-850 text-slate-350">
+                  <tbody className="divide-y divide-slate-850 text-text-main">
                     {students.map((s) => (
-                      <tr key={s.id} className="hover:bg-slate-900/5 transition-colors">
-                        <td className="px-6 py-4 font-semibold text-white">
+                      <tr key={s.id} className="hover:bg-bg-card/5 transition-colors">
+                        <td className="px-6 py-4 font-semibold text-text-main">
                           <div>{s.user.name}</div>
-                          <div className="text-xs text-slate-500">{s.department.name}</div>
+                          <div className="text-xs text-text-muted">{s.department.name}</div>
                         </td>
                         <td className="px-6 py-4 text-center font-mono text-xs">{s.rollNo}</td>
-                        <td className="px-6 py-4 text-center text-slate-300 font-medium">{s.batchYear}</td>
-                        <td className="px-6 py-4 text-center text-slate-300 font-bold">{s.section}</td>
-                        <td className="px-6 py-4 text-slate-400 text-xs">
+                        <td className="px-6 py-4 text-center text-text-main font-medium">{s.batchYear}</td>
+                        <td className="px-6 py-4 text-center text-text-main font-bold">{s.section}</td>
+                        <td className="px-6 py-4 text-text-muted text-xs">
                           <div>Mob: {s.mobileNo || 'N/A'}</div>
                           <div>Guard: {s.guardianContact || 'N/A'}</div>
                         </td>
@@ -669,15 +669,15 @@ const AdminDashboard = () => {
 
       {/* --- INTERACTIVE MODAL COMPONENT --- */}
       {modalType && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4">
-          <div className="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl space-y-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-bg-app/70 backdrop-blur-sm p-4">
+          <div className="w-full max-w-lg rounded-2xl border border-border-app bg-bg-card p-6 shadow-2xl space-y-6">
             
             {/* Modal Header */}
-            <div className="flex justify-between items-center border-b border-slate-800 pb-4">
-              <h3 className="text-lg font-bold text-white capitalize">
+            <div className="flex justify-between items-center border-b border-border-app pb-4">
+              <h3 className="text-lg font-bold text-text-main capitalize">
                 {modalAction} {modalType === 'dept' ? 'Department' : modalType}
               </h3>
-              <button onClick={() => setModalType(null)} aria-label="Close modal form" className="p-1 text-slate-450 hover:text-white">
+              <button onClick={() => setModalType(null)} aria-label="Close modal form" className="p-1 text-slate-450 hover:text-text-main">
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -689,7 +689,7 @@ const AdminDashboard = () => {
               {modalType === 'dept' && (
                 <>
                   <div className="space-y-1">
-                    <label htmlFor="dept-name" className="text-xs font-semibold text-slate-400 uppercase">Department Name</label>
+                    <label htmlFor="dept-name" className="text-xs font-semibold text-text-muted uppercase">Department Name</label>
                     <input
                       id="dept-name"
                       type="text"
@@ -697,11 +697,11 @@ const AdminDashboard = () => {
                       value={deptForm.name}
                       onChange={(e) => setDeptForm({ ...deptForm, name: e.target.value })}
                       placeholder="e.g. Artificial Intelligence and Data Science"
-                      className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-white focus:outline-none"
+                      className="block w-full rounded-xl border border-border-app bg-bg-app px-4 py-3 text-sm text-text-main focus:outline-none"
                     />
                   </div>
                   <div className="space-y-1">
-                    <label htmlFor="dept-code" className="text-xs font-semibold text-slate-400 uppercase">Department Code</label>
+                    <label htmlFor="dept-code" className="text-xs font-semibold text-text-muted uppercase">Department Code</label>
                     <input
                       id="dept-code"
                       type="text"
@@ -709,7 +709,7 @@ const AdminDashboard = () => {
                       value={deptForm.code}
                       onChange={(e) => setDeptForm({ ...deptForm, code: e.target.value })}
                       placeholder="e.g. AIDS"
-                      className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-white focus:outline-none"
+                      className="block w-full rounded-xl border border-border-app bg-bg-app px-4 py-3 text-sm text-text-main focus:outline-none"
                     />
                   </div>
                 </>
@@ -720,7 +720,7 @@ const AdminDashboard = () => {
                 <>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label htmlFor="sub-name" className="text-xs font-semibold text-slate-400 uppercase">Subject Name</label>
+                      <label htmlFor="sub-name" className="text-xs font-semibold text-text-muted uppercase">Subject Name</label>
                       <input
                         id="sub-name"
                         type="text"
@@ -728,11 +728,11 @@ const AdminDashboard = () => {
                         value={subjectForm.name}
                         onChange={(e) => setSubjectForm({ ...subjectForm, name: e.target.value })}
                         placeholder="e.g. Machine Learning"
-                        className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-sm text-white focus:outline-none"
+                        className="block w-full rounded-xl border border-border-app bg-bg-app px-4 py-2.5 text-sm text-text-main focus:outline-none"
                       />
                     </div>
                     <div className="space-y-1">
-                      <label htmlFor="sub-code" className="text-xs font-semibold text-slate-400 uppercase">Subject Code</label>
+                      <label htmlFor="sub-code" className="text-xs font-semibold text-text-muted uppercase">Subject Code</label>
                       <input
                         id="sub-code"
                         type="text"
@@ -740,12 +740,12 @@ const AdminDashboard = () => {
                         value={subjectForm.code}
                         onChange={(e) => setSubjectForm({ ...subjectForm, code: e.target.value })}
                         placeholder="e.g. AD401"
-                        className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-sm text-white focus:outline-none"
+                        className="block w-full rounded-xl border border-border-app bg-bg-app px-4 py-2.5 text-sm text-text-main focus:outline-none"
                       />
                     </div>
                   </div>
                   <div className="space-y-1">
-                    <label htmlFor="sub-semester" className="text-xs font-semibold text-slate-400 uppercase">Semester</label>
+                    <label htmlFor="sub-semester" className="text-xs font-semibold text-text-muted uppercase">Semester</label>
                     <input
                       id="sub-semester"
                       type="number"
@@ -755,27 +755,27 @@ const AdminDashboard = () => {
                       value={subjectForm.semester}
                       onChange={(e) => setSubjectForm({ ...subjectForm, semester: e.target.value })}
                       placeholder="e.g. 4"
-                      className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-sm text-white focus:outline-none"
+                      className="block w-full rounded-xl border border-border-app bg-bg-app px-4 py-2.5 text-sm text-text-main focus:outline-none"
                     />
                   </div>
                   <div className="space-y-1">
-                    <label htmlFor="sub-dept" className="text-xs font-semibold text-slate-400 uppercase">Department</label>
+                    <label htmlFor="sub-dept" className="text-xs font-semibold text-text-muted uppercase">Department</label>
                     <select
                       id="sub-dept"
                       value={subjectForm.departmentId}
                       onChange={(e) => setSubjectForm({ ...subjectForm, departmentId: e.target.value })}
-                      className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-sm text-white focus:outline-none"
+                      className="block w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-sm text-text-main focus:outline-none"
                     >
                       {departments.map(d => <option key={d.id} value={d.id}>{d.name} ({d.code})</option>)}
                     </select>
                   </div>
                   <div className="space-y-1">
-                    <label htmlFor="sub-fac" className="text-xs font-semibold text-slate-400 uppercase">Assigned Faculty</label>
+                    <label htmlFor="sub-fac" className="text-xs font-semibold text-text-muted uppercase">Assigned Faculty</label>
                     <select
                       id="sub-fac"
                       value={subjectForm.facultyId}
                       onChange={(e) => setSubjectForm({ ...subjectForm, facultyId: e.target.value })}
-                      className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-sm text-white focus:outline-none"
+                      className="block w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-sm text-text-main focus:outline-none"
                     >
                       {faculty.map(f => <option key={f.id} value={f.id}>{f.user.name} ({f.designation})</option>)}
                     </select>
@@ -787,7 +787,7 @@ const AdminDashboard = () => {
               {modalType === 'faculty' && (
                 <>
                   <div className="space-y-1">
-                    <label htmlFor="fac-name" className="text-xs font-semibold text-slate-400 uppercase">Faculty Full Name</label>
+                    <label htmlFor="fac-name" className="text-xs font-semibold text-text-muted uppercase">Faculty Full Name</label>
                     <input
                       id="fac-name"
                       type="text"
@@ -795,11 +795,11 @@ const AdminDashboard = () => {
                       value={facultyForm.name}
                       onChange={(e) => setFacultyForm({ ...facultyForm, name: e.target.value })}
                       placeholder="Dr. Ramesh Kumar"
-                      className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-sm text-white focus:outline-none"
+                      className="block w-full rounded-xl border border-border-app bg-bg-app px-4 py-2.5 text-sm text-text-main focus:outline-none"
                     />
                   </div>
                   <div className="space-y-1">
-                    <label htmlFor="fac-email" className="text-xs font-semibold text-slate-400 uppercase">Email Address</label>
+                    <label htmlFor="fac-email" className="text-xs font-semibold text-text-muted uppercase">Email Address</label>
                     <input
                       id="fac-email"
                       type="email"
@@ -807,12 +807,12 @@ const AdminDashboard = () => {
                       value={facultyForm.email}
                       onChange={(e) => setFacultyForm({ ...facultyForm, email: e.target.value })}
                       placeholder="ramesh.kumar@velammal.edu.in"
-                      className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-sm text-white focus:outline-none"
+                      className="block w-full rounded-xl border border-border-app bg-bg-app px-4 py-2.5 text-sm text-text-main focus:outline-none"
                     />
                   </div>
                   {modalAction === 'create' && (
                     <div className="space-y-1">
-                      <label htmlFor="fac-pass" className="text-xs font-semibold text-slate-400 uppercase">Access Password</label>
+                      <label htmlFor="fac-pass" className="text-xs font-semibold text-text-muted uppercase">Access Password</label>
                       <input
                         id="fac-pass"
                         type="password"
@@ -820,13 +820,13 @@ const AdminDashboard = () => {
                         value={facultyForm.password}
                         onChange={(e) => setFacultyForm({ ...facultyForm, password: e.target.value })}
                         placeholder="••••••••"
-                        className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-sm text-white focus:outline-none"
+                        className="block w-full rounded-xl border border-border-app bg-bg-app px-4 py-2.5 text-sm text-text-main focus:outline-none"
                       />
                     </div>
                   )}
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label htmlFor="fac-desig" className="text-xs font-semibold text-slate-400 uppercase">Designation</label>
+                      <label htmlFor="fac-desig" className="text-xs font-semibold text-text-muted uppercase">Designation</label>
                       <input
                         id="fac-desig"
                         type="text"
@@ -834,16 +834,16 @@ const AdminDashboard = () => {
                         value={facultyForm.designation}
                         onChange={(e) => setFacultyForm({ ...facultyForm, designation: e.target.value })}
                         placeholder="Professor & Head"
-                        className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-sm text-white focus:outline-none"
+                        className="block w-full rounded-xl border border-border-app bg-bg-app px-4 py-2.5 text-sm text-text-main focus:outline-none"
                       />
                     </div>
                     <div className="space-y-1">
-                      <label htmlFor="fac-dept" className="text-xs font-semibold text-slate-400 uppercase">Department</label>
+                      <label htmlFor="fac-dept" className="text-xs font-semibold text-text-muted uppercase">Department</label>
                       <select
                         id="fac-dept"
                         value={facultyForm.departmentId}
                         onChange={(e) => setFacultyForm({ ...facultyForm, departmentId: e.target.value })}
-                        className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-sm text-white focus:outline-none"
+                        className="block w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-sm text-text-main focus:outline-none"
                       >
                         {departments.map(d => <option key={d.id} value={d.id}>{d.code}</option>)}
                       </select>
@@ -857,7 +857,7 @@ const AdminDashboard = () => {
                 <>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label htmlFor="stud-name" className="text-xs font-semibold text-slate-400 uppercase">Name</label>
+                      <label htmlFor="stud-name" className="text-xs font-semibold text-text-muted uppercase">Name</label>
                       <input
                         id="stud-name"
                         type="text"
@@ -865,11 +865,11 @@ const AdminDashboard = () => {
                         value={studentForm.name}
                         onChange={(e) => setStudentForm({ ...studentForm, name: e.target.value })}
                         placeholder="Abishek R"
-                        className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2 text-sm text-white focus:outline-none"
+                        className="block w-full rounded-xl border border-border-app bg-bg-app px-4 py-2 text-sm text-text-main focus:outline-none"
                       />
                     </div>
                     <div className="space-y-1">
-                      <label htmlFor="stud-email" className="text-xs font-semibold text-slate-400 uppercase">Email</label>
+                      <label htmlFor="stud-email" className="text-xs font-semibold text-text-muted uppercase">Email</label>
                       <input
                         id="stud-email"
                         type="email"
@@ -877,13 +877,13 @@ const AdminDashboard = () => {
                         value={studentForm.email}
                         onChange={(e) => setStudentForm({ ...studentForm, email: e.target.value })}
                         placeholder="abishek.r@student.velammal.edu.in"
-                        className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2 text-sm text-white focus:outline-none"
+                        className="block w-full rounded-xl border border-border-app bg-bg-app px-4 py-2 text-sm text-text-main focus:outline-none"
                       />
                     </div>
                   </div>
                   {modalAction === 'create' && (
                     <div className="space-y-1">
-                      <label htmlFor="stud-pass" className="text-xs font-semibold text-slate-400 uppercase">Access Password</label>
+                      <label htmlFor="stud-pass" className="text-xs font-semibold text-text-muted uppercase">Access Password</label>
                       <input
                         id="stud-pass"
                         type="password"
@@ -891,13 +891,13 @@ const AdminDashboard = () => {
                         value={studentForm.password}
                         onChange={(e) => setStudentForm({ ...studentForm, password: e.target.value })}
                         placeholder="••••••••"
-                        className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2 text-sm text-white focus:outline-none"
+                        className="block w-full rounded-xl border border-border-app bg-bg-app px-4 py-2 text-sm text-text-main focus:outline-none"
                       />
                     </div>
                   )}
                   <div className="grid grid-cols-3 gap-2">
                     <div className="space-y-1">
-                      <label htmlFor="stud-roll" className="text-xs font-semibold text-slate-400 uppercase">Roll No</label>
+                      <label htmlFor="stud-roll" className="text-xs font-semibold text-text-muted uppercase">Roll No</label>
                       <input
                         id="stud-roll"
                         type="text"
@@ -905,28 +905,28 @@ const AdminDashboard = () => {
                         value={studentForm.rollNo}
                         onChange={(e) => setStudentForm({ ...studentForm, rollNo: e.target.value })}
                         placeholder="2024AIDS002"
-                        className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2 text-sm text-white focus:outline-none"
+                        className="block w-full rounded-xl border border-border-app bg-bg-app px-4 py-2 text-sm text-text-main focus:outline-none"
                       />
                     </div>
                     <div className="space-y-1">
-                      <label htmlFor="stud-batch" className="text-xs font-semibold text-slate-400 uppercase">Batch</label>
+                      <label htmlFor="stud-batch" className="text-xs font-semibold text-text-muted uppercase">Batch</label>
                       <select
                         id="stud-batch"
                         value={studentForm.batchYear}
                         onChange={(e) => setStudentForm({ ...studentForm, batchYear: e.target.value })}
-                        className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-2 py-2 text-sm text-white focus:outline-none"
+                        className="block w-full rounded-xl border border-border-app bg-bg-app px-2 py-2 text-sm text-text-main focus:outline-none"
                       >
                         <option value="2024-28">2024-28</option>
                         <option value="2025-29">2025-29</option>
                       </select>
                     </div>
                     <div className="space-y-1">
-                      <label htmlFor="stud-sec" className="text-xs font-semibold text-slate-400 uppercase">Section</label>
+                      <label htmlFor="stud-sec" className="text-xs font-semibold text-text-muted uppercase">Section</label>
                       <select
                         id="stud-sec"
                         value={studentForm.section}
                         onChange={(e) => setStudentForm({ ...studentForm, section: e.target.value })}
-                        className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-2 py-2 text-sm text-white focus:outline-none"
+                        className="block w-full rounded-xl border border-border-app bg-bg-app px-2 py-2 text-sm text-text-main focus:outline-none"
                       >
                         <option value="A">A</option>
                         <option value="B">B</option>
@@ -935,35 +935,35 @@ const AdminDashboard = () => {
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label htmlFor="stud-mob" className="text-xs font-semibold text-slate-400 uppercase">Mobile No</label>
+                      <label htmlFor="stud-mob" className="text-xs font-semibold text-text-muted uppercase">Mobile No</label>
                       <input
                         id="stud-mob"
                         type="text"
                         value={studentForm.mobileNo}
                         onChange={(e) => setStudentForm({ ...studentForm, mobileNo: e.target.value })}
                         placeholder="9876543220"
-                        className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2 text-sm text-white focus:outline-none"
+                        className="block w-full rounded-xl border border-border-app bg-bg-app px-4 py-2 text-sm text-text-main focus:outline-none"
                       />
                     </div>
                     <div className="space-y-1">
-                      <label htmlFor="stud-guard" className="text-xs font-semibold text-slate-400 uppercase">Guardian Contact</label>
+                      <label htmlFor="stud-guard" className="text-xs font-semibold text-text-muted uppercase">Guardian Contact</label>
                       <input
                         id="stud-guard"
                         type="text"
                         value={studentForm.guardianContact}
                         onChange={(e) => setStudentForm({ ...studentForm, guardianContact: e.target.value })}
                         placeholder="9876543221"
-                        className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2 text-sm text-white focus:outline-none"
+                        className="block w-full rounded-xl border border-border-app bg-bg-app px-4 py-2 text-sm text-text-main focus:outline-none"
                       />
                     </div>
                   </div>
                   <div className="space-y-1">
-                    <label htmlFor="stud-dept" className="text-xs font-semibold text-slate-400 uppercase">Department</label>
+                    <label htmlFor="stud-dept" className="text-xs font-semibold text-text-muted uppercase">Department</label>
                     <select
                       id="stud-dept"
                       value={studentForm.departmentId}
                       onChange={(e) => setStudentForm({ ...studentForm, departmentId: e.target.value })}
-                      className="block w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2 text-sm text-white focus:outline-none"
+                      className="block w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2 text-sm text-text-main focus:outline-none"
                     >
                       {departments.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
                     </select>
@@ -972,17 +972,17 @@ const AdminDashboard = () => {
               )}
 
               {/* Action Buttons */}
-              <div className="flex justify-end gap-3 border-t border-slate-800 pt-4">
+              <div className="flex justify-end gap-3 border-t border-border-app pt-4">
                 <button
                   type="button"
                   onClick={() => setModalType(null)}
-                  className="px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-900 text-sm font-semibold text-slate-400 hover:text-white"
+                  className="px-4 py-2.5 rounded-xl border border-border-app bg-bg-card text-sm font-semibold text-text-muted hover:text-text-main"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white shadow-lg"
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-text-main shadow-lg"
                 >
                   Save Record
                 </button>
@@ -997,10 +997,10 @@ const AdminDashboard = () => {
       {activeTab === 'audit' && (
         <div className="space-y-6 animate-in fade-in duration-200">
           {/* Filters Bar */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 bg-slate-900/40 backdrop-blur-md p-4 rounded-xl border border-slate-800/80">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 bg-bg-card/40 backdrop-blur-md p-4 rounded-xl border border-border-app/80">
             {/* Search */}
             <div className="space-y-1">
-              <label htmlFor="audit-search" className="text-xs font-semibold text-slate-400 uppercase">Search</label>
+              <label htmlFor="audit-search" className="text-xs font-semibold text-text-muted uppercase">Search</label>
               <input
                 id="audit-search"
                 type="text"
@@ -1011,12 +1011,12 @@ const AdminDashboard = () => {
                   setAuditFilters(newFilters);
                   fetchAuditLogs(newFilters);
                 }}
-                className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs text-white focus:outline-none"
+                className="w-full rounded-lg border border-border-app bg-bg-app px-3 py-1.5 text-xs text-text-main focus:outline-none"
               />
             </div>
             {/* Action */}
             <div className="space-y-1">
-              <label htmlFor="audit-action" className="text-xs font-semibold text-slate-400 uppercase">Action</label>
+              <label htmlFor="audit-action" className="text-xs font-semibold text-text-muted uppercase">Action</label>
               <select
                 id="audit-action"
                 value={auditFilters.action}
@@ -1025,7 +1025,7 @@ const AdminDashboard = () => {
                   setAuditFilters(newFilters);
                   fetchAuditLogs(newFilters);
                 }}
-                className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs text-white focus:outline-none"
+                className="w-full rounded-lg border border-border-app bg-bg-app px-3 py-1.5 text-xs text-text-main focus:outline-none"
               >
                 <option value="">All Actions</option>
                 <option value="STUDENT_CREATED">Student Created</option>
@@ -1042,7 +1042,7 @@ const AdminDashboard = () => {
             </div>
             {/* Entity Type */}
             <div className="space-y-1">
-              <label htmlFor="audit-entity" className="text-xs font-semibold text-slate-400 uppercase">Entity</label>
+              <label htmlFor="audit-entity" className="text-xs font-semibold text-text-muted uppercase">Entity</label>
               <select
                 id="audit-entity"
                 value={auditFilters.entityType}
@@ -1051,7 +1051,7 @@ const AdminDashboard = () => {
                   setAuditFilters(newFilters);
                   fetchAuditLogs(newFilters);
                 }}
-                className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs text-white focus:outline-none"
+                className="w-full rounded-lg border border-border-app bg-bg-app px-3 py-1.5 text-xs text-text-main focus:outline-none"
               >
                 <option value="">All Entities</option>
                 <option value="STUDENT">Student</option>
@@ -1062,7 +1062,7 @@ const AdminDashboard = () => {
             </div>
             {/* Start Date */}
             <div className="space-y-1">
-              <label htmlFor="audit-start" className="text-xs font-semibold text-slate-400 uppercase">Start Date</label>
+              <label htmlFor="audit-start" className="text-xs font-semibold text-text-muted uppercase">Start Date</label>
               <input
                 id="audit-start"
                 type="date"
@@ -1072,12 +1072,12 @@ const AdminDashboard = () => {
                   setAuditFilters(newFilters);
                   fetchAuditLogs(newFilters);
                 }}
-                className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs text-white focus:outline-none"
+                className="w-full rounded-lg border border-border-app bg-bg-app px-3 py-1.5 text-xs text-text-main focus:outline-none"
               />
             </div>
             {/* End Date */}
             <div className="space-y-1">
-              <label htmlFor="audit-end" className="text-xs font-semibold text-slate-400 uppercase">End Date</label>
+              <label htmlFor="audit-end" className="text-xs font-semibold text-text-muted uppercase">End Date</label>
               <input
                 id="audit-end"
                 type="date"
@@ -1087,7 +1087,7 @@ const AdminDashboard = () => {
                   setAuditFilters(newFilters);
                   fetchAuditLogs(newFilters);
                 }}
-                className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs text-white focus:outline-none"
+                className="w-full rounded-lg border border-border-app bg-bg-app px-3 py-1.5 text-xs text-text-main focus:outline-none"
               />
             </div>
             {/* Reset */}
@@ -1099,7 +1099,7 @@ const AdminDashboard = () => {
                   setAuditFilters(resetFilters);
                   fetchAuditLogs(resetFilters);
                 }}
-                className="w-full text-center px-4 py-2 border border-slate-800 hover:border-slate-700 bg-slate-950 text-slate-400 hover:text-white rounded-lg text-xs font-semibold transition-colors"
+                className="w-full text-center px-4 py-2 border border-border-app hover:border-border-card bg-bg-app text-text-muted hover:text-white rounded-lg text-xs font-semibold transition-colors"
               >
                 Clear Filters
               </button>
@@ -1107,14 +1107,14 @@ const AdminDashboard = () => {
           </div>
 
           {/* Logs Table */}
-          <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950">
+          <div className="overflow-x-auto rounded-2xl border border-border-app bg-bg-app">
             {loadingAudit ? (
               <TableSkeleton />
             ) : auditLogs.length === 0 ? (
-              <div className="p-8 text-center text-slate-500 text-sm">No audit logs found matching criteria.</div>
+              <div className="p-8 text-center text-text-muted text-sm">No audit logs found matching criteria.</div>
             ) : (
-              <table className="w-full border-collapse text-left text-sm text-slate-400">
-                <thead className="bg-[#0b121e] font-semibold text-slate-200 border-b border-slate-800">
+              <table className="w-full border-collapse text-left text-sm text-text-muted">
+                <thead className="bg-[#0b121e] font-semibold text-text-main border-b border-border-app">
                   <tr>
                     <th className="px-6 py-4">Timestamp</th>
                     <th className="px-6 py-4">Actor</th>
@@ -1142,13 +1142,13 @@ const AdminDashboard = () => {
                     };
 
                     return (
-                      <tr key={log.id} className="hover:bg-slate-900/30 transition-colors">
+                      <tr key={log.id} className="hover:bg-bg-card/30 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-550">
                           {new Date(log.timestamp).toLocaleString()}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap font-medium text-slate-200">
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-text-main">
                           <div>{log.actorUser?.name || 'System'}</div>
-                          <div className="text-[10px] text-slate-500">{log.actorRole}</div>
+                          <div className="text-[10px] text-text-muted">{log.actorRole}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold border ${
@@ -1160,10 +1160,10 @@ const AdminDashboard = () => {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-xs">
-                          <span className="text-slate-350">{log.entityType}</span>
-                          {log.entityId && <span className="block text-[10px] text-slate-500">{log.entityId}</span>}
+                          <span className="text-text-main">{log.entityType}</span>
+                          {log.entityId && <span className="block text-[10px] text-text-muted">{log.entityId}</span>}
                         </td>
-                        <td className="px-6 py-4 text-xs text-slate-300 max-w-xs truncate">
+                        <td className="px-6 py-4 text-xs text-text-main max-w-xs truncate">
                           {getSummary()}
                         </td>
                         <td className="px-6 py-4 text-right whitespace-nowrap">
@@ -1186,7 +1186,7 @@ const AdminDashboard = () => {
           {/* Pagination Controls */}
           {auditPagination.totalPages > 1 && (
             <div className="flex items-center justify-between mt-4">
-              <span className="text-xs text-slate-500">
+              <span className="text-xs text-text-muted">
                 Page {auditPagination.page} of {auditPagination.totalPages} (Total {auditPagination.total} logs)
               </span>
               <div className="flex gap-2">
@@ -1198,7 +1198,7 @@ const AdminDashboard = () => {
                     setAuditFilters(newFilters);
                     fetchAuditLogs(newFilters);
                   }}
-                  className="px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-950 text-xs font-semibold text-slate-400 hover:text-white disabled:opacity-40 transition-colors"
+                  className="px-3 py-1.5 rounded-lg border border-border-app bg-bg-app text-xs font-semibold text-text-muted hover:text-white disabled:opacity-40 transition-colors"
                 >
                   Previous
                 </button>
@@ -1210,7 +1210,7 @@ const AdminDashboard = () => {
                     setAuditFilters(newFilters);
                     fetchAuditLogs(newFilters);
                   }}
-                  className="px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-950 text-xs font-semibold text-slate-400 hover:text-white disabled:opacity-40 transition-colors"
+                  className="px-3 py-1.5 rounded-lg border border-border-app bg-bg-app text-xs font-semibold text-text-muted hover:text-white disabled:opacity-40 transition-colors"
                 >
                   Next
                 </button>
@@ -1223,43 +1223,43 @@ const AdminDashboard = () => {
       {/* AUDIT DETAILS EXPANSION MODAL */}
       {selectedAuditLog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          <div className="w-full max-w-3xl rounded-2xl border border-slate-800 bg-[#0b1323] p-6 text-slate-350 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
+          <div className="w-full max-w-3xl rounded-2xl border border-border-app bg-[#0b1323] p-6 text-text-main shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between border-b border-border-app pb-4 mb-4">
               <div>
                 <h3 className="text-lg font-bold text-slate-100">Audit Record Details</h3>
-                <p className="text-[10px] text-slate-500 font-medium font-mono">Log Identifier: {selectedAuditLog.id}</p>
+                <p className="text-[10px] text-text-muted font-medium font-mono">Log Identifier: {selectedAuditLog.id}</p>
               </div>
               <button 
                 onClick={() => setSelectedAuditLog(null)} 
                 type="button" 
                 aria-label="Close modal dialog"
-                className="text-slate-400 hover:text-slate-200 p-1.5 hover:bg-slate-900 rounded-lg transition-colors"
+                className="text-text-muted hover:text-text-main p-1.5 hover:bg-bg-card rounded-lg transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
             
             <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
-              <div className="grid grid-cols-2 gap-4 text-xs bg-[#090e18] p-4 rounded-xl border border-slate-900">
+              <div className="grid grid-cols-2 gap-4 text-xs bg-[#090e18] p-4 rounded-xl border border-border-card">
                 <div>
-                  <span className="block text-[10px] text-slate-500 font-semibold uppercase">Actor User</span>
-                  <span className="text-slate-200 font-semibold">{selectedAuditLog.actorUser?.name || 'System'}</span>
+                  <span className="block text-[10px] text-text-muted font-semibold uppercase">Actor User</span>
+                  <span className="text-text-main font-semibold">{selectedAuditLog.actorUser?.name || 'System'}</span>
                 </div>
                 <div>
-                  <span className="block text-[10px] text-slate-500 font-semibold uppercase">Actor Role</span>
-                  <span className="text-slate-200 font-semibold">{selectedAuditLog.actorRole}</span>
+                  <span className="block text-[10px] text-text-muted font-semibold uppercase">Actor Role</span>
+                  <span className="text-text-main font-semibold">{selectedAuditLog.actorRole}</span>
                 </div>
                 <div>
-                  <span className="block text-[10px] text-slate-500 font-semibold uppercase">Action Performed</span>
-                  <span className="text-slate-200 font-semibold">{selectedAuditLog.action}</span>
+                  <span className="block text-[10px] text-text-muted font-semibold uppercase">Action Performed</span>
+                  <span className="text-text-main font-semibold">{selectedAuditLog.action}</span>
                 </div>
                 <div>
-                  <span className="block text-[10px] text-slate-500 font-semibold uppercase">Timestamp</span>
-                  <span className="text-slate-200 font-semibold">{new Date(selectedAuditLog.timestamp).toLocaleString()}</span>
+                  <span className="block text-[10px] text-text-muted font-semibold uppercase">Timestamp</span>
+                  <span className="text-text-main font-semibold">{new Date(selectedAuditLog.timestamp).toLocaleString()}</span>
                 </div>
-                <div className="col-span-2 border-t border-slate-800/60 pt-2">
-                  <span className="block text-[10px] text-slate-500 font-semibold uppercase">HTTP Context</span>
-                  <span className="text-slate-200 font-mono font-semibold">
+                <div className="col-span-2 border-t border-border-app/60 pt-2">
+                  <span className="block text-[10px] text-text-muted font-semibold uppercase">HTTP Context</span>
+                  <span className="text-text-main font-mono font-semibold">
                     {selectedAuditLog.httpMethod} {selectedAuditLog.apiRoute || 'N/A'}
                   </span>
                 </div>
@@ -1267,14 +1267,14 @@ const AdminDashboard = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <span className="block text-[10px] text-slate-500 font-semibold mb-2 uppercase font-mono">Previous State</span>
-                  <pre className="text-[10px] bg-[#070b13] p-4 rounded-xl border border-slate-900 overflow-x-auto text-amber-500 font-mono max-h-60 overflow-y-auto">
+                  <span className="block text-[10px] text-text-muted font-semibold mb-2 uppercase font-mono">Previous State</span>
+                  <pre className="text-[10px] bg-[#070b13] p-4 rounded-xl border border-border-card overflow-x-auto text-amber-500 font-mono max-h-60 overflow-y-auto">
                     {JSON.stringify(selectedAuditLog.previousValue, null, 2) || 'null'}
                   </pre>
                 </div>
                 <div>
-                  <span className="block text-[10px] text-slate-500 font-semibold mb-2 uppercase font-mono">New State</span>
-                  <pre className="text-[10px] bg-[#070b13] p-4 rounded-xl border border-slate-900 overflow-x-auto text-emerald-500 font-mono max-h-60 overflow-y-auto">
+                  <span className="block text-[10px] text-text-muted font-semibold mb-2 uppercase font-mono">New State</span>
+                  <pre className="text-[10px] bg-[#070b13] p-4 rounded-xl border border-border-card overflow-x-auto text-emerald-500 font-mono max-h-60 overflow-y-auto">
                     {JSON.stringify(selectedAuditLog.newValue, null, 2) || 'null'}
                   </pre>
                 </div>

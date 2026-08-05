@@ -13,7 +13,7 @@ export default function EligibilityReasonsPanel({ reasons = [], eligible }) {
         {reasons.map((r) => (
           <li
             key={r.code}
-            className="flex items-start gap-2 rounded-lg border border-slate-800 bg-slate-950/50 px-3 py-2 text-xs"
+            className="flex items-start gap-2 rounded-lg border border-border-app bg-bg-app/50 px-3 py-2 text-xs"
           >
             {r.passed ? (
               <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-400" />
@@ -21,8 +21,8 @@ export default function EligibilityReasonsPanel({ reasons = [], eligible }) {
               <XCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-rose-400" />
             )}
             <div>
-              <span className="font-medium text-slate-300">{r.code}</span>
-              <p className="text-slate-500">{r.message}</p>
+              <span className="font-medium text-text-main">{r.code}</span>
+              <p className="text-text-muted">{r.message}</p>
             </div>
           </li>
         ))}

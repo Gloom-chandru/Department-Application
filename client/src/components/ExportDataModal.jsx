@@ -100,25 +100,25 @@ export default function ExportDataModal({ isOpen, onClose, userRole, onToast }) 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-bg-sidebar/80 backdrop-blur-sm animate-fadeIn">
+      <div className="bg-bg-card border border-border-card rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5">
         
         {/* Modal Header */}
-        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div className="flex items-center justify-between border-b border-border-app pb-4">
           <div className="flex items-center space-x-3">
             <div className="p-2.5 bg-blue-500/10 text-blue-400 rounded-xl border border-blue-500/20">
               <FileSpreadsheet className="w-6 h-6" />
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-100">Export Academic Data</h2>
-              <p className="text-xs text-slate-400">Download formatted Excel or CSV report ledgers.</p>
+              <p className="text-xs text-text-muted">Download formatted Excel or CSV report ledgers.</p>
             </div>
           </div>
 
           <button
             type="button"
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-lg transition-colors"
+            className="p-2 text-text-muted hover:text-text-main hover:bg-bg-sidebar rounded-lg transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -128,7 +128,7 @@ export default function ExportDataModal({ isOpen, onClose, userRole, onToast }) 
           
           {/* Report Type Selector */}
           <div>
-            <label className="block text-slate-300 font-semibold mb-1.5">Report Type</label>
+            <label className="block text-text-main font-semibold mb-1.5">Report Type</label>
             <div className="grid grid-cols-3 gap-2">
               {[
                 { id: 'ATTENDANCE', label: 'Attendance' },
@@ -142,7 +142,7 @@ export default function ExportDataModal({ isOpen, onClose, userRole, onToast }) 
                   className={`py-2 px-3 rounded-xl border font-semibold transition-all text-center ${
                     reportType === item.id
                       ? 'bg-blue-600 text-white border-blue-500 shadow-sm'
-                      : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                      : 'bg-bg-sidebar text-text-main border-border-card hover:bg-bg-input'
                   }`}
                 >
                   {item.label}
@@ -153,7 +153,7 @@ export default function ExportDataModal({ isOpen, onClose, userRole, onToast }) 
 
           {/* Format Selector */}
           <div>
-            <label className="block text-slate-300 font-semibold mb-1.5">File Format</label>
+            <label className="block text-text-main font-semibold mb-1.5">File Format</label>
             <div className="grid grid-cols-2 gap-2">
               {[
                 { id: 'xlsx', label: 'Excel (.xlsx)' },
@@ -166,7 +166,7 @@ export default function ExportDataModal({ isOpen, onClose, userRole, onToast }) 
                   className={`py-2 px-3 rounded-xl border font-semibold transition-all text-center ${
                     format === f.id
                       ? 'bg-emerald-600 text-white border-emerald-500 shadow-sm'
-                      : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                      : 'bg-bg-sidebar text-text-main border-border-card hover:bg-bg-input'
                   }`}
                 >
                   {f.label}
@@ -176,20 +176,20 @@ export default function ExportDataModal({ isOpen, onClose, userRole, onToast }) 
           </div>
 
           {/* Filter Options */}
-          <div className="bg-slate-950/50 p-4 border border-slate-800 rounded-xl space-y-3">
-            <div className="flex items-center space-x-2 text-slate-400 font-semibold border-b border-slate-800 pb-2">
+          <div className="bg-bg-app/50 p-4 border border-border-app rounded-xl space-y-3">
+            <div className="flex items-center space-x-2 text-text-muted font-semibold border-b border-border-app pb-2">
               <Filter className="w-4 h-4 text-blue-400" />
               <span>Report Filters (Optional)</span>
             </div>
 
             {reportType === 'TIMETABLE' ? (
               <div>
-                <label className="block text-slate-300 mb-1 font-medium">Select Timetable Schedule *</label>
+                <label className="block text-text-main mb-1 font-medium">Select Timetable Schedule *</label>
                 <select
                   value={scheduleId}
                   onChange={(e) => setScheduleId(e.target.value)}
                   required
-                  className="w-full bg-slate-800 text-slate-200 p-2.5 rounded-lg border border-slate-700 focus:outline-none focus:border-blue-500"
+                  className="w-full bg-bg-sidebar text-text-main p-2.5 rounded-lg border border-border-card focus:outline-none focus:border-blue-500"
                 >
                   <option value="">-- Choose Schedule --</option>
                   {schedules.map(s => (
@@ -203,11 +203,11 @@ export default function ExportDataModal({ isOpen, onClose, userRole, onToast }) 
               <>
                 {userRole === 'ADMIN' && (
                   <div>
-                    <label className="block text-slate-300 mb-1 font-medium">Department</label>
+                    <label className="block text-text-main mb-1 font-medium">Department</label>
                     <select
                       value={departmentId}
                       onChange={(e) => setDepartmentId(e.target.value)}
-                      className="w-full bg-slate-800 text-slate-200 p-2.5 rounded-lg border border-slate-700 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-bg-sidebar text-text-main p-2.5 rounded-lg border border-border-card focus:outline-none focus:border-blue-500"
                     >
                       <option value="">All Departments</option>
                       {departments.map(d => (
@@ -219,34 +219,34 @@ export default function ExportDataModal({ isOpen, onClose, userRole, onToast }) 
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-slate-300 mb-1 font-medium">Batch Year</label>
+                    <label className="block text-text-main mb-1 font-medium">Batch Year</label>
                     <input
                       type="text"
                       placeholder="e.g. 2024-28"
                       value={batchYear}
                       onChange={(e) => setBatchYear(e.target.value)}
-                      className="w-full bg-slate-800 text-slate-200 p-2.5 rounded-lg border border-slate-700 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-bg-sidebar text-text-main p-2.5 rounded-lg border border-border-card focus:outline-none focus:border-blue-500"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-slate-300 mb-1 font-medium">Section</label>
+                    <label className="block text-text-main mb-1 font-medium">Section</label>
                     <input
                       type="text"
                       placeholder="e.g. A"
                       value={section}
                       onChange={(e) => setSection(e.target.value)}
-                      className="w-full bg-slate-800 text-slate-200 p-2.5 rounded-lg border border-slate-700 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-bg-sidebar text-text-main p-2.5 rounded-lg border border-border-card focus:outline-none focus:border-blue-500"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 mb-1 font-medium">Subject</label>
+                  <label className="block text-text-main mb-1 font-medium">Subject</label>
                   <select
                     value={subjectId}
                     onChange={(e) => setSubjectId(e.target.value)}
-                    className="w-full bg-slate-800 text-slate-200 p-2.5 rounded-lg border border-slate-700 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-bg-sidebar text-text-main p-2.5 rounded-lg border border-border-card focus:outline-none focus:border-blue-500"
                   >
                     <option value="">
                       {userRole === 'FACULTY' ? '-- Select Taught Subject --' : 'All Subjects'}
@@ -261,11 +261,11 @@ export default function ExportDataModal({ isOpen, onClose, userRole, onToast }) 
           </div>
 
           {/* Form Actions */}
-          <div className="flex items-center justify-end space-x-3 pt-3 border-t border-slate-800">
+          <div className="flex items-center justify-end space-x-3 pt-3 border-t border-border-app">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-semibold transition-colors"
+              className="px-4 py-2 bg-bg-sidebar hover:bg-bg-input text-text-main rounded-xl font-semibold transition-colors"
             >
               Cancel
             </button>

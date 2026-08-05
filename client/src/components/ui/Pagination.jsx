@@ -75,8 +75,8 @@ const Pagination = ({
         </Button>
       ))}
 
-      {pages.length > 0 && pages[0] > 1 && (
-        <span className="px-2 text-slate-500" aria-hidden="true">...</span>
+      {pages.length > 0 && pages[pages.length - 1] < totalPages && (
+        <span className="px-2 text-text-muted" aria-hidden="true">...</span>
       )}
 
       {showPrevNext && (

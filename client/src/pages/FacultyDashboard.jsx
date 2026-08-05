@@ -334,7 +334,7 @@ const FacultyDashboard = () => {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
         <Loader2 className="h-10 w-10 text-blue-500 animate-spin" />
-        <span className="ml-3 text-slate-400">Loading academic subjects...</span>
+        <span className="ml-3 text-text-muted">Loading academic subjects...</span>
       </div>
     );
   }
@@ -342,14 +342,14 @@ const FacultyDashboard = () => {
   const activeSubjectObj = subjects.find(s => s.id === selectedSubject);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
+    <div className="space-y-8">
       
       {/* HEADER CONTROLS */}
-      <div className="backdrop-blur-md bg-slate-900/40 border border-slate-800 p-6 rounded-2xl space-y-6">
+      <div className="backdrop-blur-md bg-bg-card/40 border border-border-app p-6 rounded-2xl space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-white mb-2">Faculty Gradebook & Registry</h1>
-            <p className="text-slate-400 text-sm">Select subject, batch, and section to view registries and grade sheets.</p>
+            <h1 className="text-2xl font-bold text-text-main mb-2">Faculty Gradebook & Registry</h1>
+            <p className="text-text-muted text-sm">Select subject, batch, and section to view registries and grade sheets.</p>
           </div>
 
           <div className="flex items-center space-x-3">
@@ -371,7 +371,7 @@ const FacultyDashboard = () => {
             <button
               type="button"
               onClick={() => setIsBulkMarksOpen(true)}
-              className="flex items-center space-x-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-xl transition-all shadow-md"
+              className="flex items-center space-x-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-text-main text-xs font-semibold rounded-xl transition-all shadow-md"
             >
               <Upload className="w-4 h-4" />
               <span>Bulk Import Marks</span>
@@ -380,7 +380,7 @@ const FacultyDashboard = () => {
             <button
               type="button"
               onClick={() => setIsExportModalOpen(true)}
-              className="flex items-center space-x-2 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold rounded-xl transition-all"
+              className="flex items-center space-x-2 px-4 py-2.5 bg-bg-sidebar hover:bg-bg-input text-text-main border border-border-card text-xs font-semibold rounded-xl transition-all"
             >
               <Download className="w-4 h-4 text-emerald-400" />
               <span>Export Subject Reports</span>
@@ -392,12 +392,12 @@ const FacultyDashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Subject Dropdown */}
           <div className="space-y-1">
-            <label htmlFor="subject-select" className="text-xs font-semibold uppercase tracking-wider text-slate-400">Subject</label>
+            <label htmlFor="subject-select" className="text-xs font-semibold uppercase tracking-wider text-text-muted">Subject</label>
             <select
               id="subject-select"
               value={selectedSubject}
               onChange={(e) => setSelectedSubject(e.target.value)}
-              className="block w-full rounded-xl border border-slate-800 bg-slate-950/80 px-3.5 py-3 text-sm text-white focus:border-blue-500 focus:outline-none"
+              className="block w-full rounded-xl border border-border-app bg-bg-sidebar/80 px-3.5 py-3 text-sm text-text-main focus:border-blue-500 focus:outline-none"
             >
               {subjects.map((sub) => (
                 <option key={sub.id} value={sub.id}>
@@ -410,12 +410,12 @@ const FacultyDashboard = () => {
 
           {/* Batch Dropdown */}
           <div className="space-y-1">
-            <label htmlFor="batch-select" className="text-xs font-semibold uppercase tracking-wider text-slate-400">Batch Year</label>
+            <label htmlFor="batch-select" className="text-xs font-semibold uppercase tracking-wider text-text-muted">Batch Year</label>
             <select
               id="batch-select"
               value={selectedBatch}
               onChange={(e) => setSelectedBatch(e.target.value)}
-              className="block w-full rounded-xl border border-slate-800 bg-slate-950/80 px-3.5 py-3 text-sm text-white focus:border-blue-500 focus:outline-none"
+              className="block w-full rounded-xl border border-border-app bg-bg-sidebar/80 px-3.5 py-3 text-sm text-text-main focus:border-blue-500 focus:outline-none"
             >
               <option value="2024-28">2024-28 (Second Year)</option>
               <option value="2025-29">2025-29 (First Year)</option>
@@ -424,12 +424,12 @@ const FacultyDashboard = () => {
 
           {/* Section Dropdown */}
           <div className="space-y-1">
-            <label htmlFor="section-select" className="text-xs font-semibold uppercase tracking-wider text-slate-400">Section</label>
+            <label htmlFor="section-select" className="text-xs font-semibold uppercase tracking-wider text-text-muted">Section</label>
             <select
               id="section-select"
               value={selectedSection}
               onChange={(e) => setSelectedSection(e.target.value)}
-              className="block w-full rounded-xl border border-slate-800 bg-slate-950/80 px-3.5 py-3 text-sm text-white focus:border-blue-500 focus:outline-none"
+              className="block w-full rounded-xl border border-border-app bg-bg-sidebar/80 px-3.5 py-3 text-sm text-text-main focus:border-blue-500 focus:outline-none"
             >
               <option value="A">Section A</option>
               <option value="B">Section B</option>
@@ -438,7 +438,7 @@ const FacultyDashboard = () => {
 
           {/* Department Code Display */}
           <div className="space-y-1 flex flex-col justify-end">
-            <div className="rounded-xl border border-slate-800 bg-slate-950/40 px-4 py-3.5 text-xs font-medium text-slate-400">
+            <div className="rounded-xl border border-border-app bg-bg-app/40 px-4 py-3.5 text-xs font-medium text-text-muted">
               Department:{' '}
               <span className="text-white font-semibold">
                 {activeSubjectObj?.department?.code || 'AIDS'}
@@ -449,7 +449,7 @@ const FacultyDashboard = () => {
       </div>
 
       {/* TABS HEADER */}
-      <div className="flex border-b border-slate-800">
+      <div className="flex border-b border-border-app">
         <button
           onClick={() => setActiveTab('attendance')}
           type="button"
@@ -457,7 +457,7 @@ const FacultyDashboard = () => {
           className={`flex items-center gap-2 border-b-2 px-6 py-3 font-semibold text-sm transition-colors ${
             activeTab === 'attendance'
               ? 'border-blue-500 text-blue-400'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              : 'border-transparent text-text-muted hover:text-text-main'
           }`}
         >
           <UserCheck className="h-4 w-4" />
@@ -470,7 +470,7 @@ const FacultyDashboard = () => {
           className={`flex items-center gap-2 border-b-2 px-6 py-3 font-semibold text-sm transition-colors ${
             activeTab === 'marks'
               ? 'border-blue-500 text-blue-400'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              : 'border-transparent text-text-muted hover:text-text-main'
           }`}
         >
           <Award className="h-4 w-4" />
@@ -480,12 +480,12 @@ const FacultyDashboard = () => {
 
       {/* REGISTRY CONTENT */}
       {loadingStudents ? (
-        <div className="bg-slate-900/10 border border-slate-800/80 rounded-2xl p-6">
+        <div className="bg-bg-card/10 border border-border-app/80 rounded-2xl p-6">
           <TableSkeleton rows={4} />
         </div>
       ) : students.length === 0 ? (
-        <div className="backdrop-blur-md bg-slate-900/10 border border-slate-800/80 rounded-2xl py-12 text-center text-slate-550">
-          <AlertCircle className="h-10 w-10 mx-auto mb-3 text-slate-600" />
+        <div className="backdrop-blur-md bg-bg-card/10 border border-border-app/80 rounded-2xl py-12 text-center text-slate-550">
+          <AlertCircle className="h-10 w-10 mx-auto mb-3 text-text-muted" />
           <span>No students found matching current criteria.</span>
         </div>
       ) : (
@@ -494,11 +494,11 @@ const FacultyDashboard = () => {
           {activeTab === 'attendance' && (
             <form onSubmit={handleAttendanceSubmit} className="space-y-6" noValidate>
               
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900/20 p-4 border border-slate-850 rounded-xl">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-bg-card/20 p-4 border border-border-card/50 rounded-xl">
                 {/* Date Picker */}
                 <div className="flex items-center gap-3">
                   <Calendar className="h-5 w-5 text-blue-500" />
-                  <label htmlFor="attendance-date" className="text-sm font-medium text-slate-350">Date:</label>
+                  <label htmlFor="attendance-date" className="text-sm font-medium text-text-main">Date:</label>
                   <div className="flex flex-col">
                     <input
                       id="attendance-date"
@@ -506,8 +506,8 @@ const FacultyDashboard = () => {
                       required
                       value={attendanceDate}
                       onChange={(e) => handleDateChange(e.target.value)}
-                      className={`rounded-lg border bg-slate-950 px-3 py-1.5 text-sm text-white focus:outline-none ${
-                        dateError ? 'border-red-500' : 'border-slate-800'
+                      className={`rounded-lg border bg-bg-app px-3 py-1.5 text-sm text-text-main focus:outline-none ${
+                        dateError ? 'border-red-500' : 'border-border-app'
                       }`}
                     />
                   </div>
@@ -519,7 +519,7 @@ const FacultyDashboard = () => {
                     type="button"
                     onClick={handleSelectAllPresent}
                     aria-label="Set all students attendance status to Present"
-                    className="px-3 py-1.5 border border-slate-800 rounded-lg text-xs font-semibold bg-slate-900/40 text-slate-400 hover:text-emerald-400 transition-colors"
+                    className="px-3 py-1.5 border border-border-app rounded-lg text-xs font-semibold bg-bg-card/40 text-text-muted hover:text-emerald-400 transition-colors"
                   >
                     Set All Present
                   </button>
@@ -527,7 +527,7 @@ const FacultyDashboard = () => {
                     type="button"
                     onClick={handleSelectAllAbsent}
                     aria-label="Set all students attendance status to Absent"
-                    className="px-3 py-1.5 border border-slate-800 rounded-lg text-xs font-semibold bg-slate-900/40 text-slate-400 hover:text-red-400 transition-colors"
+                    className="px-3 py-1.5 border border-border-app rounded-lg text-xs font-semibold bg-bg-card/40 text-text-muted hover:text-red-400 transition-colors"
                   >
                     Set All Absent
                   </button>
@@ -551,24 +551,24 @@ const FacultyDashboard = () => {
               )}
 
               {/* Student Attendance List */}
-              <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/10">
+              <div className="overflow-x-auto rounded-xl border border-border-app bg-bg-card/10">
                 <table className="min-w-full divide-y divide-slate-800 text-left text-sm">
-                  <thead className="bg-slate-900/50 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                  <thead className="bg-bg-card/50 text-xs font-semibold uppercase tracking-wider text-text-muted">
                     <tr>
                       <th className="px-6 py-4">Student Details</th>
                       <th className="px-6 py-4 text-center">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-850 text-slate-300">
+                  <tbody className="divide-y divide-slate-850 text-text-main">
                     {students.map((student) => {
                       const status = attendanceRecords[student.id];
                       const isUnmarked = status === null;
                       
                       return (
-                        <tr key={student.id} className={`hover:bg-slate-900/10 transition-colors ${isUnmarked && attendanceError ? 'bg-red-500/5' : ''}`}>
+                        <tr key={student.id} className={`hover:bg-bg-card/10 transition-colors ${isUnmarked && attendanceError ? 'bg-red-500/5' : ''}`}>
                           <td className="px-6 py-4">
                             <div className="font-semibold text-slate-100">{student.user.name}</div>
-                            <div className="text-xs text-slate-500">Roll: {student.rollNo}</div>
+                            <div className="text-xs text-text-muted">Roll: {student.rollNo}</div>
                           </td>
                           <td className="px-6 py-4">
                             <div className="flex justify-center items-center gap-2">
@@ -579,7 +579,7 @@ const FacultyDashboard = () => {
                                 className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${
                                   status === 'PRESENT'
                                     ? 'bg-emerald-600/20 border-emerald-500/40 text-emerald-400'
-                                    : 'border-slate-800 bg-slate-950/40 text-slate-500 hover:text-slate-400'
+                                    : 'border-border-app bg-bg-app/40 text-text-muted hover:text-text-muted'
                                 }`}
                               >
                                 PRESENT
@@ -591,7 +591,7 @@ const FacultyDashboard = () => {
                                 className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${
                                   status === 'ABSENT'
                                     ? 'bg-red-600/20 border-red-500/40 text-red-400'
-                                    : 'border-slate-800 bg-slate-950/40 text-slate-500 hover:text-slate-400'
+                                    : 'border-border-app bg-bg-app/40 text-text-muted hover:text-text-muted'
                                 }`}
                               >
                                 ABSENT
@@ -616,7 +616,7 @@ const FacultyDashboard = () => {
                 <button
                   type="submit"
                   disabled={savingAttendance || !!dateError}
-                  className="flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm disabled:opacity-50 transition-colors shadow-lg shadow-blue-650/10"
+                  className="flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-text-main font-semibold text-sm disabled:opacity-50 transition-colors shadow-lg shadow-blue-650/10"
                 >
                   {savingAttendance ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                   <span>Save Attendance Registry</span>
@@ -628,15 +628,15 @@ const FacultyDashboard = () => {
           {/* TAB 2: MARKS */}
           {activeTab === 'marks' && (
             <form onSubmit={handleMarksSubmit} className="space-y-6" noValidate>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-900/20 p-4 border border-slate-850 rounded-xl">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-bg-card/20 p-4 border border-border-card/50 rounded-xl">
                 {/* Exam Type */}
                 <div className="space-y-1">
-                  <label htmlFor="exam-select" className="text-xs font-semibold uppercase tracking-wider text-slate-400">Exam Type</label>
+                  <label htmlFor="exam-select" className="text-xs font-semibold uppercase tracking-wider text-text-muted">Exam Type</label>
                   <select
                     id="exam-select"
                     value={examType}
                     onChange={(e) => setExamType(e.target.value)}
-                    className="block w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white focus:outline-none"
+                    className="block w-full rounded-lg border border-border-app bg-bg-app px-3 py-2 text-sm text-text-main focus:outline-none"
                   >
                     <option value="INTERNAL1">Internal Assessment 1</option>
                     <option value="INTERNAL2">Internal Assessment 2</option>
@@ -646,7 +646,7 @@ const FacultyDashboard = () => {
 
                 {/* Maximum Marks */}
                 <div className="space-y-1">
-                  <label htmlFor="max-marks-input" className="text-xs font-semibold uppercase tracking-wider text-slate-400">Maximum Marks</label>
+                  <label htmlFor="max-marks-input" className="text-xs font-semibold uppercase tracking-wider text-text-muted">Maximum Marks</label>
                   <input
                     id="max-marks-input"
                     type="number"
@@ -655,26 +655,26 @@ const FacultyDashboard = () => {
                     max="100"
                     value={maxMarks}
                     onChange={(e) => setMaxMarks(Number(e.target.value))}
-                    className="block w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white focus:outline-none"
+                    className="block w-full rounded-lg border border-border-app bg-bg-app px-3 py-2 text-sm text-text-main focus:outline-none"
                   />
                 </div>
               </div>
 
               {/* Student Marks Sheet Table */}
-              <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/10">
+              <div className="overflow-x-auto rounded-xl border border-border-app bg-bg-card/10">
                 <table className="min-w-full divide-y divide-slate-800 text-left text-sm">
-                  <thead className="bg-slate-900/50 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                  <thead className="bg-bg-card/50 text-xs font-semibold uppercase tracking-wider text-text-muted">
                     <tr>
                       <th className="px-6 py-4">Student Details</th>
                       <th className="px-6 py-4 text-center">Marks Obtained (Max: {maxMarks})</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-850 text-slate-300">
+                  <tbody className="divide-y divide-slate-850 text-text-main">
                     {students.map((student) => (
-                      <tr key={student.id} className="hover:bg-slate-900/10 transition-colors">
+                      <tr key={student.id} className="hover:bg-bg-card/10 transition-colors">
                         <td className="px-6 py-4">
                           <div className="font-semibold text-slate-100">{student.user.name}</div>
-                          <div className="text-xs text-slate-500">Roll: {student.rollNo}</div>
+                          <div className="text-xs text-text-muted">Roll: {student.rollNo}</div>
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex flex-col items-center justify-center gap-1">
@@ -689,11 +689,11 @@ const FacultyDashboard = () => {
                                 placeholder="0"
                                 value={marksRecords[student.id] ?? ''}
                                 onChange={(e) => handleMarkChange(student.id, e.target.value)}
-                                className={`w-24 text-center rounded-lg border bg-slate-950 px-3 py-1.5 text-sm text-white focus:outline-none ${
-                                  marksErrors[student.id] ? 'border-red-500' : 'border-slate-850'
+                                className={`w-24 text-center rounded-lg border bg-bg-app px-3 py-1.5 text-sm text-text-main focus:outline-none ${
+                                  marksErrors[student.id] ? 'border-red-500' : 'border-border-card/50'
                                 }`}
                               />
-                              <span className="text-slate-500">/ {maxMarks}</span>
+                              <span className="text-text-muted">/ {maxMarks}</span>
                             </div>
                             {marksErrors[student.id] && (
                               <span className="text-[10px] text-red-400 font-medium flex items-center gap-0.5">
@@ -714,7 +714,7 @@ const FacultyDashboard = () => {
                 <button
                   type="submit"
                   disabled={savingMarks}
-                  className="flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm disabled:opacity-50 transition-colors shadow-lg shadow-blue-650/10"
+                  className="flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-text-main font-semibold text-sm disabled:opacity-50 transition-colors shadow-lg shadow-blue-650/10"
                 >
                   {savingMarks ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                   <span>Publish Exam Marks</span>

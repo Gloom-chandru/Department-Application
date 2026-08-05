@@ -272,16 +272,16 @@ export default function AdminPlacementManager() {
   return (
     <div className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
       <div>
-        <h1 className="flex items-center gap-2 text-2xl font-bold text-white">
+        <h1 className="flex items-center gap-2 text-2xl font-bold text-text-main">
           <Briefcase className="h-7 w-7 text-blue-500" />
           Placement Management
         </h1>
-        <p className="mt-1 text-sm text-slate-400">
+        <p className="mt-1 text-sm text-text-muted">
           Companies, drives, applications, offers, analytics, and bulk import/export.
         </p>
       </div>
 
-      <div className="flex flex-wrap gap-2 border-b border-slate-800 pb-2">
+      <div className="flex flex-wrap gap-2 border-b border-border-app pb-2">
         {tabs.map((t) => (
           <button
             key={t.id}
@@ -290,7 +290,7 @@ export default function AdminPlacementManager() {
             className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold ${
               tab === t.id
                 ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30'
-                : 'text-slate-400 hover:text-slate-200'
+                : 'text-text-muted hover:text-text-main'
             }`}
           >
             <t.icon className="h-3.5 w-3.5" />
@@ -308,16 +308,16 @@ export default function AdminPlacementManager() {
               { label: 'Placement %', value: `${summary.placementPercent}%` },
               { label: 'Applications', value: summary.applications }
             ].map((c) => (
-              <div key={c.label} className="rounded-2xl border border-slate-800 bg-slate-900/40 p-4">
-                <div className="text-[11px] uppercase text-slate-500">{c.label}</div>
-                <div className="mt-1 text-2xl font-semibold text-white">{c.value}</div>
+              <div key={c.label} className="rounded-2xl border border-border-app bg-bg-card/40 p-4">
+                <div className="text-[11px] uppercase text-text-muted">{c.label}</div>
+                <div className="mt-1 text-2xl font-semibold text-text-main">{c.value}</div>
               </div>
             ))}
           </div>
 
           {packages && (
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5">
-              <h3 className="text-sm font-semibold text-white mb-3">Package stats (accepted offers)</h3>
+            <div className="rounded-2xl border border-border-app bg-bg-card/40 p-5">
+              <h3 className="text-sm font-semibold text-text-main mb-3">Package stats (accepted offers)</h3>
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-center text-xs">
                 {[
                   ['Highest', packages.highest],
@@ -326,8 +326,8 @@ export default function AdminPlacementManager() {
                   ['Lowest', packages.lowest],
                   ['Accepted', packages.acceptedCount]
                 ].map(([k, v]) => (
-                  <div key={k} className="rounded-xl border border-slate-800 p-3">
-                    <div className="text-slate-500">{k}</div>
+                  <div key={k} className="rounded-xl border border-border-app p-3">
+                    <div className="text-text-muted">{k}</div>
                     <div className="mt-1 text-lg font-semibold text-emerald-400">{v ?? '—'}</div>
                   </div>
                 ))}
@@ -336,8 +336,8 @@ export default function AdminPlacementManager() {
           )}
 
           <div className="grid gap-4 lg:grid-cols-2">
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5 h-72">
-              <h3 className="text-sm font-semibold text-white mb-3">By department</h3>
+            <div className="rounded-2xl border border-border-app bg-bg-card/40 p-5 h-72">
+              <h3 className="text-sm font-semibold text-text-main mb-3">By department</h3>
               <ResponsiveContainer width="100%" height="85%">
                 <BarChart data={byDept}>
                   <XAxis dataKey="code" stroke="#94a3b8" fontSize={11} />
@@ -347,8 +347,8 @@ export default function AdminPlacementManager() {
                 </BarChart>
               </ResponsiveContainer>
             </div>
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5 h-72">
-              <h3 className="text-sm font-semibold text-white mb-3">By batch</h3>
+            <div className="rounded-2xl border border-border-app bg-bg-card/40 p-5 h-72">
+              <h3 className="text-sm font-semibold text-text-main mb-3">By batch</h3>
               <ResponsiveContainer width="100%" height="85%">
                 <BarChart data={byBatch}>
                   <XAxis dataKey="batchYear" stroke="#94a3b8" fontSize={11} />
@@ -360,11 +360,11 @@ export default function AdminPlacementManager() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5">
-            <h3 className="text-sm font-semibold text-white mb-3">Company-wise selections</h3>
+          <div className="rounded-2xl border border-border-app bg-bg-card/40 p-5">
+            <h3 className="text-sm font-semibold text-text-main mb-3">Company-wise selections</h3>
             <div className="overflow-x-auto">
               <table className="min-w-full text-xs text-left">
-                <thead className="text-slate-400">
+                <thead className="text-text-muted">
                   <tr>
                     <th className="py-2 pr-4">Company</th>
                     <th className="py-2 pr-4">Selected</th>
@@ -374,10 +374,10 @@ export default function AdminPlacementManager() {
                 </thead>
                 <tbody>
                   {byCompany.map((c) => (
-                    <tr key={c.companyId} className="border-t border-slate-800">
-                      <td className="py-2 pr-4 text-white">{c.companyName}</td>
-                      <td className="py-2 pr-4 text-slate-300">{c.selectedApplications}</td>
-                      <td className="py-2 pr-4 text-slate-300">{c.acceptedOffers}</td>
+                    <tr key={c.companyId} className="border-t border-border-app">
+                      <td className="py-2 pr-4 text-text-main">{c.companyName}</td>
+                      <td className="py-2 pr-4 text-text-main">{c.selectedApplications}</td>
+                      <td className="py-2 pr-4 text-text-main">{c.acceptedOffers}</td>
                       <td className="py-2 text-emerald-400">{c.avgCtc != null ? Number(c.avgCtc).toFixed(2) : '—'}</td>
                     </tr>
                   ))}
@@ -390,8 +390,8 @@ export default function AdminPlacementManager() {
 
       {tab === 'companies' && (
         <div className="grid gap-6 lg:grid-cols-2">
-          <form onSubmit={createCompany} className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5 space-y-3">
-            <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+          <form onSubmit={createCompany} className="rounded-2xl border border-border-app bg-bg-card/40 p-5 space-y-3">
+            <h3 className="text-sm font-semibold text-text-main flex items-center gap-2">
               <Plus className="h-4 w-4" /> New company
             </h3>
             <input
@@ -399,32 +399,32 @@ export default function AdminPlacementManager() {
               value={companyForm.name}
               onChange={(e) => setCompanyForm({ ...companyForm, name: e.target.value })}
               placeholder="Name"
-              className="w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white"
+              className="w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main"
             />
             <input
               value={companyForm.code}
               onChange={(e) => setCompanyForm({ ...companyForm, code: e.target.value })}
               placeholder="Code (optional)"
-              className="w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white"
+              className="w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main"
             />
             <input
               value={companyForm.industry}
               onChange={(e) => setCompanyForm({ ...companyForm, industry: e.target.value })}
               placeholder="Industry"
-              className="w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white"
+              className="w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main"
             />
-            <button type="submit" className="rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-500">
+            <button type="submit" className="rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-text-main hover:bg-blue-500">
               Create
             </button>
           </form>
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5 space-y-2 max-h-96 overflow-y-auto">
+          <div className="rounded-2xl border border-border-app bg-bg-card/40 p-5 space-y-2 max-h-96 overflow-y-auto">
             {companies.map((c) => (
-              <div key={c.id} className="flex justify-between gap-2 border-b border-slate-800/60 py-2 text-xs">
+              <div key={c.id} className="flex justify-between gap-2 border-b border-border-app/60 py-2 text-xs">
                 <div>
-                  <div className="font-semibold text-white">{c.name}</div>
-                  <div className="text-slate-500">{c.code || '—'} · {c.industry || '—'}</div>
+                  <div className="font-semibold text-text-main">{c.name}</div>
+                  <div className="text-text-muted">{c.code || '—'} · {c.industry || '—'}</div>
                 </div>
-                <span className={c.isActive ? 'text-emerald-400' : 'text-slate-500'}>
+                <span className={c.isActive ? 'text-emerald-400' : 'text-text-muted'}>
                   {c.isActive ? 'Active' : 'Inactive'}
                 </span>
               </div>
@@ -435,13 +435,13 @@ export default function AdminPlacementManager() {
 
       {tab === 'drives' && (
         <div className="space-y-6">
-          <form onSubmit={createDrive} className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5 grid gap-3 sm:grid-cols-2">
-            <h3 className="sm:col-span-2 text-sm font-semibold text-white">Create drive (DRAFT)</h3>
+          <form onSubmit={createDrive} className="rounded-2xl border border-border-app bg-bg-card/40 p-5 grid gap-3 sm:grid-cols-2">
+            <h3 className="sm:col-span-2 text-sm font-semibold text-text-main">Create drive (DRAFT)</h3>
             <select
               required
               value={driveForm.companyId}
               onChange={(e) => setDriveForm({ ...driveForm, companyId: e.target.value })}
-              className="rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white"
+              className="rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main"
             >
               <option value="">Select company</option>
               {companies.filter((c) => c.isActive).map((c) => (
@@ -453,54 +453,54 @@ export default function AdminPlacementManager() {
               value={driveForm.title}
               onChange={(e) => setDriveForm({ ...driveForm, title: e.target.value })}
               placeholder="Job role / title"
-              className="rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white"
+              className="rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main"
             />
             <input
               required
               value={driveForm.location}
               onChange={(e) => setDriveForm({ ...driveForm, location: e.target.value })}
               placeholder="Location"
-              className="rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white"
+              className="rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main"
             />
             <input
               type="datetime-local"
               required
               value={driveForm.applicationDeadline}
               onChange={(e) => setDriveForm({ ...driveForm, applicationDeadline: e.target.value })}
-              className="rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white"
+              className="rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main"
             />
             <input
               value={driveForm.packageCtc}
               onChange={(e) => setDriveForm({ ...driveForm, packageCtc: e.target.value })}
               placeholder="CTC (LPA)"
-              className="rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white"
+              className="rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main"
             />
             <input
               value={driveForm.minCgpa}
               onChange={(e) => setDriveForm({ ...driveForm, minCgpa: e.target.value })}
               placeholder="Min CGPA"
-              className="rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white"
+              className="rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main"
             />
             <input
               value={driveForm.maxBacklogs}
               onChange={(e) => setDriveForm({ ...driveForm, maxBacklogs: e.target.value })}
               placeholder="Max backlogs"
-              className="rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white"
+              className="rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main"
             />
             <input
               required
               value={driveForm.batchYears}
               onChange={(e) => setDriveForm({ ...driveForm, batchYears: e.target.value })}
               placeholder="Batch years (comma-separated)"
-              className="rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white"
+              className="rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main"
             />
             <div className="sm:col-span-2">
-              <div className="text-[11px] text-slate-500 mb-1">Eligible departments</div>
+              <div className="text-[11px] text-text-muted mb-1">Eligible departments</div>
               <div className="flex flex-wrap gap-2">
                 {departments.map((d) => {
                   const checked = driveForm.departmentIds.includes(d.id);
                   return (
-                    <label key={d.id} className="inline-flex items-center gap-1.5 text-xs text-slate-300">
+                    <label key={d.id} className="inline-flex items-center gap-1.5 text-xs text-text-main">
                       <input
                         type="checkbox"
                         checked={checked}
@@ -525,25 +525,25 @@ export default function AdminPlacementManager() {
               onChange={(e) => setDriveForm({ ...driveForm, description: e.target.value })}
               placeholder="Description"
               rows={3}
-              className="sm:col-span-2 rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white"
+              className="sm:col-span-2 rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main"
             />
-            <button type="submit" className="rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-500">
+            <button type="submit" className="rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-text-main hover:bg-blue-500">
               Create draft
             </button>
           </form>
 
           <div className="space-y-3">
             {drives.map((d) => (
-              <div key={d.id} className="rounded-2xl border border-slate-800 bg-slate-900/40 p-4 flex flex-wrap items-center justify-between gap-3">
+              <div key={d.id} className="rounded-2xl border border-border-app bg-bg-card/40 p-4 flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <div className="text-sm font-semibold text-white">{d.title}</div>
-                  <div className="text-xs text-slate-400">
+                  <div className="text-sm font-semibold text-text-main">{d.title}</div>
+                  <div className="text-xs text-text-muted">
                     {d.company?.name} · {d.status} · Apps: {d._count?.applications ?? 0}
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {d.status === 'DRAFT' && (
-                    <button type="button" onClick={() => publishDrive(d.id)} className="rounded-xl bg-emerald-600 px-3 py-1.5 text-xs text-white">
+                    <button type="button" onClick={() => publishDrive(d.id)} className="rounded-xl bg-emerald-600 px-3 py-1.5 text-xs text-text-main">
                       Publish
                     </button>
                   )}
@@ -552,7 +552,7 @@ export default function AdminPlacementManager() {
                       Close
                     </button>
                   )}
-                  <button type="button" onClick={() => loadApps(d.id)} className="rounded-xl border border-slate-700 px-3 py-1.5 text-xs text-slate-300">
+                  <button type="button" onClick={() => loadApps(d.id)} className="rounded-xl border border-border-card px-3 py-1.5 text-xs text-text-main">
                     Applications
                   </button>
                 </div>
@@ -564,15 +564,15 @@ export default function AdminPlacementManager() {
 
       {tab === 'applications' && (
         <div className="space-y-4">
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-text-muted">
             {selectedDriveId ? `Applications for drive ${selectedDriveId}` : 'Select a drive from the Drives tab to load applications.'}
           </p>
           {selectedDriveApps.map((a) => (
-            <div key={a.id} className="rounded-2xl border border-slate-800 bg-slate-900/40 p-4 space-y-3">
+            <div key={a.id} className="rounded-2xl border border-border-app bg-bg-card/40 p-4 space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <div className="text-sm font-semibold text-white">{a.student?.user?.name} ({a.student?.rollNo})</div>
-                  <div className="text-xs text-slate-400">{a.student?.department?.code} · CGPA {a.student?.cgpa ?? '—'}</div>
+                  <div className="text-sm font-semibold text-text-main">{a.student?.user?.name} ({a.student?.rollNo})</div>
+                  <div className="text-xs text-text-muted">{a.student?.department?.code} · CGPA {a.student?.cgpa ?? '—'}</div>
                 </div>
                 <StageBadge stage={a.stage} />
               </div>
@@ -582,7 +582,7 @@ export default function AdminPlacementManager() {
                     key={s}
                     type="button"
                     onClick={() => changeStage(a.id, s)}
-                    className="rounded-lg border border-slate-800 px-2 py-1 text-[10px] text-slate-400 hover:text-blue-300"
+                    className="rounded-lg border border-border-app px-2 py-1 text-[10px] text-text-muted hover:text-blue-300"
                   >
                     → {s}
                   </button>
@@ -600,14 +600,14 @@ export default function AdminPlacementManager() {
             </div>
           ))}
           {selectedDriveId && selectedDriveApps.length === 0 && (
-            <p className="text-sm text-slate-500">No applications for this drive.</p>
+            <p className="text-sm text-text-muted">No applications for this drive.</p>
           )}
           {offers.length > 0 && (
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-4">
-              <h3 className="text-sm font-semibold text-white mb-3">Recent offers</h3>
+            <div className="rounded-2xl border border-border-app bg-bg-card/40 p-4">
+              <h3 className="text-sm font-semibold text-text-main mb-3">Recent offers</h3>
               {offers.slice(0, 10).map((o) => (
-                <div key={o.id} className="flex justify-between border-b border-slate-800/50 py-2 text-xs">
-                  <span className="text-slate-300">{o.student?.user?.name} · {o.company?.name}</span>
+                <div key={o.id} className="flex justify-between border-b border-border-card/50 py-2 text-xs">
+                  <span className="text-text-main">{o.student?.user?.name} · {o.company?.name}</span>
                   <span className="text-emerald-400">{o.ctc} LPA · {o.status}</span>
                 </div>
               ))}
@@ -617,29 +617,29 @@ export default function AdminPlacementManager() {
       )}
 
       {tab === 'eligibility' && (
-        <form onSubmit={updateEligibility} className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5 space-y-3 max-w-lg">
-          <h3 className="text-sm font-semibold text-white">Update student CGPA / backlogs</h3>
-          <p className="text-xs text-slate-500">CGPA is never derived from marks. Use student UUID from admin student list.</p>
+        <form onSubmit={updateEligibility} className="rounded-2xl border border-border-app bg-bg-card/40 p-5 space-y-3 max-w-lg">
+          <h3 className="text-sm font-semibold text-text-main">Update student CGPA / backlogs</h3>
+          <p className="text-xs text-text-muted">CGPA is never derived from marks. Use student UUID from admin student list.</p>
           <input
             required
             value={eligStudentId}
             onChange={(e) => setEligStudentId(e.target.value)}
             placeholder="Student ID (UUID)"
-            className="w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white"
+            className="w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main"
           />
           <input
             value={eligForm.cgpa}
             onChange={(e) => setEligForm({ ...eligForm, cgpa: e.target.value })}
             placeholder="CGPA"
-            className="w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white"
+            className="w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main"
           />
           <input
             value={eligForm.currentBacklogs}
             onChange={(e) => setEligForm({ ...eligForm, currentBacklogs: e.target.value })}
             placeholder="Current backlogs"
-            className="w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white"
+            className="w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main"
           />
-          <button type="submit" className="rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white">
+          <button type="submit" className="rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-text-main">
             Save
           </button>
         </form>
@@ -654,7 +654,7 @@ export default function AdminPlacementManager() {
                 type="button"
                 onClick={() => { setImportType(t); setDryRun(null); setImportFile(null); }}
                 className={`rounded-xl px-3 py-2 text-xs font-semibold ${
-                  importType === t ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30' : 'text-slate-400'
+                  importType === t ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30' : 'text-text-muted'
                 }`}
               >
                 {t}
@@ -664,7 +664,7 @@ export default function AdminPlacementManager() {
           <button
             type="button"
             onClick={downloadTemplate}
-            className="inline-flex items-center gap-2 rounded-xl border border-slate-700 px-3 py-2 text-xs text-slate-300"
+            className="inline-flex items-center gap-2 rounded-xl border border-border-card px-3 py-2 text-xs text-text-main"
           >
             <Download className="h-3.5 w-3.5" /> Download template
           </button>
@@ -687,7 +687,7 @@ export default function AdminPlacementManager() {
                 <button
                   type="button"
                   onClick={confirmImport}
-                  className="rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white"
+                  className="rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-text-main"
                 >
                   Confirm import
                 </button>

@@ -108,13 +108,13 @@ const StudentTimetable = () => {
       {toastMessage && <Toast type={toastType} message={toastMessage} onClose={() => setToastMessage('')} />}
 
       {/* Header card */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 rounded-xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur-sm">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 rounded-xl border border-border-app bg-bg-card/50 p-6 backdrop-blur-sm">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-text-main flex items-center gap-2">
             <Calendar className="h-6 w-6 text-blue-500" />
             Class Timetable
           </h1>
-          <p className="text-slate-400 mt-1">
+          <p className="text-text-muted mt-1">
             {schedule 
               ? `Active Schedule: ${schedule.name} (${schedule.batchYear} Section ${schedule.section})`
               : 'No active published timetable schedule found for this semester.'}
@@ -123,11 +123,11 @@ const StudentTimetable = () => {
 
         {/* Semester Selector */}
         <div className="flex items-center gap-3">
-          <label className="text-sm font-medium text-slate-300">Semester:</label>
+          <label className="text-sm font-medium text-text-main">Semester:</label>
           <select
             value={selectedSemester}
             onChange={(e) => setSelectedSemester(Number(e.target.value))}
-            className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-slate-300 focus:border-blue-500 focus:outline-none"
+            className="rounded-lg border border-border-app bg-bg-app px-3 py-2 text-text-main focus:border-blue-500 focus:outline-none"
           >
             {[1, 2, 3, 4, 5, 6, 7, 8].map(sem => (
               <option key={sem} value={sem}>Semester {sem}</option>
@@ -137,8 +137,8 @@ const StudentTimetable = () => {
       </div>
 
       {schedule && (
-        <div className="rounded-xl border border-slate-800 bg-slate-900/20 backdrop-blur-sm p-4">
-          <div className="flex items-center gap-2 text-xs text-slate-400 mb-4 px-2">
+        <div className="rounded-xl border border-border-app bg-bg-card/20 backdrop-blur-sm p-4">
+          <div className="flex items-center gap-2 text-xs text-text-muted mb-4 px-2">
             <Info className="h-4 w-4 text-blue-500 shrink-0" />
             <span>Effective from {new Date(schedule.effectiveFrom).toLocaleDateString()} {schedule.effectiveTo ? `to ${new Date(schedule.effectiveTo).toLocaleDateString()}` : '(Ongoing)'}</span>
           </div>
@@ -148,11 +148,11 @@ const StudentTimetable = () => {
             <table className="w-full border-collapse">
               <thead>
                 <tr>
-                  <th className="p-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-800 w-32">Day</th>
+                  <th className="p-3 text-left text-xs font-semibold text-text-muted uppercase tracking-wider border-b border-border-app w-32">Day</th>
                   {periods.map(p => (
-                    <th key={p.id} className="p-3 text-center border-b border-slate-800 min-w-[140px]">
-                      <div className="text-xs font-bold text-slate-300">{p.name}</div>
-                      <div className="text-[10px] text-slate-500 flex items-center justify-center gap-1 mt-0.5">
+                    <th key={p.id} className="p-3 text-center border-b border-border-app min-w-[140px]">
+                      <div className="text-xs font-bold text-text-main">{p.name}</div>
+                      <div className="text-[10px] text-text-muted flex items-center justify-center gap-1 mt-0.5">
                         <Clock className="h-3 w-3" />
                         {p.startTime} - {p.endTime}
                       </div>
@@ -168,11 +168,11 @@ const StudentTimetable = () => {
                   return (
                     <tr 
                       key={dayName} 
-                      className={`border-b border-slate-800/50 transition-colors ${
+                      className={`border-b border-border-card/50 transition-colors ${
                         isCurrentDay ? 'bg-blue-900/5' : ''
                       }`}
                     >
-                      <td className="p-3 font-semibold text-slate-300 text-sm border-r border-slate-800/30">
+                      <td className="p-3 font-semibold text-text-main text-sm border-r border-border-app/30">
                         <div className="flex items-center gap-2">
                           {isCurrentDay && <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></div>}
                           {dayName}
@@ -182,7 +182,7 @@ const StudentTimetable = () => {
                       {periods.map(p => {
                         if (p.isBreak) {
                           return (
-                            <td key={p.id} className="p-3 bg-slate-950/40 text-center text-xs font-semibold text-slate-600 border-r border-slate-800/30 select-none">
+                            <td key={p.id} className="p-3 bg-bg-app/40 text-center text-xs font-semibold text-text-muted border-r border-border-app/30 select-none">
                               {p.name}
                             </td>
                           );
@@ -193,8 +193,8 @@ const StudentTimetable = () => {
 
                         if (!slot) {
                           return (
-                            <td key={p.id} className="p-3 border-r border-slate-800/30">
-                              <div className="flex flex-col items-center justify-center h-20 rounded-lg border border-dashed border-slate-800/40 text-slate-600 text-xs select-none">
+                            <td key={p.id} className="p-3 border-r border-border-app/30">
+                              <div className="flex flex-col items-center justify-center h-20 rounded-lg border border-dashed border-border-app/40 text-text-muted text-xs select-none">
                                 Free Period
                               </div>
                             </td>
@@ -217,7 +217,7 @@ const StudentTimetable = () => {
                           <td 
                             key={p.id} 
                             colSpan={span} 
-                            className="p-2 border-r border-slate-800/30 align-middle"
+                            className="p-2 border-r border-border-app/30 align-middle"
                           >
                             <div 
                               className={`flex flex-col justify-between p-3 rounded-lg border h-20 transition-all duration-200 ${colColor} ${
@@ -227,20 +227,20 @@ const StudentTimetable = () => {
                               <div className="flex items-start justify-between gap-1">
                                 <span className="font-bold text-sm tracking-tight truncate">{slot.subject.code}</span>
                                 {isCurrentlyActive && (
-                                  <span className="flex items-center gap-1 rounded bg-blue-500 px-1 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
+                                  <span className="flex items-center gap-1 rounded bg-blue-500 px-1 py-0.5 text-[9px] font-bold uppercase tracking-wider text-text-main">
                                     LIVE
                                   </span>
                                 )}
                               </div>
-                              <div className="text-xs font-medium truncate text-slate-300 mt-0.5">{slot.subject.name}</div>
-                              <div className="flex items-center justify-between text-[10px] text-slate-400 mt-1">
+                              <div className="text-xs font-medium truncate text-text-main mt-0.5">{slot.subject.name}</div>
+                              <div className="flex items-center justify-between text-[10px] text-text-muted mt-1">
                                 <span className="flex items-center gap-0.5 truncate max-w-[65%]">
-                                  <User className="h-3 w-3 shrink-0 text-slate-500" />
+                                  <User className="h-3 w-3 shrink-0 text-text-muted" />
                                   {slot.subject.faculty.user.name}
                                 </span>
                                 {slot.room && (
-                                  <span className="flex items-center gap-0.5 font-semibold text-slate-300">
-                                    <MapPin className="h-3 w-3 text-slate-500" />
+                                  <span className="flex items-center gap-0.5 font-semibold text-text-main">
+                                    <MapPin className="h-3 w-3 text-text-muted" />
                                     {slot.room.roomNo}
                                   </span>
                                 )}
@@ -259,17 +259,17 @@ const StudentTimetable = () => {
           {/* Mobile View (Collapsible Daily Agenda) */}
           <div className="lg:hidden">
             {/* Day Selector Navigation */}
-            <div className="flex items-center justify-between bg-slate-900 border border-slate-800 rounded-lg p-2 mb-4">
+            <div className="flex items-center justify-between bg-bg-card border border-border-app rounded-lg p-2 mb-4">
               <button 
                 onClick={() => setActiveMobileDay(prev => prev > 1 ? prev - 1 : 6)}
-                className="p-2 text-slate-400 hover:text-white"
+                className="p-2 text-text-muted hover:text-text-main"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
-              <span className="font-bold text-sm text-slate-200">{DAYS[activeMobileDay - 1]}</span>
+              <span className="font-bold text-sm text-text-main">{DAYS[activeMobileDay - 1]}</span>
               <button 
                 onClick={() => setActiveMobileDay(prev => prev < 6 ? prev + 1 : 1)}
-                className="p-2 text-slate-400 hover:text-white"
+                className="p-2 text-text-muted hover:text-text-main"
               >
                 <ChevronRight className="h-5 w-5" />
               </button>
@@ -280,7 +280,7 @@ const StudentTimetable = () => {
               {periods.map(p => {
                 if (p.isBreak) {
                   return (
-                    <div key={p.id} className="flex items-center justify-center py-2.5 px-4 bg-slate-950/30 rounded-lg border border-slate-800/40 text-xs font-semibold text-slate-500 select-none">
+                    <div key={p.id} className="flex items-center justify-center py-2.5 px-4 bg-bg-app/30 rounded-lg border border-border-app/40 text-xs font-semibold text-text-muted select-none">
                       {p.name} ({p.startTime} - {p.endTime})
                     </div>
                   );
@@ -296,9 +296,9 @@ const StudentTimetable = () => {
 
                 if (isMiddle) {
                   return (
-                    <div key={p.id} className="flex items-center gap-3 pl-4 text-xs text-slate-600">
+                    <div key={p.id} className="flex items-center gap-3 pl-4 text-xs text-text-muted">
                       <div className="w-16 text-right shrink-0">{p.startTime}</div>
-                      <div className="h-4 border-l border-slate-850"></div>
+                      <div className="h-4 border-l border-border-card/50"></div>
                       <div>Continuation of {slot.subject.code}</div>
                     </div>
                   );
@@ -308,44 +308,44 @@ const StudentTimetable = () => {
                   <div 
                     key={p.id} 
                     className={`flex items-start gap-4 p-3 rounded-lg border transition-all duration-200 ${
-                      isCurrentlyActive ? 'bg-blue-950/10 border-blue-500/50 ring-1 ring-blue-500/30' : 'bg-slate-900/30 border-slate-800/60'
+                      isCurrentlyActive ? 'bg-blue-950/10 border-blue-500/50 ring-1 ring-blue-500/30' : 'bg-bg-card/30 border-border-app/60'
                     }`}
                   >
                     {/* Time Column */}
                     <div className="w-16 shrink-0 pt-0.5">
-                      <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{p.name}</div>
-                      <div className="text-xs font-medium text-slate-300 mt-0.5">{p.startTime}</div>
-                      <div className="text-[10px] text-slate-500">{p.endTime}</div>
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-text-muted">{p.name}</div>
+                      <div className="text-xs font-medium text-text-main mt-0.5">{p.startTime}</div>
+                      <div className="text-[10px] text-text-muted">{p.endTime}</div>
                     </div>
 
-                    <div className="h-10 border-l border-slate-800/80 align-self-stretch shrink-0"></div>
+                    <div className="h-10 border-l border-border-app/80 align-self-stretch shrink-0"></div>
 
                     {/* Slot Info Column */}
                     <div className="flex-1 min-w-0">
                       {slot ? (
                         <div className="space-y-1">
                           <div className="flex items-center justify-between gap-2">
-                            <span className="font-bold text-sm text-slate-200 truncate">{slot.subject.code} - {slot.subject.name}</span>
+                            <span className="font-bold text-sm text-text-main truncate">{slot.subject.code} - {slot.subject.name}</span>
                             {isCurrentlyActive && (
-                              <span className="rounded bg-blue-500 px-1 py-0.5 text-[8px] font-bold tracking-wider text-white">LIVE</span>
+                              <span className="rounded bg-blue-500 px-1 py-0.5 text-[8px] font-bold tracking-wider text-text-main">LIVE</span>
                             )}
                           </div>
                           
-                          <div className="flex flex-col gap-1 sm:flex-row sm:items-center justify-between text-xs text-slate-400 pt-0.5">
+                          <div className="flex flex-col gap-1 sm:flex-row sm:items-center justify-between text-xs text-text-muted pt-0.5">
                             <span className="flex items-center gap-1">
-                              <User className="h-3.5 w-3.5 text-slate-500 shrink-0" />
+                              <User className="h-3.5 w-3.5 text-text-muted shrink-0" />
                               {slot.subject.faculty.user.name}
                             </span>
                             {slot.room && (
-                              <span className="flex items-center gap-1 font-semibold text-slate-300">
-                                <MapPin className="h-3.5 w-3.5 text-slate-500 shrink-0" />
+                              <span className="flex items-center gap-1 font-semibold text-text-main">
+                                <MapPin className="h-3.5 w-3.5 text-text-muted shrink-0" />
                                 Room {slot.room.roomNo}
                               </span>
                             )}
                           </div>
                         </div>
                       ) : (
-                        <div className="text-xs text-slate-600 italic py-2">Free Period</div>
+                        <div className="text-xs text-text-muted italic py-2">Free Period</div>
                       )}
                     </div>
                   </div>
@@ -358,10 +358,10 @@ const StudentTimetable = () => {
 
       {/* Empty State */}
       {!schedule && (
-        <div className="flex flex-col items-center justify-center text-center p-12 border border-slate-800 rounded-xl bg-slate-900/20">
-          <AlertCircle className="h-12 w-12 text-slate-600 mb-3" />
-          <h3 className="text-lg font-semibold text-slate-300">No Timetable Schedule Available</h3>
-          <p className="text-slate-500 text-sm max-w-sm mt-1">
+        <div className="flex flex-col items-center justify-center text-center p-12 border border-border-app rounded-xl bg-bg-card/20">
+          <AlertCircle className="h-12 w-12 text-text-muted mb-3" />
+          <h3 className="text-lg font-semibold text-text-main">No Timetable Schedule Available</h3>
+          <p className="text-text-muted text-sm max-w-sm mt-1">
             There is currently no published timetable schedule matching your group for Semester {selectedSemester}.
           </p>
         </div>

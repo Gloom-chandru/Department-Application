@@ -99,7 +99,7 @@ export default function BulkUploadDropzone({ selectedFile, onFileSelect, onFileC
           className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer ${
             isDragOver
               ? 'border-blue-500 bg-blue-500/10'
-              : 'border-slate-700 bg-slate-800/40 hover:border-slate-500 hover:bg-slate-800/80'
+              : 'border-border-card bg-bg-sidebar/40 hover:border-slate-500 hover:bg-bg-sidebar/80'
           } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
           <div className="flex flex-col items-center justify-center space-y-3">
@@ -107,24 +107,24 @@ export default function BulkUploadDropzone({ selectedFile, onFileSelect, onFileC
               <Upload className="w-8 h-8" />
             </div>
             <div>
-              <p className="text-base font-medium text-slate-200">
+              <p className="text-base font-medium text-text-main">
                 Drag and drop your spreadsheet here, or <span className="text-blue-400 font-semibold underline">browse</span>
               </p>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-text-muted mt-1">
                 Supports Excel (.xlsx) and CSV (.csv) up to 5 MB. Legacy .xls is not supported.
               </p>
             </div>
           </div>
         </div>
       ) : (
-        <div className="flex items-center justify-between p-4 bg-slate-800/80 border border-slate-700 rounded-xl">
+        <div className="flex items-center justify-between p-4 bg-bg-sidebar/80 border border-border-card rounded-xl">
           <div className="flex items-center space-x-3 overflow-hidden">
             <div className="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg flex-shrink-0">
               <FileSpreadsheet className="w-6 h-6" />
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-medium text-slate-200 truncate">{selectedFile.name}</p>
-              <p className="text-xs text-slate-400">
+              <p className="text-sm font-medium text-text-main truncate">{selectedFile.name}</p>
+              <p className="text-xs text-text-muted">
                 {formatSize(selectedFile.size)} • {selectedFile.name.split('.').pop()?.toUpperCase()}
               </p>
             </div>
@@ -135,7 +135,7 @@ export default function BulkUploadDropzone({ selectedFile, onFileSelect, onFileC
               type="button"
               onClick={() => !disabled && fileInputRef.current?.click()}
               disabled={disabled}
-              className="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-700/50 rounded-lg transition-colors text-xs flex items-center space-x-1"
+              className="p-2 text-text-muted hover:text-text-main hover:bg-bg-input/50 rounded-lg transition-colors text-xs flex items-center space-x-1"
               title="Replace file"
             >
               <RefreshCw className="w-4 h-4" />

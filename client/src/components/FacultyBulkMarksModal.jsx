@@ -126,25 +126,25 @@ export default function FacultyBulkMarksModal({ isOpen, onClose, onToast }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-5 max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-bg-sidebar/80 backdrop-blur-sm animate-fadeIn">
+      <div className="bg-bg-card border border-border-card rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-5 max-h-[90vh] flex flex-col">
         
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div className="flex items-center justify-between border-b border-border-app pb-4">
           <div className="flex items-center space-x-3">
             <div className="p-2.5 bg-blue-500/10 text-blue-400 rounded-xl border border-blue-500/20">
               <Award className="w-6 h-6" />
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-100">Bulk Import Subject Marks</h2>
-              <p className="text-xs text-slate-400">Import student exam marks for subjects assigned to you.</p>
+              <p className="text-xs text-text-muted">Import student exam marks for subjects assigned to you.</p>
             </div>
           </div>
 
           <button
             type="button"
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-lg transition-colors"
+            className="p-2 text-text-muted hover:text-text-main hover:bg-bg-sidebar rounded-lg transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -152,10 +152,10 @@ export default function FacultyBulkMarksModal({ isOpen, onClose, onToast }) {
 
         <div className="flex-1 overflow-y-auto space-y-5 pr-1">
           {/* Assigned Subjects Summary */}
-          <div className="p-3 bg-slate-950/50 border border-slate-800 rounded-xl text-xs space-y-1">
-            <span className="font-semibold text-slate-300">Your Authorized Subjects:</span>
+          <div className="p-3 bg-bg-app/50 border border-border-app rounded-xl text-xs space-y-1">
+            <span className="font-semibold text-text-main">Your Authorized Subjects:</span>
             {loadingSubjects ? (
-              <p className="text-slate-400">Loading assigned subjects...</p>
+              <p className="text-text-muted">Loading assigned subjects...</p>
             ) : subjects.length > 0 ? (
               <div className="flex flex-wrap gap-1.5 pt-1">
                 {subjects.map(s => (
@@ -170,15 +170,15 @@ export default function FacultyBulkMarksModal({ isOpen, onClose, onToast }) {
           </div>
 
           {/* Template Download */}
-          <div className="flex items-center justify-between p-3.5 bg-slate-950/60 border border-slate-800 rounded-xl text-xs">
+          <div className="flex items-center justify-between p-3.5 bg-bg-app/60 border border-border-app rounded-xl text-xs">
             <div>
-              <p className="font-bold text-slate-200">Download Marks Template</p>
-              <p className="text-slate-400">Use Internal 1, Internal 2, or Semester exam types.</p>
+              <p className="font-bold text-text-main">Download Marks Template</p>
+              <p className="text-text-muted">Use Internal 1, Internal 2, or Semester exam types.</p>
             </div>
             <button
               type="button"
               onClick={handleDownloadTemplate}
-              className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-blue-400 border border-slate-700 rounded-lg font-semibold transition-colors"
+              className="flex items-center space-x-1.5 px-3 py-1.5 bg-bg-sidebar hover:bg-bg-input text-blue-400 border border-border-card rounded-lg font-semibold transition-colors"
             >
               <Download className="w-4 h-4" />
               <span>Template (.xlsx)</span>
@@ -210,7 +210,7 @@ export default function FacultyBulkMarksModal({ isOpen, onClose, onToast }) {
 
           {/* Results display */}
           {dryRunResult && (
-            <div className="space-y-4 pt-2 border-t border-slate-800">
+            <div className="space-y-4 pt-2 border-t border-border-app">
               <DryRunSummary
                 summary={dryRunResult.summary}
                 valid={dryRunResult.valid}
@@ -237,11 +237,11 @@ export default function FacultyBulkMarksModal({ isOpen, onClose, onToast }) {
         </div>
 
         {/* Modal Footer */}
-        <div className="flex items-center justify-between pt-3 border-t border-slate-800">
+        <div className="flex items-center justify-between pt-3 border-t border-border-app">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold transition-colors"
+            className="px-4 py-2 bg-bg-sidebar hover:bg-bg-input text-text-main rounded-xl text-xs font-semibold transition-colors"
           >
             Close
           </button>

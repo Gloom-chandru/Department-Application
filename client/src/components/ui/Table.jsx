@@ -2,8 +2,8 @@ import React from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 
 const Table = React.forwardRef(({ children, className = '', ...props }, ref) => (
-  <div ref={ref} className={`overflow-x-auto rounded-2xl border border-slate-800 ${className}`} {...props}>
-    <table className="min-w-full divide-y divide-slate-800 text-left text-sm">
+  <div ref={ref} className={`overflow-x-auto rounded-xl border border-border-card bg-bg-card shadow-premium-sm ${className}`} {...props}>
+    <table className="min-w-full divide-y divide-border-card text-left text-sm">
       {children}
     </table>
   </div>
@@ -11,21 +11,21 @@ const Table = React.forwardRef(({ children, className = '', ...props }, ref) => 
 Table.displayName = 'Table';
 
 const TableHeader = React.forwardRef(({ children, className = '', ...props }, ref) => (
-  <thead ref={ref} className={`bg-slate-900/50 ${className}`} {...props}>
+  <thead ref={ref} className={`bg-bg-sidebar/45 border-b border-border-card ${className}`} {...props}>
     {children}
   </thead>
 ));
 TableHeader.displayName = 'TableHeader';
 
 const TableBody = React.forwardRef(({ children, className = '', ...props }, ref) => (
-  <tbody ref={ref} className={`divide-y divide-slate-850 ${className}`} {...props}>
+  <tbody ref={ref} className={`divide-y divide-border-card/50 ${className}`} {...props}>
     {children}
   </tbody>
 ));
 TableBody.displayName = 'TableBody';
 
 const TableFooter = React.forwardRef(({ children, className = '', ...props }, ref) => (
-  <tfoot ref={ref} className={`bg-slate-900/30 ${className}`} {...props}>
+  <tfoot ref={ref} className={`bg-bg-sidebar/35 border-t border-border-card ${className}`} {...props}>
     {children}
   </tfoot>
 ));
@@ -35,9 +35,9 @@ const TableRow = React.forwardRef(({ children, className = '', hover = true, sel
   <tr
     ref={ref}
     className={`
-      transition-colors
-      ${hover ? 'hover:bg-slate-900/30' : ''}
-      ${selected ? 'bg-blue-500/10 border-l-4 border-l-blue-500' : ''}
+      transition-colors duration-150
+      ${hover ? 'hover:bg-bg-sidebar/35' : ''}
+      ${selected ? 'bg-primary-500/10 border-l-4 border-l-primary-500' : ''}
       ${className}
     `}
     {...props}
@@ -52,8 +52,8 @@ const TableHead = React.forwardRef(({ children, className = '', sortable = false
     ref={ref}
     scope="col"
     className={`
-      px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-400
-      ${sortable ? 'cursor-pointer select-none hover:text-slate-200' : ''}
+      px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-text-muted
+      ${sortable ? 'cursor-pointer select-none hover:text-text-main transition-colors duration-150' : ''}
       ${className}
     `}
     onClick={onSort}
@@ -65,11 +65,11 @@ const TableHead = React.forwardRef(({ children, className = '', sortable = false
       {sortable && (
         <span className="inline-flex">
           {sortDirection === 'asc' ? (
-            <ChevronUp className="h-4 w-4 text-blue-500" />
+            <ChevronUp className="h-4 w-4 text-primary-500" />
           ) : sortDirection === 'desc' ? (
-            <ChevronDown className="h-4 w-4 text-blue-500" />
+            <ChevronDown className="h-4 w-4 text-primary-500" />
           ) : (
-            <ChevronUp className="h-4 w-4 text-slate-600" />
+            <ChevronUp className="h-4 w-4 text-text-muted/40" />
           )}
         </span>
       )}
@@ -82,7 +82,7 @@ const TableCell = React.forwardRef(({ children, className = '', align = 'left', 
   <td
     ref={ref}
     className={`
-      px-6 py-4 text-slate-300
+      px-6 py-3.5 text-text-main font-medium
       ${align === 'center' ? 'text-center' : align === 'right' ? 'text-right' : ''}
       ${className}
     `}

@@ -45,25 +45,25 @@ export default function CredentialSummaryModal({ credentials, onClose, onToast }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-3xl w-full p-6 shadow-2xl flex flex-col max-h-[90vh] space-y-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-bg-sidebar/80 backdrop-blur-sm animate-fadeIn">
+      <div className="bg-bg-card border border-border-card rounded-2xl max-w-3xl w-full p-6 shadow-2xl flex flex-col max-h-[90vh] space-y-4">
         
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div className="flex items-center justify-between border-b border-border-app pb-4">
           <div className="flex items-center space-x-3">
             <div className="p-2.5 bg-amber-500/10 text-amber-400 rounded-xl border border-amber-500/20">
               <KeyRound className="w-6 h-6" />
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-100">Generated Temporary Credentials</h2>
-              <p className="text-xs text-slate-400">Successfully created {credentials.length} user account(s).</p>
+              <p className="text-xs text-text-muted">Successfully created {credentials.length} user account(s).</p>
             </div>
           </div>
 
           <button
             type="button"
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-lg transition-colors"
+            className="p-2 text-text-muted hover:text-text-main hover:bg-bg-sidebar rounded-lg transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -82,28 +82,28 @@ export default function CredentialSummaryModal({ credentials, onClose, onToast }
         </div>
 
         {/* Credentials Grid */}
-        <div className="flex-1 overflow-y-auto border border-slate-800 rounded-xl bg-slate-950/50 divide-y divide-slate-800">
+        <div className="flex-1 overflow-y-auto border border-border-app rounded-xl bg-bg-app/50 divide-y divide-slate-800">
           {credentials.map((cred, idx) => (
-            <div key={idx} className="p-3.5 flex flex-wrap items-center justify-between gap-3 hover:bg-slate-800/40 transition-colors">
+            <div key={idx} className="p-3.5 flex flex-wrap items-center justify-between gap-3 hover:bg-bg-sidebar/40 transition-colors">
               <div className="space-y-0.5">
                 <div className="flex items-center space-x-2">
                   <span className="text-xs font-mono font-bold text-blue-400">
                     {cred.identifier || cred.rollNo || cred.email}
                   </span>
-                  <span className="text-xs text-slate-200 font-medium">— {cred.name}</span>
+                  <span className="text-xs text-text-main font-medium">— {cred.name}</span>
                 </div>
-                <p className="text-xs text-slate-400 font-sans">{cred.email}</p>
+                <p className="text-xs text-text-muted font-sans">{cred.email}</p>
               </div>
 
               <div className="flex items-center space-x-3">
-                <div className="bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg font-mono text-xs text-emerald-400 font-bold tracking-wider select-all">
+                <div className="bg-bg-card border border-border-card px-3 py-1.5 rounded-lg font-mono text-xs text-emerald-400 font-bold tracking-wider select-all">
                   {cred.temporaryPassword}
                 </div>
 
                 <button
                   type="button"
                   onClick={() => handleCopySingle(cred, idx)}
-                  className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-colors border border-slate-700"
+                  className="p-2 bg-bg-sidebar hover:bg-bg-input text-text-main rounded-lg transition-colors border border-border-card"
                   title="Copy single credential"
                 >
                   {copiedIndex === idx ? (
@@ -118,12 +118,12 @@ export default function CredentialSummaryModal({ credentials, onClose, onToast }
         </div>
 
         {/* Modal Actions */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-800">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-border-app">
           <div className="flex items-center space-x-2">
             <button
               type="button"
               onClick={handleCopyAll}
-              className="flex items-center space-x-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold transition-colors"
+              className="flex items-center space-x-1.5 px-4 py-2 bg-bg-sidebar hover:bg-bg-input text-text-main border border-border-card rounded-xl text-xs font-semibold transition-colors"
             >
               {copiedAll ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-blue-400" />}
               <span>{copiedAll ? 'All Copied!' : 'Copy All Credentials'}</span>
@@ -132,7 +132,7 @@ export default function CredentialSummaryModal({ credentials, onClose, onToast }
             <button
               type="button"
               onClick={handleDownloadCsv}
-              className="flex items-center space-x-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold transition-colors"
+              className="flex items-center space-x-1.5 px-4 py-2 bg-bg-sidebar hover:bg-bg-input text-text-main border border-border-card rounded-xl text-xs font-semibold transition-colors"
             >
               <Download className="w-4 h-4 text-emerald-400" />
               <span>Download Credentials (.csv)</span>

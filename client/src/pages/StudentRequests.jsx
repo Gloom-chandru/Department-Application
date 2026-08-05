@@ -128,7 +128,7 @@ const StudentRequests = () => {
       case 'REJECTED':
         return 'bg-red-500/10 border-red-500/25 text-red-400';
       case 'CANCELLED':
-        return 'bg-slate-500/10 border-slate-500/25 text-slate-400';
+        return 'bg-slate-500/10 border-slate-500/25 text-text-muted';
       default:
         return 'bg-amber-500/10 border-amber-500/25 text-amber-400 animate-pulse';
     }
@@ -147,20 +147,20 @@ const StudentRequests = () => {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
+    <div className="space-y-8">
       {/* HEADER */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-border-app pb-6">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-white mb-1">
+          <h1 className="text-3xl font-extrabold tracking-tight text-text-main mb-1">
             Leave & On-Duty Requests
           </h1>
-          <p className="text-slate-400 text-sm">
+          <p className="text-text-muted text-sm">
             Submit request absences, upload medical certificates/event letters, and track approvals.
           </p>
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium transition-colors text-sm shadow-lg shadow-blue-900/20"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-text-main font-medium transition-colors text-sm shadow-lg shadow-blue-900/20"
         >
           <PlusCircle className="h-4 w-4" />
           <span>New Absence Request</span>
@@ -168,15 +168,15 @@ const StudentRequests = () => {
       </div>
 
       {/* REQUESTS HISTORY */}
-      <div className="backdrop-blur-md bg-slate-900/30 border border-slate-800 rounded-2xl p-6">
-        <h2 className="text-lg font-bold text-slate-200 mb-6 flex items-center gap-2">
+      <div className="backdrop-blur-md bg-bg-card/30 border border-border-app rounded-2xl p-6">
+        <h2 className="text-lg font-bold text-text-main mb-6 flex items-center gap-2">
           <Calendar className="h-5 w-5 text-blue-500" />
           My Absence History
         </h2>
 
-        <div className="overflow-x-auto rounded-xl border border-slate-800/80">
+        <div className="overflow-x-auto rounded-xl border border-border-app/80">
           <table className="min-w-full divide-y divide-slate-800 text-left text-sm">
-            <thead className="bg-slate-900/50 text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <thead className="bg-bg-card/50 text-xs font-semibold uppercase tracking-wider text-text-muted">
               <tr>
                 <th className="px-6 py-4">Type</th>
                 <th className="px-6 py-4">Date Range</th>
@@ -187,10 +187,10 @@ const StudentRequests = () => {
                 <th className="px-6 py-4 text-center">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-850 text-slate-300">
+            <tbody className="divide-y divide-slate-850 text-text-main">
               {requests.map((req) => (
-                <tr key={req.id} className="hover:bg-slate-900/10 transition-colors">
-                  <td className="px-6 py-4 font-semibold text-slate-200">
+                <tr key={req.id} className="hover:bg-bg-card/10 transition-colors">
+                  <td className="px-6 py-4 font-semibold text-text-main">
                     {req.requestType}
                   </td>
                   <td className="px-6 py-4 font-medium text-slate-100">
@@ -200,9 +200,9 @@ const StudentRequests = () => {
                     {req.reason}
                   </td>
                   <td className="px-6 py-4">
-                    <div className="font-semibold text-slate-200">Prof. {req.reviewerFaculty.user.name}</div>
+                    <div className="font-semibold text-text-main">Prof. {req.reviewerFaculty.user.name}</div>
                     {req.approvalHistory.length > 1 && (
-                      <div className="text-xs text-slate-500 italic">
+                      <div className="text-xs text-text-muted italic">
                         "{req.approvalHistory[req.approvalHistory.length - 1].remarks}"
                       </div>
                     )}
@@ -220,7 +220,7 @@ const StudentRequests = () => {
                         <ExternalLink className="h-3 w-3" />
                       </a>
                     ) : (
-                      <span className="text-slate-600">—</span>
+                      <span className="text-text-muted">—</span>
                     )}
                   </td>
                   <td className="px-6 py-4">
@@ -238,14 +238,14 @@ const StudentRequests = () => {
                         <Trash2 className="h-4 w-4" />
                       </button>
                     ) : (
-                      <span className="text-slate-600 text-xs">—</span>
+                      <span className="text-text-muted text-xs">—</span>
                     )}
                   </td>
                 </tr>
               ))}
               {requests.length === 0 && (
                 <tr>
-                  <td colSpan="7" className="text-center py-8 text-slate-500">
+                  <td colSpan="7" className="text-center py-8 text-text-muted">
                     No requests submitted yet.
                   </td>
                 </tr>
@@ -258,12 +258,12 @@ const StudentRequests = () => {
       {/* CREATE MODAL */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="relative w-full max-w-lg bg-[#0f172a] border border-slate-800 rounded-2xl p-6 space-y-6">
-            <div className="flex justify-between items-center border-b border-slate-800 pb-4">
-              <h3 className="text-xl font-bold text-white">Create Absence Request</h3>
+          <div className="relative w-full max-w-lg bg-[#0f172a] border border-border-app rounded-2xl p-6 space-y-6">
+            <div className="flex justify-between items-center border-b border-border-app pb-4">
+              <h3 className="text-xl font-bold text-text-main">Create Absence Request</h3>
               <button 
                 onClick={() => setShowModal(false)}
-                className="text-slate-400 hover:text-white"
+                className="text-text-muted hover:text-text-main"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -271,11 +271,11 @@ const StudentRequests = () => {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs uppercase font-bold text-slate-400 mb-1.5">Request Type</label>
+                <label className="block text-xs uppercase font-bold text-text-muted mb-1.5">Request Type</label>
                 <select
                   value={requestType}
                   onChange={(e) => setRequestType(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                  className="w-full px-3 py-2.5 bg-bg-card border border-border-app rounded-xl text-text-main focus:outline-none focus:border-blue-500"
                 >
                   <option value="LEAVE">Leave (Absenteeism)</option>
                   <option value="OD">On-Duty (OD Event Representing)</option>
@@ -284,33 +284,33 @@ const StudentRequests = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs uppercase font-bold text-slate-400 mb-1.5">Start Date</label>
+                  <label className="block text-xs uppercase font-bold text-text-muted mb-1.5">Start Date</label>
                   <input
                     type="date"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
                     required
-                    className="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-3 py-2.5 bg-bg-card border border-border-app rounded-xl text-text-main focus:outline-none focus:border-blue-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs uppercase font-bold text-slate-400 mb-1.5">End Date</label>
+                  <label className="block text-xs uppercase font-bold text-text-muted mb-1.5">End Date</label>
                   <input
                     type="date"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
                     required
-                    className="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-3 py-2.5 bg-bg-card border border-border-app rounded-xl text-text-main focus:outline-none focus:border-blue-500"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs uppercase font-bold text-slate-400 mb-1.5">Department Reviewer</label>
+                <label className="block text-xs uppercase font-bold text-text-muted mb-1.5">Department Reviewer</label>
                 <select
                   value={reviewerFacultyId}
                   onChange={(e) => setReviewerFacultyId(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                  className="w-full px-3 py-2.5 bg-bg-card border border-border-app rounded-xl text-text-main focus:outline-none focus:border-blue-500"
                 >
                   {reviewers.map(rev => (
                     <option key={rev.id} value={rev.id}>
@@ -321,47 +321,47 @@ const StudentRequests = () => {
                     <option value="">No Faculty reviewers found in your department.</option>
                   )}
                 </select>
-                <p className="text-[10px] text-slate-500 mt-1 italic">
+                <p className="text-[10px] text-text-muted mt-1 italic">
                   Temporary reviewer-selection policy: limited to your department faculty.
                 </p>
               </div>
 
               <div>
-                <label className="block text-xs uppercase font-bold text-slate-400 mb-1.5">Reason for Absence</label>
+                <label className="block text-xs uppercase font-bold text-text-muted mb-1.5">Reason for Absence</label>
                 <textarea
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
                   required
                   placeholder="Explain the reason for absence (minimum 10 chars)..."
-                  className="w-full h-24 px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                  className="w-full h-24 px-3 py-2.5 bg-bg-card border border-border-app rounded-xl text-text-main focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs uppercase font-bold text-slate-400 mb-1.5">Supporting Attachment (Optional)</label>
+                <label className="block text-xs uppercase font-bold text-text-muted mb-1.5">Supporting Attachment (Optional)</label>
                 <input
                   type="file"
                   accept=".pdf,.png,.jpg,.jpeg"
                   onChange={(e) => setDocumentFile(e.target.files[0])}
-                  className="w-full text-slate-400 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-slate-800 file:text-slate-200 file:cursor-pointer hover:file:bg-slate-700"
+                  className="w-full text-text-muted text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-bg-sidebar file:text-text-main file:cursor-pointer hover:file:bg-bg-input"
                 />
-                <p className="text-[10px] text-slate-500 mt-1">
+                <p className="text-[10px] text-text-muted mt-1">
                   Accepts PDF, PNG, JPG/JPEG files up to 5MB.
                 </p>
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
+              <div className="flex justify-end gap-3 pt-4 border-t border-border-app">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2.5 rounded-xl border border-slate-800 text-slate-300 hover:bg-slate-800 transition-colors text-sm font-medium"
+                  className="px-4 py-2.5 rounded-xl border border-border-app text-text-main hover:bg-bg-sidebar transition-colors text-sm font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white transition-colors text-sm font-semibold shadow-lg shadow-blue-900/20"
+                  className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-text-main transition-colors text-sm font-semibold shadow-lg shadow-blue-900/20"
                 >
                   {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
                   <span>Submit Request</span>

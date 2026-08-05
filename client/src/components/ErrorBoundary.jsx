@@ -28,7 +28,7 @@ class ErrorBoundary extends Component {
             <AlertOctagon className="h-12 w-12 text-red-500" />
           </div>
           <h2 className="text-2xl font-bold text-white mb-2">Application Crash Detected</h2>
-          <p className="text-slate-400 text-sm mb-6">
+          <p className="text-text-muted text-sm mb-6">
             A runtime script exception occurred in this interface view. Let's try reloading the dashboard.
           </p>
           <button

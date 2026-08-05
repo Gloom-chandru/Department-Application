@@ -123,16 +123,16 @@ export default function StudentPlacement() {
     <div className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="flex items-center gap-2 text-2xl font-bold text-white">
+          <h1 className="flex items-center gap-2 text-2xl font-bold text-text-main">
             <Briefcase className="h-7 w-7 text-blue-500" />
             Placement Portal
           </h1>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 text-sm text-text-muted">
             Manage your career profile, apply to drives, and track offers.
           </p>
         </div>
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/40 px-4 py-3 text-xs">
-          <div className="text-slate-500">Status</div>
+        <div className="rounded-2xl border border-border-app bg-bg-card/40 px-4 py-3 text-xs">
+          <div className="text-text-muted">Status</div>
           <div className={`text-sm font-semibold ${p?.placementStatus === 'PLACED' ? 'text-emerald-400' : 'text-amber-400'}`}>
             {p?.placementStatus || 'UNPLACED'}
           </div>
@@ -146,14 +146,14 @@ export default function StudentPlacement() {
           { label: 'Applications', value: applications.length },
           { label: 'Offers', value: offers.length }
         ].map((c) => (
-          <div key={c.label} className="rounded-2xl border border-slate-800 bg-slate-900/40 p-4">
-            <div className="text-[11px] uppercase tracking-wide text-slate-500">{c.label}</div>
-            <div className="mt-1 text-xl font-semibold text-white">{c.value}</div>
+          <div key={c.label} className="rounded-2xl border border-border-app bg-bg-card/40 p-4">
+            <div className="text-[11px] uppercase tracking-wide text-text-muted">{c.label}</div>
+            <div className="mt-1 text-xl font-semibold text-text-main">{c.value}</div>
           </div>
         ))}
       </div>
 
-      <div className="flex flex-wrap gap-2 border-b border-slate-800 pb-2">
+      <div className="flex flex-wrap gap-2 border-b border-border-app pb-2">
         {['drives', 'applications', 'offers', 'profile'].map((t) => (
           <button
             key={t}
@@ -162,7 +162,7 @@ export default function StudentPlacement() {
             className={`rounded-xl px-3 py-2 text-xs font-semibold capitalize ${
               tab === t
                 ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30'
-                : 'text-slate-400 hover:text-slate-200'
+                : 'text-text-muted hover:text-text-main'
             }`}
           >
             {t}
@@ -171,12 +171,12 @@ export default function StudentPlacement() {
       </div>
 
       {tab === 'profile' && (
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 space-y-4">
-          <p className="text-xs text-slate-500">
+        <div className="rounded-2xl border border-border-app bg-bg-card/40 p-6 space-y-4">
+          <p className="text-xs text-text-muted">
             CGPA and backlogs are set by admin. Upload a resume to apply for drives.
           </p>
           <div className="flex flex-wrap items-center gap-3">
-            <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-500">
+            <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-blue-600 px-3 py-2 text-xs font-semibold text-text-main hover:bg-blue-500">
               <Upload className="h-3.5 w-3.5" />
               Upload Resume (PDF/DOCX)
               <input type="file" accept=".pdf,.docx" className="hidden" onChange={uploadResume} />
@@ -192,21 +192,21 @@ export default function StudentPlacement() {
             value={skills}
             onChange={(e) => setSkills(e.target.value)}
             placeholder="Skills (comma-separated)"
-            className="w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white"
+            className="w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main"
             rows={2}
           />
           <textarea
             value={bio}
             onChange={(e) => setBio(e.target.value)}
             placeholder="Short bio"
-            className="w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white"
+            className="w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main"
             rows={3}
           />
           <button
             type="button"
             disabled={busy}
             onClick={saveProfile}
-            className="rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-500 disabled:opacity-50"
+            className="rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-text-main hover:bg-blue-500 disabled:opacity-50"
           >
             Save Profile
           </button>
@@ -215,17 +215,17 @@ export default function StudentPlacement() {
 
       {tab === 'drives' && (
         <div className="space-y-3">
-          {drives.length === 0 && <p className="text-sm text-slate-500">No published drives yet.</p>}
+          {drives.length === 0 && <p className="text-sm text-text-muted">No published drives yet.</p>}
           {drives.map((d) => (
-            <div key={d.id} className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5">
+            <div key={d.id} className="rounded-2xl border border-border-app bg-bg-card/40 p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <h3 className="text-sm font-semibold text-white">{d.title}</h3>
-                  <p className="text-xs text-slate-400 mt-0.5">
+                  <h3 className="text-sm font-semibold text-text-main">{d.title}</h3>
+                  <p className="text-xs text-text-muted mt-0.5">
                     {d.company?.name} · {d.location}
                     {d.packageCtc != null ? ` · CTC ${d.packageCtc} LPA` : ''}
                   </p>
-                  <p className="text-[11px] text-slate-500 mt-1">
+                  <p className="text-[11px] text-text-muted mt-1">
                     Deadline: {new Date(d.applicationDeadline).toLocaleString()} · {d.status}
                   </p>
                 </div>
@@ -243,7 +243,7 @@ export default function StudentPlacement() {
                     <button
                       type="button"
                       onClick={() => setSelectedDrive(d)}
-                      className="rounded-xl border border-slate-700 px-3 py-1.5 text-xs text-slate-300 hover:border-blue-500/40 hover:text-blue-300"
+                      className="rounded-xl border border-border-card px-3 py-1.5 text-xs text-text-main hover:border-blue-500/40 hover:text-blue-300"
                     >
                       Details
                     </button>
@@ -258,11 +258,11 @@ export default function StudentPlacement() {
       {tab === 'applications' && (
         <div className="space-y-4">
           {applications.map((a) => (
-            <div key={a.id} className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5 space-y-3">
+            <div key={a.id} className="rounded-2xl border border-border-app bg-bg-card/40 p-5 space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <h3 className="text-sm font-semibold text-white">{a.drive?.title}</h3>
-                  <p className="text-xs text-slate-400">{a.drive?.company?.name}</p>
+                  <h3 className="text-sm font-semibold text-text-main">{a.drive?.title}</h3>
+                  <p className="text-xs text-text-muted">{a.drive?.company?.name}</p>
                 </div>
                 <StageBadge stage={a.stage} />
               </div>
@@ -279,7 +279,7 @@ export default function StudentPlacement() {
               )}
             </div>
           ))}
-          {applications.length === 0 && <p className="text-sm text-slate-500">No applications yet.</p>}
+          {applications.length === 0 && <p className="text-sm text-text-muted">No applications yet.</p>}
         </div>
       )}
 
@@ -288,21 +288,21 @@ export default function StudentPlacement() {
           {offers.map((o) => (
             <OfferActionsCard key={o.id} offer={o} onUpdated={() => loadAll()} />
           ))}
-          {offers.length === 0 && <p className="text-sm text-slate-500">No offers yet.</p>}
+          {offers.length === 0 && <p className="text-sm text-text-muted">No offers yet.</p>}
         </div>
       )}
 
       {selectedDrive && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
-          <div className="w-full max-w-lg rounded-2xl border border-slate-700 bg-slate-900 p-6 space-y-4 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-semibold text-white">{selectedDrive.title}</h3>
-            <p className="text-sm text-slate-400">{selectedDrive.description}</p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-bg-sidebar/80 backdrop-blur-sm p-4">
+          <div className="w-full max-w-lg rounded-2xl border border-border-card bg-bg-card p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+            <h3 className="text-lg font-semibold text-text-main">{selectedDrive.title}</h3>
+            <p className="text-sm text-text-muted">{selectedDrive.description}</p>
             <EligibilityReasonsPanel reasons={selectedDrive.reasons} eligible={selectedDrive.eligible} />
             <div className="flex gap-2 justify-end">
               <button
                 type="button"
                 onClick={() => setSelectedDrive(null)}
-                className="rounded-xl border border-slate-700 px-3 py-2 text-xs text-slate-300"
+                className="rounded-xl border border-border-card px-3 py-2 text-xs text-text-main"
               >
                 Close
               </button>
@@ -310,7 +310,7 @@ export default function StudentPlacement() {
                 type="button"
                 disabled={busy || !selectedDrive.eligible || selectedDrive.application}
                 onClick={() => apply(selectedDrive.id)}
-                className="rounded-xl bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-500 disabled:opacity-50"
+                className="rounded-xl bg-blue-600 px-3 py-2 text-xs font-semibold text-text-main hover:bg-blue-500 disabled:opacity-50"
               >
                 Apply
               </button>

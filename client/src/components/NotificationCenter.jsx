@@ -1,16 +1,31 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
-import { 
-  Bell, Check, X, ClipboardList, Info, AlertTriangle, ShieldAlert, AlertCircle 
-} from 'lucide-react';
+import { Bell, Check, X, ClipboardList, Info, AlertTriangle, ShieldAlert } from 'lucide-react';
+import Drawer from './ui/Drawer';
+import Button from './ui/Button';
+import { EmptyState } from './ui/FeedbackStates';
+
+const getRelativeTime = (dateStr) => {
+  const now = new Date();
+  const date = new Date(dateStr);
+  const diffMs = now - date;
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHr = Math.floor(diffMin / 60);
+  const diffDays = Math.floor(diffHr / 24);
+
+  if (diffSec < 60) return 'just now';
+  if (diffMin < 60) return `${diffMin}m ago`;
+  if (diffHr < 24) return `${diffHr}h ago`;
+  return `${diffDays}d ago`;
+};
 
 const NotificationCenter = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [notifications, setNotifications] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
   const fetchUnreadCount = async () => {
@@ -25,7 +40,7 @@ const NotificationCenter = () => {
   const fetchRecentNotifications = async () => {
     try {
       setLoading(true);
-      const res = await api.get('/notifications?limit=5');
+      const res = await api.get('/notifications?limit=10');
       setNotifications(res.data.notifications);
     } catch (err) {
       console.error('Error loading recent notifications:', err);
@@ -36,10 +51,7 @@ const NotificationCenter = () => {
 
   useEffect(() => {
     fetchUnreadCount();
-    // Lightweight polling every 30s
-    const timer = setInterval(() => {
-      fetchUnreadCount();
-    }, 30000);
+    const timer = setInterval(fetchUnreadCount, 30000);
     return () => clearInterval(timer);
   }, []);
 
@@ -48,16 +60,6 @@ const NotificationCenter = () => {
       fetchRecentNotifications();
     }
   }, [isOpen]);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   const handleMarkAsRead = async (id, e) => {
     e.stopPropagation();
@@ -94,111 +96,133 @@ const NotificationCenter = () => {
   const getTypeIcon = (type) => {
     switch (type) {
       case 'ATTENDANCE_WARNING':
-        return <AlertTriangle className="h-4 w-4 text-orange-500" />;
+        return <AlertTriangle className="h-4 w-4 text-amber-500" />;
       case 'MARKS_PUBLISHED':
         return <ClipboardList className="h-4 w-4 text-emerald-500" />;
       case 'SYSTEM':
         return <ShieldAlert className="h-4 w-4 text-red-500" />;
       default:
-        return <Info className="h-4 w-4 text-blue-500" />;
+        return <Info className="h-4 w-4 text-primary-500" />;
     }
   };
 
   const getPriorityStyle = (priority) => {
     switch (priority) {
       case 'URGENT':
-        return 'border-l-4 border-l-red-500 bg-red-950/10';
+        return 'border-l-4 border-red-500 bg-red-500/5';
       case 'HIGH':
-        return 'border-l-4 border-l-orange-500 bg-orange-950/10';
+        return 'border-l-4 border-amber-500 bg-amber-500/5';
       case 'LOW':
-        return 'border-l-4 border-l-slate-650 bg-slate-900/10';
+        return 'border-l-4 border-border-card bg-bg-sidebar/35';
       default:
-        return 'border-l-4 border-l-blue-500';
+        return 'border-l-4 border-primary-500 bg-primary-500/5';
     }
   };
 
   return (
-    <div className="relative" ref={dropdownRef}>
-      {/* Bell Trigger */}
+    <>
+      {/* Bell Trigger Button */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => setIsOpen(true)}
         type="button"
-        aria-label="View notifications panel"
-        className="relative p-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 hover:text-white transition-colors"
+        aria-label="View notification drawer"
+        className="relative p-2 rounded-lg border border-border-card bg-bg-card text-text-muted hover:text-text-main hover:bg-bg-sidebar focus-ring transition-colors cursor-pointer"
       >
         <Bell className="h-5 w-5" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-rose-600 text-[10px] font-bold text-white ring-2 ring-slate-950">
+          <span className="absolute -top-0.5 -right-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white ring-2 ring-bg-card animate-pulse">
             {unreadCount > 99 ? '99+' : unreadCount}
           </span>
         )}
       </button>
 
-      {/* Dropdown Popover */}
-      {isOpen && (
-        <div className="absolute right-0 mt-3 w-80 sm:w-96 rounded-2xl border border-slate-800 bg-[#0d1424] text-slate-300 shadow-2xl z-50 p-4 animate-in fade-in slide-in-from-top-2 duration-150">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
-            <h4 className="text-sm font-bold text-slate-200">Recent Notifications</h4>
-            {unreadCount > 0 && (
+      {/* Notification Slide-out Drawer */}
+      <Drawer
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Notifications Center"
+        size="md"
+      >
+        <div className="flex flex-col h-full">
+          {/* Action Bar */}
+          {unreadCount > 0 && (
+            <div className="flex justify-end mb-4">
               <button
                 onClick={handleMarkAllRead}
-                className="text-xs font-semibold text-blue-500 hover:text-blue-400 transition-colors"
+                className="text-xs font-semibold text-primary-500 hover:text-primary-400 hover:underline cursor-pointer"
               >
-                Mark all read
+                Mark all as read
               </button>
-            )}
-          </div>
+            </div>
+          )}
 
-          {/* List Content */}
-          <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
+          {/* Messages Panel Container */}
+          <div className="flex-1 overflow-y-auto space-y-3 pr-1">
             {loading ? (
-              <div className="flex justify-center items-center py-8">
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
+              <div className="flex flex-col gap-3">
+                {[1, 2, 3].map((n) => (
+                  <div key={n} className="animate-pulse bg-bg-sidebar border border-border-card p-4 rounded-lg flex items-center gap-3">
+                    <div className="h-8 w-8 rounded-full bg-border-card" />
+                    <div className="flex-1 space-y-2">
+                      <div className="h-4 bg-border-card w-1/3 rounded" />
+                      <div className="h-3 bg-border-card w-2/3 rounded" />
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : notifications.length === 0 ? (
-              <div className="py-8 text-center text-slate-500 text-xs">You have no active notifications.</div>
+              <EmptyState
+                icon={Bell}
+                title="All caught up!"
+                description="No recent notifications found."
+              />
             ) : (
               notifications.map((notif) => (
                 <div
                   key={notif.id}
-                  onClick={() => navigate('/notifications')}
-                  className={`group relative flex gap-3 p-3 rounded-xl bg-slate-900/35 hover:bg-slate-900/80 cursor-pointer transition-colors border border-slate-900/60 ${getPriorityStyle(notif.priority)} ${
-                    !notif.readStatus ? 'shadow-md shadow-blue-500/5' : 'opacity-70'
-                  }`}
+                  onClick={() => {
+                    setIsOpen(false);
+                    navigate('/notifications');
+                  }}
+                  className={`
+                    group relative flex gap-3 p-3.5 rounded-lg border border-border-card/50 transition-all duration-150 cursor-pointer
+                    ${getPriorityStyle(notif.priority)}
+                    ${!notif.readStatus ? 'shadow-premium-sm border-l-4' : 'opacity-65 hover:opacity-100'}
+                  `}
                 >
-                  <div className="mt-0.5">{getTypeIcon(notif.type)}</div>
-                  <div className="flex-1 min-w-0 pr-6">
-                    <div className="flex items-center gap-1.5">
-                      <span className={`text-xs font-bold truncate ${!notif.readStatus ? 'text-slate-105' : 'text-slate-400'}`}>
+                  <div className="shrink-0 mt-0.5">{getTypeIcon(notif.type)}</div>
+                  <div className="flex-1 min-w-0 pr-12">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className={`text-sm font-bold truncate ${!notif.readStatus ? 'text-text-main' : 'text-text-muted'}`}>
                         {notif.title || 'Notification'}
                       </span>
                       {!notif.readStatus && (
-                        <span className="h-1.5 w-1.5 rounded-full bg-blue-500 shrink-0"></span>
+                        <span className="h-2 w-2 rounded-full bg-primary-500 shrink-0" />
                       )}
                     </div>
-                    <p className="text-[11px] text-slate-400 line-clamp-2 mt-0.5 leading-relaxed">{notif.message}</p>
-                    <span className="block text-[9px] text-slate-500 mt-1">
-                      {new Date(notif.createdAt).toLocaleDateString()}
+                    <p className="text-xs text-text-muted mt-1 leading-relaxed">{notif.message}</p>
+                    <span className="block text-[10px] text-text-muted/65 mt-2.5 font-medium">
+                      {getRelativeTime(notif.createdAt)}
                     </span>
                   </div>
 
-                  {/* Quick Action buttons */}
-                  <div className="absolute right-2 top-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  {/* Actions overlay buttons */}
+                  <div className="absolute right-3.5 top-3.5 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                     {!notif.readStatus && (
                       <button
                         onClick={(e) => handleMarkAsRead(notif.id, e)}
                         title="Mark as read"
-                        className="p-1 rounded bg-slate-950/80 hover:bg-slate-950 text-slate-400 hover:text-white"
+                        className="p-1 rounded-md bg-bg-sidebar hover:bg-bg-card border border-border-card text-text-muted hover:text-text-main cursor-pointer focus-ring"
                       >
-                        <Check className="h-3 w-3" />
+                        <Check className="h-3.5 w-3.5" />
                       </button>
                     )}
                     <button
                       onClick={(e) => handleArchive(notif.id, e)}
                       title="Archive notification"
-                      className="p-1 rounded bg-slate-950/80 hover:bg-slate-950 text-slate-450 hover:text-red-400"
+                      className="p-1 rounded-md bg-bg-sidebar hover:bg-bg-card border border-border-card text-text-muted hover:text-red-500 cursor-pointer focus-ring"
                     >
-                      <X className="h-3 w-3" />
+                      <X className="h-3.5 w-3.5" />
                     </button>
                   </div>
                 </div>
@@ -206,21 +230,23 @@ const NotificationCenter = () => {
             )}
           </div>
 
-          {/* Footer view all link */}
-          <div className="border-t border-slate-800 pt-3 mt-3 text-center">
-            <button
+          {/* Footer View All Notifications Button */}
+          <div className="border-t border-border-card/65 pt-4 mt-4 select-none shrink-0">
+            <Button
+              variant="outline"
+              size="sm"
+              fullWidth
               onClick={() => {
                 setIsOpen(false);
                 navigate('/notifications');
               }}
-              className="text-xs font-bold text-blue-500 hover:text-blue-400 transition-colors w-full"
             >
-              View All Notifications
-            </button>
+              <span>View All Notifications</span>
+            </Button>
           </div>
         </div>
-      )}
-    </div>
+      </Drawer>
+    </>
   );
 };
 

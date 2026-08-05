@@ -8,7 +8,7 @@ const STAGE_COLOR = {
   HR: 'border-amber-500/40 text-amber-300 bg-amber-500/10',
   SELECTED: 'border-emerald-500/40 text-emerald-300 bg-emerald-500/10',
   REJECTED: 'border-rose-500/40 text-rose-300 bg-rose-500/10',
-  WITHDRAWN: 'border-slate-500/40 text-slate-400 bg-slate-500/10'
+  WITHDRAWN: 'border-slate-500/40 text-text-muted bg-slate-500/10'
 };
 
 export function StageBadge({ stage }) {
@@ -21,11 +21,11 @@ export function StageBadge({ stage }) {
 
 export default function ApplicationStageTimeline({ history = [] }) {
   if (!history.length) {
-    return <p className="text-xs text-slate-500">No stage history yet.</p>;
+    return <p className="text-xs text-text-muted">No stage history yet.</p>;
   }
 
   return (
-    <ol className="relative space-y-3 border-l border-slate-800 pl-4">
+    <ol className="relative space-y-3 border-l border-border-app pl-4">
       {history.map((h) => (
         <li key={h.id} className="relative">
           <span className="absolute -left-[21px] top-1 h-2.5 w-2.5 rounded-full bg-blue-500" />
@@ -33,20 +33,20 @@ export default function ApplicationStageTimeline({ history = [] }) {
             {h.fromStage && (
               <>
                 <StageBadge stage={h.fromStage} />
-                <span className="text-slate-600">→</span>
+                <span className="text-text-muted">→</span>
               </>
             )}
             <StageBadge stage={h.toStage} />
-            <span className="text-slate-500">
+            <span className="text-text-muted">
               {new Date(h.createdAt).toLocaleString()}
             </span>
           </div>
           {h.actorUser && (
-            <p className="mt-0.5 text-[11px] text-slate-500">
+            <p className="mt-0.5 text-[11px] text-text-muted">
               by {h.actorUser.name} ({h.actorUser.role})
             </p>
           )}
-          {h.remarks && <p className="mt-1 text-xs text-slate-400">{h.remarks}</p>}
+          {h.remarks && <p className="mt-1 text-xs text-text-muted">{h.remarks}</p>}
         </li>
       ))}
     </ol>

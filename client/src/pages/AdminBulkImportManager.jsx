@@ -217,17 +217,17 @@ export default function AdminBulkImportManager() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 p-4 sm:p-6 lg:p-8 space-y-6">
+    <div className="min-h-screen bg-bg-app text-slate-100 p-4 sm:p-6 lg:p-8 space-y-6">
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border-app pb-5">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center space-x-3">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-main flex items-center space-x-3">
             <FileSpreadsheet className="w-8 h-8 text-blue-500" />
             <span>Bulk Operations & Data Management Portal</span>
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-text-muted mt-1">
             Perform multi-entity bulk registrations, marks updates, timetable imports, and custom ledger exports.
           </p>
         </div>
@@ -235,7 +235,7 @@ export default function AdminBulkImportManager() {
         <button
           type="button"
           onClick={() => setIsExportModalOpen(true)}
-          className="flex items-center space-x-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl transition-all shadow-md"
+          className="flex items-center space-x-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-text-main text-xs font-semibold rounded-xl transition-all shadow-md"
         >
           <Download className="w-4 h-4" />
           <span>Export Academic Reports</span>
@@ -243,7 +243,7 @@ export default function AdminBulkImportManager() {
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-slate-800 pb-3">
+      <div className="flex flex-wrap items-center gap-2 border-b border-border-app pb-3">
         {[
           { id: 'STUDENTS', label: 'Students Registration', icon: Users },
           { id: 'FACULTY', label: 'Faculty Onboarding', icon: UserCheck },
@@ -259,8 +259,8 @@ export default function AdminBulkImportManager() {
               onClick={() => handleTabChange(tab.id)}
               className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl font-semibold text-xs transition-all ${
                 isActive
-                  ? 'bg-blue-600 text-white shadow-lg border border-blue-500'
-                  : 'bg-slate-900/60 text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-slate-800'
+                  ? 'bg-blue-600 text-text-main shadow-lg border border-blue-500'
+                  : 'bg-bg-card/60 text-text-muted hover:bg-bg-sidebar hover:text-text-main border border-border-app'
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -271,13 +271,13 @@ export default function AdminBulkImportManager() {
       </div>
 
       {/* Tab Content Section */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6 shadow-xl">
+      <div className="bg-bg-card border border-border-app rounded-2xl p-6 space-y-6 shadow-xl">
         
         {/* Step 1: Guidance & Template Download */}
-        <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-slate-950/60 border border-slate-800 rounded-xl">
+        <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-bg-app/60 border border-border-app rounded-xl">
           <div>
-            <h3 className="text-sm font-bold text-slate-200">Step 1: Download Spreadsheet Template</h3>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <h3 className="text-sm font-bold text-text-main">Step 1: Download Spreadsheet Template</h3>
+            <p className="text-xs text-text-muted mt-0.5">
               Fill in your data using the standard formatting template. Do not modify header names.
             </p>
           </div>
@@ -285,7 +285,7 @@ export default function AdminBulkImportManager() {
           <button
             type="button"
             onClick={handleDownloadTemplate}
-            className="flex items-center space-x-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-blue-400 border border-slate-700 text-xs font-semibold rounded-xl transition-all"
+            className="flex items-center space-x-2 px-4 py-2 bg-bg-sidebar hover:bg-bg-input text-blue-400 border border-border-card text-xs font-semibold rounded-xl transition-all"
           >
             <Download className="w-4 h-4" />
             <span>Download {activeTab} Template (.xlsx)</span>
@@ -294,12 +294,12 @@ export default function AdminBulkImportManager() {
 
         {/* Timetable Target Schedule Selector */}
         {activeTab === 'TIMETABLE' && (
-          <div className="p-4 bg-slate-950/60 border border-slate-800 rounded-xl space-y-2">
-            <label className="block text-xs font-bold text-slate-200 uppercase tracking-wider">
+          <div className="p-4 bg-bg-app/60 border border-border-app rounded-xl space-y-2">
+            <label className="block text-xs font-bold text-text-main uppercase tracking-wider">
               Select Target DRAFT Schedule *
             </label>
             {loadingSchedules ? (
-              <p className="text-xs text-slate-400">Loading draft schedules...</p>
+              <p className="text-xs text-text-muted">Loading draft schedules...</p>
             ) : draftSchedules.length > 0 ? (
               <select
                 value={selectedScheduleId}
@@ -307,7 +307,7 @@ export default function AdminBulkImportManager() {
                   setSelectedScheduleId(e.target.value);
                   resetWorkflowState();
                 }}
-                className="w-full bg-slate-800 text-slate-200 text-xs p-3 rounded-xl border border-slate-700 focus:outline-none focus:border-blue-500"
+                className="w-full bg-bg-sidebar text-text-main text-xs p-3 rounded-xl border border-border-card focus:outline-none focus:border-blue-500"
               >
                 {draftSchedules.map(s => (
                   <option key={s.id} value={s.id}>
@@ -326,7 +326,7 @@ export default function AdminBulkImportManager() {
 
         {/* Step 2: Upload Dropzone */}
         <div className="space-y-2">
-          <h3 className="text-sm font-bold text-slate-200">Step 2: Select or Drop Spreadsheet File</h3>
+          <h3 className="text-sm font-bold text-text-main">Step 2: Select or Drop Spreadsheet File</h3>
           <BulkUploadDropzone
             selectedFile={selectedFile}
             onFileSelect={handleFileSelect}
@@ -342,7 +342,7 @@ export default function AdminBulkImportManager() {
               type="button"
               onClick={handleRunDryRun}
               disabled={isDryRunning}
-              className="flex items-center space-x-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-xs font-semibold rounded-xl transition-all shadow-md"
+              className="flex items-center space-x-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-text-main text-xs font-semibold rounded-xl transition-all shadow-md"
             >
               <Upload className="w-4 h-4" />
               <span>{isDryRunning ? 'Validating Spreadsheet...' : 'Run Dry-Run Validation'}</span>
@@ -352,7 +352,7 @@ export default function AdminBulkImportManager() {
 
         {/* Step 4: Dry-Run Results Display */}
         {dryRunResult && (
-          <div className="space-y-6 pt-2 border-t border-slate-800">
+          <div className="space-y-6 pt-2 border-t border-border-app">
             <DryRunSummary
               summary={dryRunResult.summary}
               valid={dryRunResult.valid}
@@ -378,11 +378,11 @@ export default function AdminBulkImportManager() {
             )}
 
             {/* Step 5: Confirm Import Action */}
-            <div className="flex items-center justify-between pt-4 border-t border-slate-800">
+            <div className="flex items-center justify-between pt-4 border-t border-border-app">
               <button
                 type="button"
                 onClick={resetWorkflowState}
-                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl transition-colors"
+                className="px-4 py-2 bg-bg-sidebar hover:bg-bg-input text-text-main text-xs font-semibold rounded-xl transition-colors"
               >
                 Reset & Re-upload
               </button>
@@ -391,7 +391,7 @@ export default function AdminBulkImportManager() {
                 type="button"
                 onClick={handleConfirmImport}
                 disabled={!dryRunResult.valid || !validationToken || isConfirming}
-                className="flex items-center space-x-2 px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white text-xs font-semibold rounded-xl transition-all shadow-lg"
+                className="flex items-center space-x-2 px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-text-main text-xs font-semibold rounded-xl transition-all shadow-lg"
               >
                 <CheckCircle2 className="w-4 h-4" />
                 <span>{isConfirming ? 'Confirming Import...' : 'Confirm & Commit Import'}</span>

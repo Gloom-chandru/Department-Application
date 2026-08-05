@@ -374,7 +374,7 @@ const AdminTimetableManager = () => {
       {toastMessage && <Toast type={toastType} message={toastMessage} onClose={() => setToastMessage('')} />}
 
       {/* Tabs */}
-      <div className="flex border-b border-slate-800 space-x-4">
+      <div className="flex border-b border-border-app space-x-4">
         {[
           { id: 'schedules', label: 'Schedules Manager', icon: Calendar },
           { id: 'periods', label: 'Period Templates', icon: Clock },
@@ -388,7 +388,7 @@ const AdminTimetableManager = () => {
               className={`flex items-center gap-2 pb-3 text-sm font-semibold border-b-2 transition-all ${
                 activeTab === tab.id 
                   ? 'border-blue-500 text-blue-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
+                  : 'border-transparent text-text-muted hover:text-text-main'
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -417,9 +417,9 @@ const AdminTimetableManager = () => {
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
           
           {/* Schedules list panel */}
-          <div className="xl:col-span-1 border border-slate-800 rounded-xl bg-slate-900/20 p-4 space-y-4">
+          <div className="xl:col-span-1 border border-border-app rounded-xl bg-bg-card/20 p-4 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-bold text-slate-200">Schedules</h2>
+              <h2 className="text-sm font-bold text-text-main">Schedules</h2>
               <button
                 onClick={() => {
                   setModalType('schedule');
@@ -450,21 +450,21 @@ const AdminTimetableManager = () => {
                   className={`w-full text-left p-3 rounded-lg border text-xs transition-all ${
                     activeSchedule?.id === sched.id
                       ? 'bg-blue-600/10 border-blue-500/50 text-blue-300'
-                      : 'bg-slate-900/35 border-slate-800 text-slate-300 hover:bg-slate-800/40'
+                      : 'bg-bg-card/35 border-border-app text-text-main hover:bg-bg-sidebar/40'
                   }`}
                 >
                   <div className="font-bold truncate">{sched.name}</div>
-                  <div className="text-[10px] text-slate-500 mt-1">
+                  <div className="text-[10px] text-text-muted mt-1">
                     Sem {sched.semester} | {sched.department.code} {sched.batchYear} ({sched.section})
                   </div>
                   <div className="mt-2 flex items-center justify-between">
                     <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold tracking-wider ${
                       sched.status === 'PUBLISHED' ? 'bg-emerald-500/10 text-emerald-400' :
-                      sched.status === 'ARCHIVED' ? 'bg-slate-800 text-slate-500' : 'bg-amber-500/10 text-amber-400'
+                      sched.status === 'ARCHIVED' ? 'bg-bg-sidebar text-text-muted' : 'bg-amber-500/10 text-amber-400'
                     }`}>
                       {sched.status}
                     </span>
-                    <span className="text-[9px] text-slate-500">Slots: {sched._count.slots}</span>
+                    <span className="text-[9px] text-text-muted">Slots: {sched._count.slots}</span>
                   </div>
                 </button>
               ))}
@@ -474,23 +474,23 @@ const AdminTimetableManager = () => {
           {/* Schedule Workspace Grid */}
           <div className="xl:col-span-3 space-y-4">
             {activeSchedule ? (
-              <div className="border border-slate-800 rounded-xl bg-slate-900/20 p-6 space-y-4">
+              <div className="border border-border-app rounded-xl bg-bg-card/20 p-6 space-y-4">
                 
                 {/* Header info */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-4">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-border-app pb-4">
                   <div>
-                    <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                    <h2 className="text-lg font-bold text-text-main flex items-center gap-2">
                       <Layers className="h-5 w-5 text-blue-400" />
                       {activeSchedule.name}
                     </h2>
-                    <div className="text-xs text-slate-400 mt-1 flex items-center gap-2">
+                    <div className="text-xs text-text-muted mt-1 flex items-center gap-2">
                       <span>Semester {activeSchedule.semester}</span>
                       <span>•</span>
                       <span>{activeSchedule.department.code} {activeSchedule.batchYear} (Section {activeSchedule.section})</span>
                       <span>•</span>
                       <span className={`px-1.5 py-0.2 rounded text-[9px] font-bold ${
                         activeSchedule.status === 'PUBLISHED' ? 'bg-emerald-500/10 text-emerald-400' :
-                        activeSchedule.status === 'ARCHIVED' ? 'bg-slate-800 text-slate-500' : 'bg-amber-500/10 text-amber-400'
+                        activeSchedule.status === 'ARCHIVED' ? 'bg-bg-sidebar text-text-muted' : 'bg-amber-500/10 text-amber-400'
                       }`}>
                         {activeSchedule.status}
                       </span>
@@ -507,14 +507,14 @@ const AdminTimetableManager = () => {
                             setBulkInput('[\n  {\n    "subjectId": "SUBJECT_UUID",\n    "dayOfWeek": 1,\n    "startPeriodId": "PERIOD_UUID",\n    "endPeriodId": "PERIOD_UUID",\n    "roomId": "ROOM_UUID_OR_NULL"\n  }\n]');
                             setBulkError('');
                           }}
-                          className="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-xs font-semibold text-slate-300"
+                          className="px-3 py-1.5 rounded-lg border border-border-card hover:bg-bg-sidebar text-xs font-semibold text-text-main"
                         >
                           Bulk Import
                         </button>
                         <button
                           onClick={handlePublishSchedule}
                           disabled={submitting}
-                          className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-white flex items-center gap-1.5"
+                          className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-text-main flex items-center gap-1.5"
                         >
                           {submitting ? <Loader2 className="h-3 w-3 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
                           Publish
@@ -525,7 +525,7 @@ const AdminTimetableManager = () => {
                       <button
                         onClick={handleArchiveSchedule}
                         disabled={submitting}
-                        className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300"
+                        className="px-3 py-1.5 rounded-lg bg-bg-sidebar hover:bg-bg-input text-xs font-semibold text-text-main"
                       >
                         Archive Schedule
                       </button>
@@ -538,11 +538,11 @@ const AdminTimetableManager = () => {
                   <table className="w-full border-collapse">
                     <thead>
                       <tr>
-                        <th className="p-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-800 w-32">Day</th>
+                        <th className="p-3 text-left text-xs font-semibold text-text-muted uppercase tracking-wider border-b border-border-app w-32">Day</th>
                         {periods.map(p => (
-                          <th key={p.id} className="p-3 text-center border-b border-slate-800 min-w-[140px]">
-                            <div className="text-xs font-bold text-slate-300">{p.name}</div>
-                            <div className="text-[10px] text-slate-500 mt-0.5">{p.startTime} - {p.endTime}</div>
+                          <th key={p.id} className="p-3 text-center border-b border-border-app min-w-[140px]">
+                            <div className="text-xs font-bold text-text-main">{p.name}</div>
+                            <div className="text-[10px] text-text-muted mt-0.5">{p.startTime} - {p.endTime}</div>
                           </th>
                         ))}
                       </tr>
@@ -552,15 +552,15 @@ const AdminTimetableManager = () => {
                         const dayNum = dayIndex + 1;
 
                         return (
-                          <tr key={dayName} className="border-b border-slate-800/50 hover:bg-slate-850/10">
-                            <td className="p-3 font-semibold text-slate-300 text-xs border-r border-slate-800/30">
+                          <tr key={dayName} className="border-b border-border-card/50 hover:bg-bg-sidebar/10">
+                            <td className="p-3 font-semibold text-text-main text-xs border-r border-border-app/30">
                               {dayName}
                             </td>
 
                             {periods.map(p => {
                               if (p.isBreak) {
                                 return (
-                                  <td key={p.id} className="p-3 bg-slate-950/20 text-center text-[10px] font-bold text-slate-600 border-r border-slate-800/30 select-none">
+                                  <td key={p.id} className="p-3 bg-bg-app/20 text-center text-[10px] font-bold text-text-muted border-r border-border-app/30 select-none">
                                     {p.name}
                                   </td>
                                 );
@@ -575,18 +575,18 @@ const AdminTimetableManager = () => {
                               if (slot) {
                                 const span = slot.endPeriod.periodNumber - slot.startPeriod.periodNumber + 1;
                                 return (
-                                  <td key={p.id} colSpan={span} className="p-2 border-r border-slate-800/30 align-middle">
+                                  <td key={p.id} colSpan={span} className="p-2 border-r border-border-app/30 align-middle">
                                     <div className="group relative flex flex-col justify-between p-3 rounded-lg border border-blue-500/20 bg-blue-950/5 h-20">
                                       <div className="font-bold text-xs text-blue-300 truncate">{slot.subject.code}</div>
-                                      <div className="text-[10px] text-slate-400 truncate mt-0.5">{slot.subject.name}</div>
-                                      <div className="text-[9px] text-slate-500 mt-1 flex items-center justify-between">
+                                      <div className="text-[10px] text-text-muted truncate mt-0.5">{slot.subject.name}</div>
+                                      <div className="text-[9px] text-text-muted mt-1 flex items-center justify-between">
                                         <span className="truncate max-w-[65%]">{slot.subject.faculty.user.name}</span>
-                                        {slot.room && <span className="font-semibold text-slate-300">{slot.room.roomNo}</span>}
+                                        {slot.room && <span className="font-semibold text-text-main">{slot.room.roomNo}</span>}
                                       </div>
 
                                       {/* Slot actions on hover */}
                                       {activeSchedule.status === 'DRAFT' && (
-                                        <div className="absolute inset-0 bg-slate-950/90 rounded-lg flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <div className="absolute inset-0 bg-bg-app/90 rounded-lg flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
                                           <button
                                             onClick={() => {
                                               setModalType('slot');
@@ -600,14 +600,14 @@ const AdminTimetableManager = () => {
                                                 roomId: slot.roomId || ''
                                               });
                                             }}
-                                            className="p-1 text-slate-400 hover:text-blue-400"
+                                            className="p-1 text-text-muted hover:text-blue-400"
                                             title="Edit Slot"
                                           >
                                             <Edit2 className="h-4 w-4" />
                                           </button>
                                           <button
                                             onClick={() => handleSlotDelete(slot.id)}
-                                            className="p-1 text-slate-400 hover:text-red-400"
+                                            className="p-1 text-text-muted hover:text-red-400"
                                             title="Delete Slot"
                                           >
                                             <Trash2 className="h-4 w-4" />
@@ -620,7 +620,7 @@ const AdminTimetableManager = () => {
                               }
 
                               return (
-                                <td key={p.id} className="p-2 border-r border-slate-800/30">
+                                <td key={p.id} className="p-2 border-r border-border-app/30">
                                   {activeSchedule.status === 'DRAFT' ? (
                                     <button
                                       onClick={() => {
@@ -635,7 +635,7 @@ const AdminTimetableManager = () => {
                                           roomId: ''
                                         });
                                       }}
-                                      className="w-full h-20 rounded-lg border border-dashed border-slate-800/40 text-slate-700 hover:text-blue-400 hover:border-blue-500/30 flex items-center justify-center text-xs group transition-all"
+                                      className="w-full h-20 rounded-lg border border-dashed border-border-app/40 text-text-muted hover:text-blue-400 hover:border-blue-500/30 flex items-center justify-center text-xs group transition-all"
                                     >
                                       <Plus className="h-4 w-4 opacity-30 group-hover:opacity-100" />
                                     </button>
@@ -654,10 +654,10 @@ const AdminTimetableManager = () => {
 
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center text-center p-12 border border-slate-800 rounded-xl bg-slate-900/20 h-[60vh]">
+              <div className="flex flex-col items-center justify-center text-center p-12 border border-border-app rounded-xl bg-bg-card/20 h-[60vh]">
                 <Calendar className="h-12 w-12 text-slate-650 mb-3" />
-                <h3 className="text-lg font-semibold text-slate-400">Select or Create a Timetable Schedule</h3>
-                <p className="text-slate-500 text-sm max-w-sm mt-1">
+                <h3 className="text-lg font-semibold text-text-muted">Select or Create a Timetable Schedule</h3>
+                <p className="text-text-muted text-sm max-w-sm mt-1">
                   Choose a schedule from the sidebar, or click "Create" to start building a new weekly draft timetable.
                 </p>
               </div>
@@ -668,11 +668,11 @@ const AdminTimetableManager = () => {
 
       {/* ==================== TAB: PERIOD TEMPLATES ==================== */}
       {activeTab === 'periods' && (
-        <div className="border border-slate-800 rounded-xl bg-slate-900/20 p-6 space-y-4">
+        <div className="border border-border-app rounded-xl bg-bg-card/20 p-6 space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-md font-bold text-white">Daily Period Templates</h2>
-              <p className="text-xs text-slate-400 mt-0.5">Define class hours and break periods.</p>
+              <h2 className="text-md font-bold text-text-main">Daily Period Templates</h2>
+              <p className="text-xs text-text-muted mt-0.5">Define class hours and break periods.</p>
             </div>
             <button
               onClick={() => {
@@ -680,7 +680,7 @@ const AdminTimetableManager = () => {
                 setModalAction('create');
                 setPeriodForm({ periodNumber: periods.length + 1, name: `Period ${periods.length + 1}`, startTime: '', endTime: '', isBreak: false });
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-semibold text-white"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-semibold text-text-main"
             >
               <Plus className="h-4 w-4" /> Add Period
             </button>
@@ -689,20 +689,20 @@ const AdminTimetableManager = () => {
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-left">
               <thead>
-                <tr className="border-b border-slate-800">
-                  <th className="p-3 text-xs font-bold text-slate-500 uppercase">Number</th>
-                  <th className="p-3 text-xs font-bold text-slate-500 uppercase">Name</th>
-                  <th className="p-3 text-xs font-bold text-slate-500 uppercase">Time Range</th>
-                  <th className="p-3 text-xs font-bold text-slate-500 uppercase">Type</th>
-                  <th className="p-3 text-xs font-bold text-slate-500 uppercase text-right">Actions</th>
+                <tr className="border-b border-border-app">
+                  <th className="p-3 text-xs font-bold text-text-muted uppercase">Number</th>
+                  <th className="p-3 text-xs font-bold text-text-muted uppercase">Name</th>
+                  <th className="p-3 text-xs font-bold text-text-muted uppercase">Time Range</th>
+                  <th className="p-3 text-xs font-bold text-text-muted uppercase">Type</th>
+                  <th className="p-3 text-xs font-bold text-text-muted uppercase text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {periods.map(p => (
-                  <tr key={p.id} className="border-b border-slate-800/40 hover:bg-slate-850/5">
-                    <td className="p-3 font-semibold text-slate-200 text-sm">{p.periodNumber}</td>
-                    <td className="p-3 text-slate-300 text-sm">{p.name}</td>
-                    <td className="p-3 text-slate-400 text-xs">{p.startTime} - {p.endTime}</td>
+                  <tr key={p.id} className="border-b border-border-app/40 hover:bg-bg-sidebar/5">
+                    <td className="p-3 font-semibold text-text-main text-sm">{p.periodNumber}</td>
+                    <td className="p-3 text-text-main text-sm">{p.name}</td>
+                    <td className="p-3 text-text-muted text-xs">{p.startTime} - {p.endTime}</td>
                     <td className="p-3 text-sm">
                       <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
                         p.isBreak ? 'bg-amber-500/10 text-amber-400' : 'bg-blue-500/10 text-blue-400'
@@ -719,13 +719,13 @@ const AdminTimetableManager = () => {
                             setEditId(p.id);
                             setPeriodForm({ periodNumber: p.periodNumber, name: p.name, startTime: p.startTime, endTime: p.endTime, isBreak: p.isBreak });
                           }}
-                          className="text-slate-400 hover:text-blue-400 p-1"
+                          className="text-text-muted hover:text-blue-400 p-1"
                         >
                           <Edit2 className="h-4 w-4" />
                         </button>
                         <button
                           onClick={() => handlePeriodDelete(p.id)}
-                          className="text-slate-400 hover:text-red-400 p-1"
+                          className="text-text-muted hover:text-red-400 p-1"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -741,11 +741,11 @@ const AdminTimetableManager = () => {
 
       {/* ==================== TAB: ROOMS ==================== */}
       {activeTab === 'rooms' && (
-        <div className="border border-slate-800 rounded-xl bg-slate-900/20 p-6 space-y-4">
+        <div className="border border-border-app rounded-xl bg-bg-card/20 p-6 space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-md font-bold text-white">Classrooms & Labs</h2>
-              <p className="text-xs text-slate-400 mt-0.5">Manage physical locations for classes.</p>
+              <h2 className="text-md font-bold text-text-main">Classrooms & Labs</h2>
+              <p className="text-xs text-text-muted mt-0.5">Manage physical locations for classes.</p>
             </div>
             <button
               onClick={() => {
@@ -753,7 +753,7 @@ const AdminTimetableManager = () => {
                 setModalAction('create');
                 setRoomForm({ roomNo: '', name: '', departmentId: departments[0]?.id || '', type: 'CLASSROOM', capacity: '', isActive: true });
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-semibold text-white"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-semibold text-text-main"
             >
               <Plus className="h-4 w-4" /> Add Room
             </button>
@@ -762,23 +762,23 @@ const AdminTimetableManager = () => {
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-left">
               <thead>
-                <tr className="border-b border-slate-800">
-                  <th className="p-3 text-xs font-bold text-slate-500 uppercase">Room No</th>
-                  <th className="p-3 text-xs font-bold text-slate-500 uppercase">Name / Desc</th>
-                  <th className="p-3 text-xs font-bold text-slate-500 uppercase">Department</th>
-                  <th className="p-3 text-xs font-bold text-slate-500 uppercase">Type</th>
-                  <th className="p-3 text-xs font-bold text-slate-500 uppercase">Capacity</th>
-                  <th className="p-3 text-xs font-bold text-slate-500 uppercase text-right">Actions</th>
+                <tr className="border-b border-border-app">
+                  <th className="p-3 text-xs font-bold text-text-muted uppercase">Room No</th>
+                  <th className="p-3 text-xs font-bold text-text-muted uppercase">Name / Desc</th>
+                  <th className="p-3 text-xs font-bold text-text-muted uppercase">Department</th>
+                  <th className="p-3 text-xs font-bold text-text-muted uppercase">Type</th>
+                  <th className="p-3 text-xs font-bold text-text-muted uppercase">Capacity</th>
+                  <th className="p-3 text-xs font-bold text-text-muted uppercase text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {rooms.map(r => (
-                  <tr key={r.id} className="border-b border-slate-800/40 hover:bg-slate-850/5">
-                    <td className="p-3 font-semibold text-slate-200 text-sm">{r.roomNo}</td>
-                    <td className="p-3 text-slate-300 text-sm">{r.name || '-'}</td>
-                    <td className="p-3 text-slate-400 text-xs">{r.department?.code || 'Global / All'}</td>
+                  <tr key={r.id} className="border-b border-border-app/40 hover:bg-bg-sidebar/5">
+                    <td className="p-3 font-semibold text-text-main text-sm">{r.roomNo}</td>
+                    <td className="p-3 text-text-main text-sm">{r.name || '-'}</td>
+                    <td className="p-3 text-text-muted text-xs">{r.department?.code || 'Global / All'}</td>
                     <td className="p-3 text-xs font-bold">{r.type}</td>
-                    <td className="p-3 text-slate-400 text-sm">{r.capacity || '-'}</td>
+                    <td className="p-3 text-text-muted text-sm">{r.capacity || '-'}</td>
                     <td className="p-3 text-right">
                       <div className="flex items-center justify-end gap-3">
                         <button
@@ -788,13 +788,13 @@ const AdminTimetableManager = () => {
                             setEditId(r.id);
                             setRoomForm({ roomNo: r.roomNo, name: r.name || '', departmentId: r.departmentId || '', type: r.type, capacity: r.capacity || '', isActive: r.isActive });
                           }}
-                          className="text-slate-400 hover:text-blue-400 p-1"
+                          className="text-text-muted hover:text-blue-400 p-1"
                         >
                           <Edit2 className="h-4 w-4" />
                         </button>
                         <button
                           onClick={() => handleRoomDelete(r.id)}
-                          className="text-slate-400 hover:text-red-400 p-1"
+                          className="text-text-muted hover:text-red-400 p-1"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -812,19 +812,19 @@ const AdminTimetableManager = () => {
 
       {/* 1. Schedule Modal */}
       {modalType === 'schedule' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4">
-          <div className="w-full max-w-md rounded-xl border border-slate-800 bg-slate-900 p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="font-bold text-white text-md">Create Weekly Timetable Schedule</h3>
-              <button onClick={() => setModalType(null)} className="text-slate-400 hover:text-white"><X className="h-5 w-5" /></button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-bg-sidebar/80 p-4">
+          <div className="w-full max-w-md rounded-xl border border-border-app bg-bg-card p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-border-app pb-3">
+              <h3 className="font-bold text-text-main text-md">Create Weekly Timetable Schedule</h3>
+              <button onClick={() => setModalType(null)} className="text-text-muted hover:text-text-main"><X className="h-5 w-5" /></button>
             </div>
             <form onSubmit={handleScheduleSubmit} className="space-y-4 text-xs">
               <div className="space-y-1">
-                <label className="text-slate-400 font-semibold">Department</label>
+                <label className="text-text-muted font-semibold">Department</label>
                 <select
                   value={scheduleForm.departmentId}
                   onChange={(e) => setScheduleForm({ ...scheduleForm, departmentId: e.target.value })}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                  className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                   required
                 >
                   {departments.map(d => <option key={d.id} value={d.id}>{d.name} ({d.code})</option>)}
@@ -833,25 +833,25 @@ const AdminTimetableManager = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-semibold">Batch Year</label>
+                  <label className="text-text-muted font-semibold">Batch Year</label>
                   <input
                     type="text"
                     placeholder="e.g. 2024-28"
                     value={scheduleForm.batchYear}
                     onChange={(e) => setScheduleForm({ ...scheduleForm, batchYear: e.target.value })}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                    className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                     required
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-semibold">Section</label>
+                  <label className="text-text-muted font-semibold">Section</label>
                   <input
                     type="text"
                     placeholder="e.g. A"
                     maxLength={2}
                     value={scheduleForm.section}
                     onChange={(e) => setScheduleForm({ ...scheduleForm, section: e.target.value })}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                    className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                     required
                   />
                 </div>
@@ -859,24 +859,24 @@ const AdminTimetableManager = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-semibold">Semester</label>
+                  <label className="text-text-muted font-semibold">Semester</label>
                   <input
                     type="number"
                     min={1} max={8}
                     value={scheduleForm.semester}
                     onChange={(e) => setScheduleForm({ ...scheduleForm, semester: Number(e.target.value) })}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                    className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                     required
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-semibold">Schedule Name</label>
+                  <label className="text-text-muted font-semibold">Schedule Name</label>
                   <input
                     type="text"
                     placeholder="e.g. Odd Sem 2026"
                     value={scheduleForm.name}
                     onChange={(e) => setScheduleForm({ ...scheduleForm, name: e.target.value })}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                    className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                     required
                   />
                 </div>
@@ -884,22 +884,22 @@ const AdminTimetableManager = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-semibold">Effective From</label>
+                  <label className="text-text-muted font-semibold">Effective From</label>
                   <input
                     type="date"
                     value={scheduleForm.effectiveFrom}
                     onChange={(e) => setScheduleForm({ ...scheduleForm, effectiveFrom: e.target.value })}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                    className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                     required
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-semibold">Effective To (Optional)</label>
+                  <label className="text-text-muted font-semibold">Effective To (Optional)</label>
                   <input
                     type="date"
                     value={scheduleForm.effectiveTo}
                     onChange={(e) => setScheduleForm({ ...scheduleForm, effectiveTo: e.target.value })}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                    className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                   />
                 </div>
               </div>
@@ -907,7 +907,7 @@ const AdminTimetableManager = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 font-bold text-white flex items-center justify-center gap-2"
+                className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 font-bold text-text-main flex items-center justify-center gap-2"
               >
                 {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
                 Create Draft Schedule
@@ -919,22 +919,22 @@ const AdminTimetableManager = () => {
 
       {/* 2. Slot Modal */}
       {modalType === 'slot' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4">
-          <div className="w-full max-w-md rounded-xl border border-slate-800 bg-slate-900 p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="font-bold text-white text-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-bg-sidebar/80 p-4">
+          <div className="w-full max-w-md rounded-xl border border-border-app bg-bg-card p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-border-app pb-3">
+              <h3 className="font-bold text-text-main text-md">
                 {modalAction === 'create' ? 'Create Timetable Slot' : 'Edit Timetable Slot'}
               </h3>
-              <button onClick={() => setModalType(null)} className="text-slate-400 hover:text-white"><X className="h-5 w-5" /></button>
+              <button onClick={() => setModalType(null)} className="text-text-muted hover:text-text-main"><X className="h-5 w-5" /></button>
             </div>
 
             <form onSubmit={handleSlotSubmit} className="space-y-4 text-xs">
               <div className="space-y-1">
-                <label className="text-slate-400 font-semibold">Subject</label>
+                <label className="text-text-muted font-semibold">Subject</label>
                 <select
                   value={slotForm.subjectId}
                   onChange={(e) => setSlotForm({ ...slotForm, subjectId: e.target.value })}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                  className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                   required
                 >
                   {subjects.map(s => <option key={s.id} value={s.id}>{s.code} - {s.name}</option>)}
@@ -944,22 +944,22 @@ const AdminTimetableManager = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-semibold">Start Period</label>
+                  <label className="text-text-muted font-semibold">Start Period</label>
                   <select
                     value={slotForm.startPeriodId}
                     onChange={(e) => setSlotForm({ ...slotForm, startPeriodId: e.target.value })}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                    className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                     required
                   >
                     {periods.map(p => <option key={p.id} value={p.id}>{p.name} ({p.startTime})</option>)}
                   </select>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-semibold">End Period</label>
+                  <label className="text-text-muted font-semibold">End Period</label>
                   <select
                     value={slotForm.endPeriodId}
                     onChange={(e) => setSlotForm({ ...slotForm, endPeriodId: e.target.value })}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                    className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                     required
                   >
                     {periods.map(p => <option key={p.id} value={p.id}>{p.name} ({p.endTime})</option>)}
@@ -968,11 +968,11 @@ const AdminTimetableManager = () => {
               </div>
 
               <div className="space-y-1">
-                <label className="text-slate-400 font-semibold">Room No (Optional)</label>
+                <label className="text-text-muted font-semibold">Room No (Optional)</label>
                 <select
                   value={slotForm.roomId}
                   onChange={(e) => setSlotForm({ ...slotForm, roomId: e.target.value })}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                  className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                 >
                   <option value="">No Room Assigned</option>
                   {rooms.map(r => <option key={r.id} value={r.id}>{r.roomNo} ({r.type})</option>)}
@@ -982,7 +982,7 @@ const AdminTimetableManager = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 font-bold text-white flex items-center justify-center gap-2"
+                className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 font-bold text-text-main flex items-center justify-center gap-2"
               >
                 {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
                 {modalAction === 'create' ? 'Save Timetable Slot' : 'Update Timetable Slot'}
@@ -994,21 +994,21 @@ const AdminTimetableManager = () => {
 
       {/* 3. Bulk JSON Import Modal */}
       {modalType === 'bulk' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4">
-          <div className="w-full max-w-xl rounded-xl border border-slate-800 bg-slate-900 p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="font-bold text-white text-md">Bulk JSON Timetable Import</h3>
-              <button onClick={() => setModalType(null)} className="text-slate-400 hover:text-white"><X className="h-5 w-5" /></button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-bg-sidebar/80 p-4">
+          <div className="w-full max-w-xl rounded-xl border border-border-app bg-bg-card p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-border-app pb-3">
+              <h3 className="font-bold text-text-main text-md">Bulk JSON Timetable Import</h3>
+              <button onClick={() => setModalType(null)} className="text-text-muted hover:text-text-main"><X className="h-5 w-5" /></button>
             </div>
 
             <form onSubmit={handleBulkSubmit} className="space-y-4 text-xs">
               <div className="space-y-1">
-                <label className="text-slate-400 font-semibold">JSON Array of Slots</label>
+                <label className="text-text-muted font-semibold">JSON Array of Slots</label>
                 <textarea
                   rows={10}
                   value={bulkInput}
                   onChange={(e) => setBulkInput(e.target.value)}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 p-3 text-slate-200 font-mono text-[11px]"
+                  className="w-full rounded-lg border border-border-app bg-bg-app p-3 text-text-main font-mono text-[11px]"
                   placeholder="Paste JSON array here..."
                   required
                 />
@@ -1019,7 +1019,7 @@ const AdminTimetableManager = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 font-bold text-white flex items-center justify-center gap-2"
+                className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 font-bold text-text-main flex items-center justify-center gap-2"
               >
                 {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
                 Atomically Import Slots
@@ -1031,34 +1031,34 @@ const AdminTimetableManager = () => {
 
       {/* 4. Period Modal */}
       {modalType === 'period' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4">
-          <div className="w-full max-w-md rounded-xl border border-slate-800 bg-slate-900 p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="font-bold text-white text-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-bg-sidebar/80 p-4">
+          <div className="w-full max-w-md rounded-xl border border-border-app bg-bg-card p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-border-app pb-3">
+              <h3 className="font-bold text-text-main text-md">
                 {modalAction === 'create' ? 'Add Period Template' : 'Edit Period Template'}
               </h3>
-              <button onClick={() => setModalType(null)} className="text-slate-400 hover:text-white"><X className="h-5 w-5" /></button>
+              <button onClick={() => setModalType(null)} className="text-text-muted hover:text-text-main"><X className="h-5 w-5" /></button>
             </div>
             <form onSubmit={handlePeriodSubmit} className="space-y-4 text-xs">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-semibold">Period Number</label>
+                  <label className="text-text-muted font-semibold">Period Number</label>
                   <input
                     type="number"
                     min={1} max={10}
                     value={periodForm.periodNumber}
                     onChange={(e) => setPeriodForm({ ...periodForm, periodNumber: e.target.value })}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                    className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                     required
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-semibold">Display Name</label>
+                  <label className="text-text-muted font-semibold">Display Name</label>
                   <input
                     type="text"
                     value={periodForm.name}
                     onChange={(e) => setPeriodForm({ ...periodForm, name: e.target.value })}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                    className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                     required
                   />
                 </div>
@@ -1066,24 +1066,24 @@ const AdminTimetableManager = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-semibold">Start Time (HH:mm)</label>
+                  <label className="text-text-muted font-semibold">Start Time (HH:mm)</label>
                   <input
                     type="text"
                     placeholder="e.g. 09:00"
                     value={periodForm.startTime}
                     onChange={(e) => setPeriodForm({ ...periodForm, startTime: e.target.value })}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                    className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                     required
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-semibold">End Time (HH:mm)</label>
+                  <label className="text-text-muted font-semibold">End Time (HH:mm)</label>
                   <input
                     type="text"
                     placeholder="e.g. 09:50"
                     value={periodForm.endTime}
                     onChange={(e) => setPeriodForm({ ...periodForm, endTime: e.target.value })}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                    className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                     required
                   />
                 </div>
@@ -1095,15 +1095,15 @@ const AdminTimetableManager = () => {
                   id="isBreak"
                   checked={periodForm.isBreak}
                   onChange={(e) => setPeriodForm({ ...periodForm, isBreak: e.target.checked })}
-                  className="rounded border-slate-800 bg-slate-950 text-blue-500"
+                  className="rounded border-border-app bg-bg-app text-blue-500"
                 />
-                <label htmlFor="isBreak" className="text-slate-350 font-semibold">Is institutional break / lunch period?</label>
+                <label htmlFor="isBreak" className="text-text-main font-semibold">Is institutional break / lunch period?</label>
               </div>
 
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 font-bold text-white flex items-center justify-center gap-2"
+                className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 font-bold text-text-main flex items-center justify-center gap-2"
               >
                 {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
                 {modalAction === 'create' ? 'Create Period' : 'Update Period'}
@@ -1115,45 +1115,45 @@ const AdminTimetableManager = () => {
 
       {/* 5. Room Modal */}
       {modalType === 'room' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4">
-          <div className="w-full max-w-md rounded-xl border border-slate-800 bg-slate-900 p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="font-bold text-white text-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-bg-sidebar/80 p-4">
+          <div className="w-full max-w-md rounded-xl border border-border-app bg-bg-card p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-border-app pb-3">
+              <h3 className="font-bold text-text-main text-md">
                 {modalAction === 'create' ? 'Add Room' : 'Edit Room'}
               </h3>
-              <button onClick={() => setModalType(null)} className="text-slate-400 hover:text-white"><X className="h-5 w-5" /></button>
+              <button onClick={() => setModalType(null)} className="text-text-muted hover:text-text-main"><X className="h-5 w-5" /></button>
             </div>
             <form onSubmit={handleRoomSubmit} className="space-y-4 text-xs">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-semibold">Room Number</label>
+                  <label className="text-text-muted font-semibold">Room Number</label>
                   <input
                     type="text"
                     placeholder="e.g. R-101"
                     value={roomForm.roomNo}
                     onChange={(e) => setRoomForm({ ...roomForm, roomNo: e.target.value })}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                    className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                     required
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-semibold">Room Name (Optional)</label>
+                  <label className="text-text-muted font-semibold">Room Name (Optional)</label>
                   <input
                     type="text"
                     value={roomForm.name}
                     onChange={(e) => setRoomForm({ ...roomForm, name: e.target.value })}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                    className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-semibold">Room Type</label>
+                  <label className="text-text-muted font-semibold">Room Type</label>
                   <select
                     value={roomForm.type}
                     onChange={(e) => setRoomForm({ ...roomForm, type: e.target.value })}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                    className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                   >
                     <option value="CLASSROOM">Classroom</option>
                     <option value="LAB">Laboratory</option>
@@ -1162,22 +1162,22 @@ const AdminTimetableManager = () => {
                   </select>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-slate-400 font-semibold">Capacity (Optional)</label>
+                  <label className="text-text-muted font-semibold">Capacity (Optional)</label>
                   <input
                     type="number"
                     value={roomForm.capacity}
                     onChange={(e) => setRoomForm({ ...roomForm, capacity: e.target.value })}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                    className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="text-slate-400 font-semibold">Department Assignment (Optional)</label>
+                <label className="text-text-muted font-semibold">Department Assignment (Optional)</label>
                 <select
                   value={roomForm.departmentId}
                   onChange={(e) => setRoomForm({ ...roomForm, departmentId: e.target.value })}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-slate-200"
+                  className="w-full rounded-lg border border-border-app bg-bg-app p-2.5 text-text-main"
                 >
                   <option value="">Global / All Departments</option>
                   {departments.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
@@ -1187,7 +1187,7 @@ const AdminTimetableManager = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 font-bold text-white flex items-center justify-center gap-2"
+                className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 font-bold text-text-main flex items-center justify-center gap-2"
               >
                 {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
                 {modalAction === 'create' ? 'Create Room' : 'Update Room'}

@@ -93,7 +93,7 @@ export default function AdminRiskAnalytics() {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
         <Loader2 className="h-10 w-10 text-blue-500 animate-spin" />
-        <span className="ml-3 text-slate-400">Loading system academic risk analytics...</span>
+        <span className="ml-3 text-text-muted">Loading system academic risk analytics...</span>
       </div>
     );
   }
@@ -107,13 +107,13 @@ export default function AdminRiskAnalytics() {
   ];
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="backdrop-blur-md bg-slate-900/40 border border-slate-800 p-6 rounded-2xl space-y-6">
+      <div className="backdrop-blur-md bg-bg-card/40 border border-border-app p-6 rounded-2xl space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-white mb-2">Academic Risk & Early-Warning Control Hub</h1>
-            <p className="text-slate-400 text-sm">System-wide monitoring of student academic risk distributions, cohort benchmarks, and recalculation engine.</p>
+            <h1 className="text-2xl font-bold text-text-main mb-2">Academic Risk & Early-Warning Control Hub</h1>
+            <p className="text-text-muted text-sm">System-wide monitoring of student academic risk distributions, cohort benchmarks, and recalculation engine.</p>
           </div>
 
           <div className="flex items-center space-x-3">
@@ -121,7 +121,7 @@ export default function AdminRiskAnalytics() {
               type="button"
               onClick={handleRecalculate}
               disabled={recalculating}
-              className="flex items-center space-x-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-xs font-semibold rounded-xl transition-all shadow-md"
+              className="flex items-center space-x-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-text-main text-xs font-semibold rounded-xl transition-all shadow-md"
             >
               <RefreshCw className={`w-4 h-4 ${recalculating ? 'animate-spin' : ''}`} />
               <span>{recalculating ? 'Recalculating Cohort...' : 'Recalculate Cohort Risk'}</span>
@@ -131,9 +131,9 @@ export default function AdminRiskAnalytics() {
 
         {/* Counter Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-          <div className="p-4 bg-slate-950/60 border border-slate-800 rounded-xl">
-            <p className="text-xs font-medium text-slate-400">Total Assessed Students</p>
-            <p className="text-2xl font-bold text-white mt-1">{counters.assessedStudents || 0}</p>
+          <div className="p-4 bg-bg-app/60 border border-border-app rounded-xl">
+            <p className="text-xs font-medium text-text-muted">Total Assessed Students</p>
+            <p className="text-2xl font-bold text-text-main mt-1">{counters.assessedStudents || 0}</p>
           </div>
 
           <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl">
@@ -162,13 +162,13 @@ export default function AdminRiskAnalytics() {
         </div>
 
         {/* Filters */}
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 pt-2 border-t border-slate-800">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 pt-2 border-t border-border-app">
           <div>
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Department</label>
+            <label className="text-xs font-semibold uppercase tracking-wider text-text-muted">Department</label>
             <select
               value={selectedDept}
               onChange={(e) => setSelectedDept(e.target.value)}
-              className="mt-1 block w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white focus:outline-none"
+              className="mt-1 block w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main focus:outline-none"
             >
               <option value="">All Departments</option>
               {departments.map((d) => (
@@ -180,11 +180,11 @@ export default function AdminRiskAnalytics() {
           </div>
 
           <div>
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Batch Year</label>
+            <label className="text-xs font-semibold uppercase tracking-wider text-text-muted">Batch Year</label>
             <select
               value={selectedBatch}
               onChange={(e) => setSelectedBatch(e.target.value)}
-              className="mt-1 block w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white focus:outline-none"
+              className="mt-1 block w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main focus:outline-none"
             >
               <option value="">All Batches</option>
               <option value="2024-28">2024-28</option>
@@ -193,11 +193,11 @@ export default function AdminRiskAnalytics() {
           </div>
 
           <div>
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Section</label>
+            <label className="text-xs font-semibold uppercase tracking-wider text-text-muted">Section</label>
             <select
               value={selectedSection}
               onChange={(e) => setSelectedSection(e.target.value)}
-              className="mt-1 block w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white focus:outline-none"
+              className="mt-1 block w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main focus:outline-none"
             >
               <option value="">All Sections</option>
               <option value="A">Section A</option>
@@ -206,11 +206,11 @@ export default function AdminRiskAnalytics() {
           </div>
 
           <div>
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Risk Level</label>
+            <label className="text-xs font-semibold uppercase tracking-wider text-text-muted">Risk Level</label>
             <select
               value={selectedRiskLevel}
               onChange={(e) => setSelectedRiskLevel(e.target.value)}
-              className="mt-1 block w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white focus:outline-none"
+              className="mt-1 block w-full rounded-xl border border-border-app bg-bg-app px-3.5 py-2.5 text-xs text-text-main focus:outline-none"
             >
               <option value="">All Risk Levels</option>
               <option value="HIGH">High Risk</option>
@@ -224,8 +224,8 @@ export default function AdminRiskAnalytics() {
       {/* Visual Charts Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Pie Chart: Distribution */}
-        <div className="backdrop-blur-md bg-slate-900/40 border border-slate-800 p-6 rounded-2xl space-y-4 flex flex-col justify-between">
-          <h2 className="text-base font-bold text-white">Risk Level Distribution</h2>
+        <div className="backdrop-blur-md bg-bg-card/40 border border-border-app p-6 rounded-2xl space-y-4 flex flex-col justify-between">
+          <h2 className="text-base font-bold text-text-main">Risk Level Distribution</h2>
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -241,22 +241,22 @@ export default function AdminRiskAnalytics() {
           <div className="flex justify-center space-x-6 text-xs">
             <div className="flex items-center space-x-2">
               <span className="w-3 h-3 rounded-full bg-rose-500 inline-block" />
-              <span className="text-slate-300">High ({distribution.HIGH})</span>
+              <span className="text-text-main">High ({distribution.HIGH})</span>
             </div>
             <div className="flex items-center space-x-2">
               <span className="w-3 h-3 rounded-full bg-amber-500 inline-block" />
-              <span className="text-slate-300">Medium ({distribution.MEDIUM})</span>
+              <span className="text-text-main">Medium ({distribution.MEDIUM})</span>
             </div>
             <div className="flex items-center space-x-2">
               <span className="w-3 h-3 rounded-full bg-emerald-500 inline-block" />
-              <span className="text-slate-300">Low ({distribution.LOW})</span>
+              <span className="text-text-main">Low ({distribution.LOW})</span>
             </div>
           </div>
         </div>
 
         {/* Bar Chart: Department Benchmarks */}
-        <div className="backdrop-blur-md bg-slate-900/40 border border-slate-800 p-6 rounded-2xl space-y-4 flex flex-col justify-between">
-          <h2 className="text-base font-bold text-white">Department Average Risk Score Benchmark</h2>
+        <div className="backdrop-blur-md bg-bg-card/40 border border-border-app p-6 rounded-2xl space-y-4 flex flex-col justify-between">
+          <h2 className="text-base font-bold text-text-main">Department Average Risk Score Benchmark</h2>
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={departmentBenchmarks}>
@@ -267,19 +267,19 @@ export default function AdminRiskAnalytics() {
               </BarChart>
             </ResponsiveContainer>
           </div>
-          <p className="text-[11px] text-slate-500 text-center">Benchmark score scale 0-100 (Higher score indicates greater academic attention required).</p>
+          <p className="text-[11px] text-text-muted text-center">Benchmark score scale 0-100 (Higher score indicates greater academic attention required).</p>
         </div>
       </div>
 
       {/* Roster & Top Factors */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Student Risk List */}
-        <div className="lg:col-span-2 backdrop-blur-md bg-slate-900/40 border border-slate-800 p-6 rounded-2xl space-y-4">
-          <h2 className="text-base font-bold text-white">Student Attention Roster ({studentsData.length})</h2>
+        <div className="lg:col-span-2 backdrop-blur-md bg-bg-card/40 border border-border-app p-6 rounded-2xl space-y-4">
+          <h2 className="text-base font-bold text-text-main">Student Attention Roster ({studentsData.length})</h2>
 
-          <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/40">
+          <div className="overflow-x-auto rounded-xl border border-border-app bg-bg-app/40">
             <table className="min-w-full divide-y divide-slate-800 text-left text-xs">
-              <thead className="bg-slate-900/60 font-semibold uppercase tracking-wider text-slate-400">
+              <thead className="bg-bg-card/60 font-semibold uppercase tracking-wider text-text-muted">
                 <tr>
                   <th className="px-4 py-3">Student Details</th>
                   <th className="px-3 py-3 text-center">Dept</th>
@@ -288,18 +288,18 @@ export default function AdminRiskAnalytics() {
                   <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-850 text-slate-300">
+              <tbody className="divide-y divide-slate-850 text-text-main">
                 {studentsData.map((s) => (
-                  <tr key={s.studentId} className="hover:bg-slate-900/40 transition-colors">
+                  <tr key={s.studentId} className="hover:bg-bg-card/40 transition-colors">
                     <td className="px-4 py-3">
                       <div className="font-semibold text-slate-100">{s.name}</div>
-                      <div className="text-[11px] text-slate-500 font-mono">
+                      <div className="text-[11px] text-text-muted font-mono">
                         {s.rollNo} • {s.batchYear} ({s.section})
                       </div>
                     </td>
-                    <td className="px-3 py-3 text-center font-semibold text-slate-300">{s.department}</td>
+                    <td className="px-3 py-3 text-center font-semibold text-text-main">{s.department}</td>
                     <td className="px-3 py-3 text-center">
-                      <span className="px-2 py-0.5 bg-slate-800 text-slate-300 rounded font-mono text-[10px]">
+                      <span className="px-2 py-0.5 bg-bg-sidebar text-text-main rounded font-mono text-[10px]">
                         {s.confidenceLevel}
                       </span>
                     </td>
@@ -329,7 +329,7 @@ export default function AdminRiskAnalytics() {
                 ))}
                 {studentsData.length === 0 && (
                   <tr>
-                    <td colSpan="5" className="py-6 text-center text-slate-500">
+                    <td colSpan="5" className="py-6 text-center text-text-muted">
                       No student records found.
                     </td>
                   </tr>
@@ -340,19 +340,19 @@ export default function AdminRiskAnalytics() {
         </div>
 
         {/* Top Risk Factor Categories */}
-        <div className="backdrop-blur-md bg-slate-900/40 border border-slate-800 p-6 rounded-2xl space-y-4">
-          <h2 className="text-base font-bold text-white">Top System Factor Categories</h2>
+        <div className="backdrop-blur-md bg-bg-card/40 border border-border-app p-6 rounded-2xl space-y-4">
+          <h2 className="text-base font-bold text-text-main">Top System Factor Categories</h2>
           <div className="space-y-3">
             {topFactorCategories.map((cat, idx) => (
-              <div key={idx} className="flex justify-between items-center p-3 bg-slate-950/60 border border-slate-800 rounded-xl text-xs">
-                <span className="font-semibold text-slate-300">{cat.category}</span>
+              <div key={idx} className="flex justify-between items-center p-3 bg-bg-app/60 border border-border-app rounded-xl text-xs">
+                <span className="font-semibold text-text-main">{cat.category}</span>
                 <span className="px-2.5 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded font-mono font-bold">
                   {cat.count} occurrences
                 </span>
               </div>
             ))}
             {topFactorCategories.length === 0 && (
-              <p className="text-xs text-slate-500 py-4 text-center">No primary risk factors detected.</p>
+              <p className="text-xs text-text-muted py-4 text-center">No primary risk factors detected.</p>
             )}
           </div>
         </div>
@@ -360,14 +360,14 @@ export default function AdminRiskAnalytics() {
 
       {/* Detail Modal */}
       {detailStudentId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-3xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-base font-bold text-white">Admin Student Risk Deep-Dive</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-bg-sidebar/80 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-bg-card border border-border-card rounded-2xl max-w-3xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-border-app pb-3">
+              <h3 className="text-base font-bold text-text-main">Admin Student Risk Deep-Dive</h3>
               <button
                 type="button"
                 onClick={() => setDetailStudentId(null)}
-                className="p-1.5 text-slate-400 hover:text-slate-200 rounded-lg"
+                className="p-1.5 text-text-muted hover:text-text-main rounded-lg"
               >
                 <X className="w-5 h-5" />
               </button>
