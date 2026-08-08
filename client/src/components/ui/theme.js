@@ -71,12 +71,12 @@ export const theme = {
     },
   },
   spacing: {
-    xs: 'var(--spacing-xs)',
-    sm: 'var(--spacing-sm)',
-    md: 'var(--spacing-md)',
-    lg: 'var(--spacing-lg)',
-    xl: 'var(--spacing-xl)',
-    xxl: 'var(--spacing-xxl)',
+    xs: 'var(--app-space-xs)',
+    sm: 'var(--app-space-sm)',
+    md: 'var(--app-space-md)',
+    lg: 'var(--app-space-lg)',
+    xl: 'var(--app-space-xl)',
+    xxl: 'var(--app-space-xxl)',
   },
   borderRadius: {
     xs: 'var(--radius-xs)',

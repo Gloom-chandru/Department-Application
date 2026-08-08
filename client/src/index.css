@@ -29,12 +29,12 @@
   --color-ring-focus: var(--ring-focus);
 
   /* Spacing Scale - Compact and elegant */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2.5rem;
-  --spacing-xxl: 4rem;
+  --app-space-xs: 0.25rem;
+  --app-space-sm: 0.5rem;
+  --app-space-md: 1rem;
+  --app-space-lg: 1.5rem;
+  --app-space-xl: 2.5rem;
+  --app-space-xxl: 4rem;
 
   /* Border Radius Scale */
   --radius-xs: 0.25rem;
