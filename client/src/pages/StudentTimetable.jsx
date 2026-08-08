@@ -358,8 +358,8 @@ const StudentTimetable = () => {
 
       {/* Empty State */}
       {!schedule && (
-        <div className="flex flex-col items-center justify-center text-center p-12 border border-border-app rounded-xl bg-bg-card/20">
-          <AlertCircle className="h-12 w-12 text-text-muted mb-3" />
+        <div className="flex flex-col items-center justify-center text-center p-12 border border-border-app rounded-xl bg-bg-card/20 w-full">
+          <AlertCircle className="h-12 w-12 text-text-muted mb-3 shrink-0" />
           <h3 className="text-lg font-semibold text-text-main">No Timetable Schedule Available</h3>
           <p className="text-text-muted text-sm max-w-sm mt-1">
             There is currently no published timetable schedule matching your group for Semester {selectedSemester}.
