@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import { 
-  User, Mail, Shield, Phone, Heart, Calendar, Building, BookOpen, Loader2, Award, AlertCircle
+  User, Mail, Shield, Phone, Heart, Calendar, Building, BookOpen, Loader2, Award, AlertCircle, Briefcase
 } from 'lucide-react';
 
 const Profile = () => {
@@ -15,21 +15,16 @@ const Profile = () => {
     const fetchProfile = async () => {
       try {
         setLoading(true);
+        let res;
         if (user.role === 'STUDENT') {
-          const res = await api.get('/student/profile');
-          setProfile(res.data);
+          res = await api.get('/student/profile');
+        } else if (user.role === 'FACULTY') {
+          res = await api.get('/faculty/profile');
         } else {
-          // For Faculty/Admin we already have their core info, or can fetch from backend
-          // Let's create a generic profile loader if needed, otherwise read from token/user
-          setProfile({
-            user: {
-              name: user.name,
-              email: user.email,
-              role: user.role,
-              createdAt: new Date().toISOString(), // Mock fallback
-            },
-          });
+          // ADMIN
+          res = await api.get('/admin/profile');
         }
+        setProfile(res.data);
       } catch (err) {
         console.error(err);
         setError('Failed to load profile details.');
@@ -58,14 +53,21 @@ const Profile = () => {
     );
   }
 
+  // Normalise shape across roles:
+  // STUDENT  → { user, rollNo, section, batchYear, mobileNo, guardianContact, department }
+  // FACULTY  → { user, designation, department, subjects[] }
+  // ADMIN    → { user }  (user may include department from the select)
+  const profileUser = profile?.user;
+  const dept = profile?.department || profileUser?.department;
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8 space-y-8">
       
-      {/* Profil Header Card */}
+      {/* Profile Header Card */}
       <div className="relative backdrop-blur-md bg-bg-card/40 border border-border-app p-8 rounded-2xl flex flex-col sm:flex-row items-center gap-6 shadow-xl">
         <div className="absolute top-0 right-0 h-40 w-40 bg-blue-500/5 rounded-full blur-2xl pointer-events-none"></div>
         
-        {/* Avatar Ring */}
+        {/* Avatar */}
         <div className="h-24 w-24 rounded-2xl bg-bg-app border border-border-card/50 flex items-center justify-center text-blue-500 shrink-0 shadow-inner">
           <User className="h-12 w-12" />
         </div>
@@ -74,18 +76,21 @@ const Profile = () => {
           <span className="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-blue-600/15 border border-blue-500/35 text-blue-400">
             {user.role} Account
           </span>
-          <h1 className="text-2xl font-black text-text-main">{profile?.user.name}</h1>
+          <h1 className="text-2xl font-black text-text-main">{profileUser?.name}</h1>
           <p className="text-text-muted text-sm flex items-center justify-center sm:justify-start gap-2">
             <Mail className="h-4 w-4" />
-            <span>{profile?.user.email}</span>
+            <span>{profileUser?.email}</span>
           </p>
+          {user.role === 'FACULTY' && profile?.designation && (
+            <p className="text-sm text-amber-400 font-semibold">{profile.designation}</p>
+          )}
         </div>
       </div>
 
-      {/* Role specific panels */}
+      {/* Role-specific panels */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
-        {/* Card 1: Account Parameters */}
+        {/* Card 1: System Authentication — shown for all roles */}
         <div className="backdrop-blur-md bg-bg-card/20 border border-border-app/80 rounded-2xl p-6 space-y-4">
           <h3 className="text-sm font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
             <Shield className="h-4 w-4 text-blue-500" />
@@ -93,29 +98,29 @@ const Profile = () => {
           </h3>
           
           <div className="space-y-3 text-sm">
-            <div className="flex justify-between items-center py-2 border-b border-border-card/50/60">
+            <div className="flex justify-between items-center py-2 border-b border-border-card/60">
               <span className="text-text-muted">Access Role</span>
               <span className="font-semibold text-text-main">{user.role}</span>
             </div>
-            <div className="flex justify-between items-center py-2 border-b border-border-card/50/60">
+            <div className="flex justify-between items-center py-2 border-b border-border-card/60">
               <span className="text-text-muted">Department</span>
               <span className="font-semibold text-text-main">
-                {user.department ? `${user.department.name} (${user.department.code})` : 'AI & DS (AIDS)'}
+                {dept ? `${dept.name} (${dept.code})` : '—'}
               </span>
             </div>
-            {profile?.user.createdAt && (
+            {profileUser?.createdAt && (
               <div className="flex justify-between items-center py-2">
-                <span className="text-text-muted">Created At</span>
+                <span className="text-text-muted">Member Since</span>
                 <span className="font-semibold text-text-main flex items-center gap-1">
                   <Calendar className="h-4 w-4 text-text-muted" />
-                  {new Date(profile.user.createdAt).toLocaleDateString(undefined, { dateStyle: 'medium' })}
+                  {new Date(profileUser.createdAt).toLocaleDateString(undefined, { dateStyle: 'medium' })}
                 </span>
               </div>
             )}
           </div>
         </div>
 
-        {/* Card 2: Student Metadata (Only rendered for students) */}
+        {/* Card 2: Student Enrollment Details */}
         {user.role === 'STUDENT' && (
           <div className="backdrop-blur-md bg-bg-card/20 border border-border-app/80 rounded-2xl p-6 space-y-4">
             <h3 className="text-sm font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
@@ -124,19 +129,19 @@ const Profile = () => {
             </h3>
             
             <div className="space-y-3 text-sm">
-              <div className="flex justify-between items-center py-2 border-b border-border-card/50/60">
+              <div className="flex justify-between items-center py-2 border-b border-border-card/60">
                 <span className="text-text-muted">Roll Number</span>
                 <span className="font-semibold text-text-main font-mono">{profile?.rollNo}</span>
               </div>
-              <div className="flex justify-between items-center py-2 border-b border-border-card/50/60">
+              <div className="flex justify-between items-center py-2 border-b border-border-card/60">
                 <span className="text-text-muted">Academic Batch</span>
                 <span className="font-semibold text-text-main">{profile?.batchYear}</span>
               </div>
-              <div className="flex justify-between items-center py-2 border-b border-border-card/50/60">
+              <div className="flex justify-between items-center py-2 border-b border-border-card/60">
                 <span className="text-text-muted">Section</span>
                 <span className="font-semibold text-text-main">Section {profile?.section}</span>
               </div>
-              <div className="flex justify-between items-center py-2 border-b border-border-card/50/60">
+              <div className="flex justify-between items-center py-2 border-b border-border-card/60">
                 <span className="text-text-muted">Mobile Phone</span>
                 <span className="font-semibold text-text-main flex items-center gap-1">
                   <Phone className="h-3.5 w-3.5 text-text-muted" />
@@ -148,6 +153,73 @@ const Profile = () => {
                 <span className="font-semibold text-text-main flex items-center gap-1">
                   <Heart className="h-3.5 w-3.5 text-text-muted" />
                   {profile?.guardianContact || 'Not specified'}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Card 2: Faculty Teaching Info */}
+        {user.role === 'FACULTY' && (
+          <div className="backdrop-blur-md bg-bg-card/20 border border-border-app/80 rounded-2xl p-6 space-y-4">
+            <h3 className="text-sm font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
+              <BookOpen className="h-4 w-4 text-amber-500" />
+              Teaching Profile
+            </h3>
+            
+            <div className="space-y-3 text-sm">
+              <div className="flex justify-between items-center py-2 border-b border-border-card/60">
+                <span className="text-text-muted">Designation</span>
+                <span className="font-semibold text-text-main">{profile?.designation || '—'}</span>
+              </div>
+              <div className="py-2">
+                <span className="text-text-muted block mb-2">
+                  Assigned Subjects ({profile?.subjects?.length ?? 0})
+                </span>
+                {profile?.subjects?.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {profile.subjects.map((sub) => (
+                      <span
+                        key={sub.id}
+                        className="px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold"
+                        title={sub.name}
+                      >
+                        {sub.code}
+                        <span className="text-text-muted font-normal ml-1">· Sem {sub.semester}</span>
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <span className="text-text-muted text-xs italic">No subjects assigned yet.</span>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Card 2: Admin System Overview */}
+        {user.role === 'ADMIN' && (
+          <div className="backdrop-blur-md bg-bg-card/20 border border-border-app/80 rounded-2xl p-6 space-y-4">
+            <h3 className="text-sm font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
+              <Briefcase className="h-4 w-4 text-rose-500" />
+              Administrator Access
+            </h3>
+            
+            <div className="space-y-3 text-sm">
+              <div className="flex justify-between items-center py-2 border-b border-border-card/60">
+                <span className="text-text-muted">Access Level</span>
+                <span className="font-semibold text-rose-400">Full System Admin</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-border-card/60">
+                <span className="text-text-muted">Manages Department</span>
+                <span className="font-semibold text-text-main">
+                  {dept ? `${dept.name} (${dept.code})` : 'All Departments'}
+                </span>
+              </div>
+              <div className="flex justify-between items-center py-2">
+                <span className="text-text-muted">Permissions</span>
+                <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase bg-rose-500/10 border border-rose-500/30 text-rose-400">
+                  Unrestricted
                 </span>
               </div>
             </div>

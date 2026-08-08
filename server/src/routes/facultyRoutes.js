@@ -1,5 +1,6 @@
 import express from 'express';
 import { 
+  getFacultyProfile,
   getFacultySubjects, 
   getStudentsList, 
   markAttendance, 
@@ -15,6 +16,7 @@ const router = express.Router();
 router.use(authenticateToken);
 router.use(authorizeRoles('FACULTY'));
 
+router.get('/profile', getFacultyProfile);
 router.get('/subjects', getFacultySubjects);
 router.get('/students', getStudentsList);
 router.post('/attendance', markAttendance);

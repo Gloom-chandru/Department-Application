@@ -2,6 +2,39 @@ import prisma from '../utils/db.js';
 import bcrypt from 'bcryptjs';
 import { logAudit, AUDIT_ACTIONS, computeDiff } from '../utils/audit.js';
 
+// --- Admin Profile Endpoint ---
+export const getAdminProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        department: {
+          select: {
+            name: true,
+            code: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'Admin profile not found' });
+    }
+
+    res.json({ user });
+  } catch (error) {
+    console.error('Error fetching admin profile:', error);
+    res.status(500).json({ message: 'Server error fetching profile' });
+  }
+};
+
 // --- Analytics Endpoint ---
 export const getAnalytics = async (req, res) => {
   try {

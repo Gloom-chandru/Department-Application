@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  getAdminProfile,
   getAnalytics,
   updateSetting,
   getSettings,
@@ -25,6 +26,9 @@ const router = express.Router();
 
 router.use(authenticateToken);
 router.use(authorizeRoles('ADMIN'));
+
+// Profile
+router.get('/profile', getAdminProfile);
 
 // Analytics & settings
 router.get('/analytics', getAnalytics);

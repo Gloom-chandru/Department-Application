@@ -79,6 +79,49 @@ async function checkLowAttendance(tx, studentId, subjectId = null) {
   }
 }
 
+export const getFacultyProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const faculty = await prisma.faculty.findUnique({
+      where: { userId },
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+            role: true,
+            createdAt: true,
+          },
+        },
+        department: {
+          select: {
+            name: true,
+            code: true,
+          },
+        },
+        subjects: {
+          select: {
+            id: true,
+            name: true,
+            code: true,
+            semester: true,
+          },
+        },
+      },
+    });
+
+    if (!faculty) {
+      return res.status(404).json({ message: 'Faculty profile not found' });
+    }
+
+    res.json(faculty);
+  } catch (error) {
+    console.error('Error fetching faculty profile:', error);
+    res.status(500).json({ message: 'Server error fetching profile' });
+  }
+};
+
 export const getFacultySubjects = async (req, res) => {
   try {
     const facultyId = req.user.facultyId;
